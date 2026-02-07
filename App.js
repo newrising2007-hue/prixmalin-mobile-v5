@@ -19,7 +19,6 @@ import { COLORS } from './styles/colors';
 
 const BACKEND_URL = 'https://prixmalin-backend.onrender.com';
 
-// Les 6 catégories actives v5.0
 const CATEGORIES = [
   { id: 'epicerie', name: '🛒 Épicerie', icon: require('./assets/icons/epicerie.png') },
   { id: 'electro', name: '⚡ Électronique', icon: require('./assets/icons/electro.png') },
@@ -35,7 +34,6 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fonction de recherche
   const handleSearch = async () => {
     if (!query.trim()) {
       setError('Veuillez entrer un produit à rechercher');
@@ -47,15 +45,16 @@ export default function App() {
     setResults([]);
 
     try {
-      // Coordonnées Abitibi-Témiscamingue (par défaut)
       const latitude = 48.0;
       const longitude = -79.0;
 
-      const response = await axios.post(`${BACKEND_URL}/api/search-prices`, {
+      const response = await axios.post(BACKEND_URL + '/api/search-prices', {
         query: query.trim(),
         category: selectedCategory,
-        latitude,
-        longitude,
+        location: {
+          latitude: latitude,
+          longitude: longitude
+        }
       });
 
       if (response.data && response.data.results) {
@@ -84,13 +83,11 @@ export default function App() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
-        {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>PrixMalin</Text>
           <Text style={styles.subtitle}>Trouvez les meilleurs prix au Canada 🇨🇦</Text>
         </View>
 
-        {/* Sélection catégorie */}
         <View style={styles.categoriesContainer}>
           <Text style={styles.categoryLabel}>Catégorie :</Text>
           <View style={styles.categories}>
@@ -116,7 +113,6 @@ export default function App() {
           </View>
         </View>
 
-        {/* Barre de recherche */}
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.input}
@@ -138,14 +134,12 @@ export default function App() {
           </TouchableOpacity>
         </View>
 
-        {/* Message d'erreur */}
         {error && (
           <View style={styles.errorContainer}>
             <Text style={styles.errorText}>{error}</Text>
           </View>
         )}
 
-        {/* Loading */}
         {loading && (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={COLORS.primary} />
@@ -153,7 +147,6 @@ export default function App() {
           </View>
         )}
 
-        {/* Résultats */}
         {!loading && results.length > 0 && (
           <View style={styles.resultsHeader}>
             <Text style={styles.resultsCount}>
