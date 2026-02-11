@@ -28,14 +28,14 @@ const CATEGORIES = [
 ];
 
 export default function App() {
-  const [query, setQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('epicerie');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleSearch = async () => {
-    if (!query.trim()) {
+    if (!searchQuery.trim()) {
       setError('Veuillez entrer un produit à rechercher');
       return;
     }
@@ -48,13 +48,13 @@ export default function App() {
       const latitude = 48.0;
       const longitude = -79.0;
 const response = await axios.post(BACKEND_URL + '/api/search-prices', {
-  query: query.trim(),
+  query: searchQuery.trim(),
   category: selectedCategory,
   location: { latitude, longitude }
 });
 
 console.log('🔍 SEARCH DEBUG:');
-console.log('Query:', query);
+console.log('Query:', searchQuery);
 console.log('Category:', selectedCategory);
 console.log('Full response:', JSON.stringify(response.data));
 console.log('Response status:', response.status);
@@ -65,6 +65,7 @@ console.log('First result:', response.data?.results?.[0]);
 
       if (response.data && response.data.results) {
         setResults(response.data.results);
+        setSearchQuery(''); // Vider la barre
       
       // ✨ Vider la barre de recherche après succès
       setSearchQuery('');
@@ -127,18 +128,17 @@ console.log('First result:', response.data?.results?.[0]);
             style={styles.input}
             placeholder="Ex: pain, laptop, marteau..."
             placeholderTextColor={COLORS.textSecondary}
-            value={query}
-            onChangeText={setQuery}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
             onSubmitEditing={handleSearch}
             returnKeyType="search"
           />
           <TouchableOpacity 
-            style={styles.searchButton}
-            onPress={handleSearch}
-            disabled={loading}
+            style={[styles.searchButton, loading && styles.cancelButton]}
+            onPress={loading ? () => setLoading(false) : handleSearch}
           >
             <Text style={styles.searchButtonText}>
-              {loading ? '⏳' : '🔍'}
+              {loading ? '✖️' : '🔍'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -272,12 +272,18 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
   },
   searchButton: {
+  cancelButton: {
+    backgroundColor: "#ff4444",
+  },
     width: 48,
     height: 48,
     backgroundColor: COLORS.primary,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: "#ff4444",
   },
   searchButtonText: {
     fontSize: 20,
