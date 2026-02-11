@@ -47,18 +47,27 @@ export default function App() {
     try {
       const latitude = 48.0;
       const longitude = -79.0;
+const response = await axios.post(BACKEND_URL + '/api/search-prices', {
+  query: query.trim(),
+  category: selectedCategory,
+  location: { latitude, longitude }
+});
 
-      const response = await axios.post(BACKEND_URL + '/api/search-prices', {
-        query: query.trim(),
-        category: selectedCategory,
-        location: {
-          latitude: latitude,
-          longitude: longitude
-        }
-      });
+console.log('🔍 SEARCH DEBUG:');
+console.log('Query:', query);
+console.log('Category:', selectedCategory);
+console.log('Full response:', JSON.stringify(response.data));
+console.log('Response status:', response.status);
+console.log('Response count:', response.data?.count);
+console.log('Results length:', response.data?.results?.length);
+console.log('First result:', response.data?.results?.[0]);
+
 
       if (response.data && response.data.results) {
         setResults(response.data.results);
+      
+      // ✨ Vider la barre de recherche après succès
+      setSearchQuery('');
         
         if (response.data.results.length === 0) {
           setError('Aucun résultat trouvé. Essayez un autre produit.');
