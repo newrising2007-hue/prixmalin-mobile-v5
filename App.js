@@ -1,345 +1,59 @@
-// v5.0 - Build Fresh
-import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator,
-  SafeAreaView,
-  StatusBar,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
-import axios from 'axios';
-import ProductCard from './components/ProductCard';
-import { COLORS } from './styles/colors';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const BACKEND_URL = 'https://prixmalin-backend.onrender.com';
+import HomeScreen from './screens/HomeScreen';
+import SearchScreen from './screens/SearchScreen';
+import CodeBonusScreen from './screens/CodeBonusScreen';
+import CouponsScreen from './screens/CouponsScreen';
+import AlertsScreen from './screens/AlertsScreen';
 
-const CATEGORIES = [
-  { id: 'epicerie', name: '🛒 Épicerie', icon: require('./assets/icons/epicerie.png') },
-  { id: 'electro', name: '⚡ Électronique', icon: require('./assets/icons/electro.png') },
-  { id: 'vetements', name: '👕 Vêtements', icon: require('./assets/icons/vetements.png') },
-  { id: 'intime', name: '💋 Intime', icon: require('./assets/icons/intime.png') },
-  { id: 'quincaillerie', name: '🔧 Quincaillerie', icon: require('./assets/icons/quincaillerie.png') },
-];
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('epicerie');
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) {
-      setError('Veuillez entrer un produit à rechercher');
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    setResults([]);
-
-    try {
-      const latitude = 48.0;
-      const longitude = -79.0;
-const response = await axios.post(BACKEND_URL + '/api/search-prices', {
-  query: searchQuery.trim(),
-  category: selectedCategory,
-  location: { latitude, longitude }
-});
-
-console.log('🔍 SEARCH DEBUG:');
-console.log('Query:', searchQuery);
-console.log('Category:', selectedCategory);
-console.log('Full response:', JSON.stringify(response.data));
-console.log('Response status:', response.status);
-console.log('Response count:', response.data?.count);
-console.log('Results length:', response.data?.results?.length);
-console.log('First result:', response.data?.results?.[0]);
-
-
-      if (response.data && response.data.results) {
-        setResults(response.data.results);
-        setSearchQuery(''); // Vider la barre
-      
-      // ✨ Vider la barre de recherche après succès
-      setSearchQuery('');
-        
-        if (response.data.results.length === 0) {
-          setError('Aucun résultat trouvé. Essayez un autre produit.');
-        }
-      }
-    } catch (err) {
-      console.error('Erreur recherche:', err);
-      setError(
-        err.response?.data?.error || 
-        'Erreur de connexion au serveur. Vérifiez votre connexion internet.'
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
-      
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardView}
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#4CAF50',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
       >
-        <View style={styles.header}>
-          <Text style={styles.title}>PrixMalin</Text>
-          <Text style={styles.subtitle}>Trouvez les meilleurs prix au Canada 🇨🇦</Text>
-        </View>
-
-        <View style={styles.categoriesContainer}>
-          <Text style={styles.categoryLabel}>Catégorie :</Text>
-          <View style={styles.categories}>
-            {CATEGORIES.map((cat) => (
-              <TouchableOpacity
-                key={cat.id}
-                style={[
-                  styles.categoryButton,
-                  selectedCategory === cat.id && styles.categoryButtonActive,
-                ]}
-                onPress={() => setSelectedCategory(cat.id)}
-              >
-                <Text
-                  style={[
-                    styles.categoryButtonText,
-                    selectedCategory === cat.id && styles.categoryButtonTextActive,
-                  ]}
-                >
-                  {cat.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Ex: pain, laptop, marteau..."
-            placeholderTextColor={COLORS.textSecondary}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            onSubmitEditing={handleSearch}
-            returnKeyType="search"
-          />
-          <TouchableOpacity 
-            style={[styles.searchButton, loading && styles.cancelButton]}
-            onPress={loading ? () => setLoading(false) : handleSearch}
-          >
-            <Text style={styles.searchButtonText}>
-              {loading ? '✖️' : '🔍'}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {error && (
-          <View style={styles.errorContainer}>
-            <Text style={styles.errorText}>{error}</Text>
-          </View>
-        )}
-
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={COLORS.primary} />
-            <Text style={styles.loadingText}>Recherche en cours...</Text>
-          </View>
-        )}
-
-        {!loading && results.length > 0 && (
-          <View style={styles.resultsHeader}>
-            <Text style={styles.resultsCount}>
-              {results.length} résultat{results.length > 1 ? 's' : ''} trouvé{results.length > 1 ? 's' : ''}
-            </Text>
-          </View>
-        )}
-
-        <FlatList
-          data={results}
-          keyExtractor={(item, index) => `${item.store}-${index}`}
-          renderItem={({ item }) => <ProductCard item={item} />}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            !loading && !error && (
-              <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>🔍</Text>
-                <Text style={styles.emptyTitle}>Aucune recherche</Text>
-                <Text style={styles.emptySubtitle}>
-                  Sélectionnez une catégorie et recherchez un produit
-                </Text>
-              </View>
-            )
-          }
+        <Stack.Screen 
+          name="Home" 
+          component={HomeScreen}
+          options={{ 
+            title: 'PrixMalin',
+            headerShown: false // Cache le header sur la page d'accueil
+          }}
         />
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        <Stack.Screen 
+          name="Search" 
+          component={SearchScreen}
+          options={{ title: 'Rechercher' }}
+        />
+        <Stack.Screen 
+          name="CodeBonus" 
+          component={CodeBonusScreen}
+          options={{ title: 'Code Bonus' }}
+        />
+        <Stack.Screen 
+          name="Coupons" 
+          component={CouponsScreen}
+          options={{ title: 'Coupons & Promos' }}
+        />
+        <Stack.Screen 
+          name="Alerts" 
+          component={AlertsScreen}
+          options={{ title: 'Alertes Prix' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  keyboardView: {
-    flex: 1,
-  },
-  header: {
-    backgroundColor: COLORS.cardBg,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: COLORS.primary,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: COLORS.textSecondary,
-    marginTop: 4,
-  },
-  categoriesContainer: {
-    backgroundColor: COLORS.cardBg,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-  },
-  categoryLabel: {
-    fontSize: 12,
-    color: COLORS.textSecondary,
-    marginBottom: 8,
-    fontWeight: '600',
-  },
-  categories: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  categoryButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    backgroundColor: COLORS.cardBg,
-  },
-  categoryButtonActive: {
-    backgroundColor: COLORS.primary,
-    borderColor: COLORS.primary,
-  },
-  categoryButtonText: {
-    fontSize: 13,
-    color: COLORS.textSecondary,
-    fontWeight: '500',
-  },
-  categoryButtonTextActive: {
-    color: '#FFFFFF',
-    fontWeight: '600',
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    padding: 16,
-    backgroundColor: COLORS.cardBg,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-    gap: 8,
-  },
-  input: {
-    flex: 1,
-    height: 48,
-    backgroundColor: COLORS.background,
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    color: COLORS.textPrimary,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-  },
-  searchButton: {
-  cancelButton: {
-    backgroundColor: "#ff4444",
-  },
-    width: 48,
-    height: 48,
-    backgroundColor: COLORS.primary,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cancelButton: {
-    backgroundColor: "#ff4444",
-  },
-  searchButtonText: {
-    fontSize: 20,
-  },
-  errorContainer: {
-    backgroundColor: '#FFE8E8',
-    padding: 12,
-    marginHorizontal: 16,
-    marginTop: 8,
-    borderRadius: 8,
-    borderLeftWidth: 4,
-    borderLeftColor: COLORS.error,
-  },
-  errorText: {
-    color: COLORS.error,
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  loadingContainer: {
-    padding: 40,
-    alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 14,
-    color: COLORS.textSecondary,
-  },
-  resultsHeader: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  resultsCount: {
-    fontSize: 14,
-    color: COLORS.textSecondary,
-    fontWeight: '600',
-  },
-  listContent: {
-    paddingBottom: 20,
-  },
-  emptyContainer: {
-    padding: 40,
-    alignItems: 'center',
-  },
-  emptyText: {
-    fontSize: 48,
-    marginBottom: 16,
-  },
-  emptyTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: COLORS.textPrimary,
-    marginBottom: 8,
-  },
-  emptySubtitle: {
-    fontSize: 14,
-    color: COLORS.textSecondary,
-    textAlign: 'center',
-  },
-});
