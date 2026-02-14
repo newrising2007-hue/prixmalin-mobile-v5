@@ -13,6 +13,7 @@ import {
   StatusBar,
 } from 'react-native';
 import axios from 'axios';
+import ProductCard from '../components/ProductCard';
 
 const BACKEND_URL = 'https://prixmalin-backend.onrender.com';
 // Pour tests locaux, utilise : 'http://192.168.0.73:10000'
@@ -55,7 +56,7 @@ export default function SearchScreen() {
         }
       });
 
-      setResults(response.data.results || []);
+      setResults(response.data.products || []);
       setSearchQuery(''); // Vide la barre de recherche après les résultats
     } catch (error) {
       console.error('Erreur de recherche:', error);
@@ -84,23 +85,7 @@ export default function SearchScreen() {
     </TouchableOpacity>
   );
 
-  const ProductCard = ({ product }) => (
-    <View style={styles.productCard}>
-      <View style={styles.productHeader}>
-        <Text style={styles.productName}>{product.product_name}</Text>
-        <Text style={styles.productPrice}>{product.price}$</Text>
-      </View>
-      <Text style={styles.productStore}>{product.store}</Text>
-      <View style={styles.badgeContainer}>
-        <View style={[styles.badge, { backgroundColor: product.verified ? '#4CAF50' : '#2196F3' }]}>
-          <Text style={styles.badgeText}>
-            {product.verified ? '✓ Prix vérifié' : '🌐 Prix sur site'}
-          </Text>
-        </View>
-      </View>
-    </View>
-  );
-
+  
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#4CAF50" />

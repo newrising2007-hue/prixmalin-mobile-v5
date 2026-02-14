@@ -29,6 +29,8 @@ const ProductCard = ({ product }) => {
 
   // Fonction pour ouvrir le lien affilié
   const handlePress = () => {
+  console.log('🔍 Clic détecté ! Lien:', product.affiliateLink);
+    console.log
     if (product.affiliateLink) {
       Linking.openURL(product.affiliateLink)
         .catch(err => console.error('Erreur ouverture lien:', err));
