@@ -1,217 +1,141 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Linking } from 'react-native';
-import { COLORS } from '../styles/colors';
+import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 
-const ProductCard = ({ item }) => {
-  const { config, storeData } = item;
-
-  // Ouvrir Google Maps pour navigation
-  const openGoogleMaps = (lat, lng) => {
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-    Linking.openURL(url).catch((err) => console.error('Erreur Google Maps:', err));
+const ProductCard = ({ product }) => {
+  
+  // Fonction pour obtenir les infos du badge selon le type d'affiliation
+  const getBadgeInfo = () => {
+    if (product.affiliationType === 'local_web') {
+      return {
+        text: '🏷️ Affiliation Locale',
+        color: '#4CAF50',
+      };
+    } else if (product.affiliationType === 'local_maps') {
+      return {
+        text: '📍 Commerce Local',
+        color: '#FF9800',
+      };
+    } else if (product.affiliationType === 'online') {
+      return {
+        text: '🌐 Partenaire En Ligne',
+        color: '#2196F3',
+      };
+    }
+    return {
+      text: '✅ Prix vérifié',
+      color: '#757575',
+    };
   };
 
-  // Ouvrir lien produit
-  const openProductLink = (url) => {
-    Linking.openURL(url).catch((err) => console.error('Erreur ouverture lien:', err));
+  // Fonction pour ouvrir le lien affilié
+  const handlePress = () => {
+    if (product.affiliateLink) {
+      Linking.openURL(product.affiliateLink)
+        .catch(err => console.error('Erreur ouverture lien:', err));
+    }
   };
+
+  const badge = getBadgeInfo();
 
   return (
-    <View style={styles.card}>
-      {/* Image produit */}
-      {item.image_url && (
-        <Image 
-          source={{ uri: item.image_url }} 
-          style={styles.image}
-          resizeMode="cover"
-        />
+    <TouchableOpacity 
+      style={styles.card}
+      onPress={handlePress}
+      activeOpacity={0.7}
+    >
+      <View style={styles.header}>
+        <Text style={styles.productName} numberOfLines={2}>
+          {product.product_name}
+        </Text>
+      </View>
+
+      <View style={styles.priceContainer}>
+        <Text style={styles.price}>{product.price}$</Text>
+      </View>
+
+      <Text style={styles.store}>📍 {product.store}</Text>
+
+      {product.distance && (
+        <Text style={styles.distance}>🚗 {product.distance}</Text>
       )}
 
-      <View style={styles.info}>
-        {/* Nom produit */}
-        <Text style={styles.productName} numberOfLines={2}>
-          {item.product_name}
-        </Text>
-
-        {/* Nom magasin */}
-        <Text style={styles.storeName}>{item.store}</Text>
-
-        {/* Prix SI displayPrice = true */}
-        {config?.displayPrice && item.price && (
-          <View style={styles.priceRow}>
-            <Text style={styles.price}>{item.price}$</Text>
-            <View style={styles.badgeVerified}>
-              <Text style={styles.badgeTextVerified}>✅ Prix vérifié</Text>
-            </View>
-          </View>
-        )}
-
-        {/* Badge SI displayPrice = false */}
-        {config && !config.displayPrice && (
-          <View style={styles.badgeEstimated}>
-            <Text style={styles.badgeTextEstimated}>⚠️ Prix sur le site</Text>
-          </View>
-        )}
-
-        {/* Distance SI magasin physique */}
-        {config?.hasPhysicalStores && storeData && (
-          <View style={styles.locationInfo}>
-            <Text style={styles.distance}>
-              📍 {storeData.distance} km · {storeData.timeEstimate}
-            </Text>
-            <Text style={styles.address} numberOfLines={1}>
-              {storeData.address}
-            </Text>
-          </View>
-        )}
-
-        {/* Info livraison SI e-commerce */}
-        {config && !config.hasPhysicalStores && (
-          <Text style={styles.delivery}>📦 Livraison disponible</Text>
-        )}
-
-        {/* Boutons d'action */}
-        <View style={styles.buttons}>
-          {/* Bouton Y Aller (Google Maps) */}
-          {config?.hasPhysicalStores && storeData && (
-            <TouchableOpacity 
-              style={styles.mapsButton}
-              onPress={() => openGoogleMaps(storeData.latitude, storeData.longitude)}
-            >
-              <Text style={styles.buttonText}>🗺️ Y Aller</Text>
-            </TouchableOpacity>
-          )}
-
-          {/* Bouton principal (Acheter ou Voir Prix) */}
-          <TouchableOpacity 
-            style={[
-              styles.productButton,
-              config?.hasPhysicalStores && storeData ? styles.productButtonHalf : styles.productButtonFull
-            ]}
-            onPress={() => openProductLink(item.url)}
-          >
-            <Text style={styles.buttonText}>
-              {config?.displayPrice && item.price
-                ? `🛒 ${config.hasPhysicalStores ? 'Acheter' : 'Commander'} ${item.price}$`
-                : '🔗 Voir le Prix'}
-            </Text>
-          </TouchableOpacity>
-        </View>
+      <View style={[styles.badge, { backgroundColor: badge.color }]}>
+        <Text style={styles.badgeText}>{badge.text}</Text>
       </View>
-    </View>
+
+      <View style={styles.actionButton}>
+        <Text style={styles.actionButtonText}>
+          Voir le produit →
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.cardBg,
+    backgroundColor: '#fff',
     borderRadius: 12,
-    marginVertical: 8,
+    padding: 16,
+    marginBottom: 12,
     marginHorizontal: 16,
-    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
-  image: {
-    width: '100%',
-    height: 180,
-    backgroundColor: COLORS.background,
-  },
-  info: {
-    padding: 12,
-  },
-  productName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: COLORS.textPrimary,
-    marginBottom: 4,
-  },
-  storeName: {
-    fontSize: 14,
-    color: COLORS.textSecondary,
+  header: {
     marginBottom: 8,
   },
-  priceRow: {
+  productName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  priceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 8,
   },
   price: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: COLORS.success,
-    marginRight: 8,
+    color: '#4CAF50',
   },
-  badgeVerified: {
-    backgroundColor: COLORS.badgeVerified,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  badgeTextVerified: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: COLORS.success,
-  },
-  badgeEstimated: {
-    backgroundColor: COLORS.badgeEstimated,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    alignSelf: 'flex-start',
-    marginBottom: 8,
-  },
-  badgeTextEstimated: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: COLORS.warning,
-  },
-  locationInfo: {
-    marginBottom: 8,
+  store: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 4,
   },
   distance: {
-    fontSize: 12,
-    color: COLORS.textSecondary,
-    marginBottom: 2,
-  },
-  address: {
-    fontSize: 12,
-    color: COLORS.textSecondary,
-  },
-  delivery: {
-    fontSize: 12,
-    color: COLORS.textSecondary,
+    fontSize: 14,
+    color: '#FF9800',
     marginBottom: 8,
+    fontWeight: '600',
   },
-  buttons: {
-    flexDirection: 'row',
-    gap: 8,
-    marginTop: 8,
+  badge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+    marginVertical: 8,
   },
-  mapsButton: {
-    flex: 1,
-    backgroundColor: COLORS.secondary,
-    paddingVertical: 12,
+  badgeText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  actionButton: {
+    backgroundColor: '#2196F3',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 8,
+    marginTop: 12,
     alignItems: 'center',
   },
-  productButton: {
-    backgroundColor: COLORS.primary,
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  productButtonHalf: {
-    flex: 2,
-  },
-  productButtonFull: {
-    flex: 1,
-  },
-  buttonText: {
-    color: '#FFFFFF',
+  actionButtonText: {
+    color: '#fff',
     fontSize: 14,
     fontWeight: '600',
   },
