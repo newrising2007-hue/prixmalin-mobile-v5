@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   SafeAreaView,
   StatusBar,
+  Keyboard,  // ← AJOUTE CETTE LIGNE
 } from 'react-native';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
@@ -39,12 +40,13 @@ export default function SearchScreen() {
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
-    if (!searchQuery.trim() || !selectedCategory) {
-      alert('Veuillez sélectionner une catégorie et entrer un produit');
-      return;
-    }
+  if (!searchQuery.trim() || !selectedCategory) {
+    alert('Veuillez sélectionner une catégorie et entrer un produit');
+    return;
+  }
 
-    setLoading(true);
+  Keyboard.dismiss();  // ← AJOUTE CETTE LIGNE
+  setLoading(true);
     
     try {
       const response = await axios.post(`${BACKEND_URL}/api/search-prices`, {
