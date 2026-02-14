@@ -53,7 +53,16 @@ export default function HomeScreen({ navigation }) {
           onPress={() => navigation.navigate('Search')}
         />
 
-        {/* BOUTON 2 - CODE BONUS */}
+{/* BOUTON 2 - CODES GAMING */}
+        <MenuButton
+          icon="🎮"
+          title="Codes Gaming"
+          subtitle="Deals & codes pour gamers"
+          color="#9C27B0"
+          onPress={() => navigation.navigate('Gaming')}
+        />
+
+        {/* BOUTON 3 - CODE BONUS */}
         <MenuButton
           icon="🎁"
           title="Code Bonus"
@@ -62,7 +71,7 @@ export default function HomeScreen({ navigation }) {
           onPress={() => navigation.navigate('CodeBonus')}
         />
 
-        {/* BOUTON 3 - COUPONS & PROMOS */}
+        {/* BOUTON 4 - COUPONS & PROMOS */}
         <MenuButton
           icon="💰"
           title="Coupons & Promos"
@@ -71,7 +80,7 @@ export default function HomeScreen({ navigation }) {
           onPress={() => navigation.navigate('Coupons')}
         />
 
-        {/* BOUTON 4 - ALERTES PRIX */}
+        {/* BOUTON 5 - ALERTES PRIX */}
         <MenuButton
           icon="📢"
           title="Alertes Prix"

@@ -7,6 +7,7 @@ import SearchScreen from './screens/SearchScreen';
 import CodeBonusScreen from './screens/CodeBonusScreen';
 import CouponsScreen from './screens/CouponsScreen';
 import AlertsScreen from './screens/AlertsScreen';
+import GamingCodesScreen from './screens/GamingCodesScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,11 @@ export default function App() {
           name="Search" 
           component={SearchScreen}
           options={{ title: 'Rechercher' }}
+        />
+<Stack.Screen 
+          name="Gaming" 
+          component={GamingCodesScreen}
+          options={{ title: 'Codes Gaming' }}
         />
         <Stack.Screen 
           name="CodeBonus" 
