@@ -17,7 +17,11 @@ export default function HomeScreen({ navigation }) {
       activeOpacity={0.7}
     >
       <View style={styles.menuButtonContent}>
-        <Text style={styles.menuIcon}>{icon}</Text>
+        {typeof icon === 'string' ? (
+          <Text style={styles.menuIcon}>{icon}</Text>
+        ) : (
+          <Image source={icon} style={styles.menuIconImage} />
+        )}
         <View style={styles.menuTextContainer}>
           <Text style={styles.menuTitle}>{title}</Text>
           <Text style={styles.menuSubtitle}>{subtitle}</Text>
@@ -152,6 +156,11 @@ const styles = StyleSheet.create({
   menuIcon: {
     fontSize: 40,
     marginRight: 15,
+  },
+  menuIconImage: {
+    width: 80,
+    height: 80,
+    marginBottom: 10,
   },
   menuTextContainer: {
     flex: 1,
