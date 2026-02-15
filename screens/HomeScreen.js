@@ -11,7 +11,7 @@ import {
 
 export default function HomeScreen({ navigation }) {
   const MenuButton = ({ icon, title, subtitle, color, onPress }) => (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={[styles.menuButton, { borderLeftColor: color }]}
       onPress={onPress}
       activeOpacity={0.7}
@@ -30,11 +30,11 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#f5f5f5" />
-      
+
       {/* HEADER */}
       <View style={styles.header}>
-        <Image 
-          source={require('../assets/icon.png')} 
+        <Image
+          source={require('../assets/icon.png')}
           style={styles.logo}
         />
         <Text style={styles.title}>PrixMalin</Text>
@@ -43,7 +43,7 @@ export default function HomeScreen({ navigation }) {
 
       {/* MENU PRINCIPAL */}
       <View style={styles.menuContainer}>
-        
+
         {/* BOUTON 1 - RECHERCHER */}
         <MenuButton
           icon="🔍"
@@ -53,21 +53,21 @@ export default function HomeScreen({ navigation }) {
           onPress={() => navigation.navigate('Search')}
         />
 
-{/* BOUTON 2 - CODES GAMING */}
+        {/* BOUTON 2 - DEALS GAMING */}
         <MenuButton
-          icon="🎮"
-          title="Codes Gaming"
-          subtitle="Deals & codes pour gamers"
-          color="#9C27B0"
+          icon={require('../assets/icons/deals_gaming.png')}
+          title="Deals Gaming"
+          subtitle="Game Pass, cartes-cadeaux, V-Bucks"
+          color="🟡#FFB300"
           onPress={() => navigation.navigate('Gaming')}
         />
 
-        {/* BOUTON 3 - CODE BONUS */}
+        {/* BOUTON 3 - CODES BONUS GRATUITS */}
         <MenuButton
-          icon="🎁"
-          title="Code Bonus"
-          subtitle="Points & récompenses"
-          color="#FF9800"
+          icon={require('../assets/icons/code_bonus.png')}
+          title="Codes Bonus"
+          subtitle="Codes promo gratuits World of Tanks, Fortnite..."
+          color="🟢#4CAF50"
           onPress={() => navigation.navigate('CodeBonus')}
         />
 
