@@ -23,10 +23,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#4CAF50"
-      }
+      },
+      "package": "com.neosmarthing.prixmalin"
     },
     "web": {
       "favicon": "./assets/icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0c8dacd4-052f-4d06-a9bc-6515ffd22b00"
+      }
     }
   }
 }
