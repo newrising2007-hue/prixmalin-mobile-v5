@@ -11,15 +11,14 @@ import {
   ActivityIndicator,
   SafeAreaView,
   StatusBar,
-  Keyboard,  // ← AJOUTE CETTE LIGNE
+  Keyboard,
 } from 'react-native';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 
 const BACKEND_URL = 'https://prixmalin-backend.onrender.com';
-// Pour tests locaux, utilise : 'http://192.168.0.73:10000'
 
-// 10 CATÉGORIES DE PRODUITS
+// 11 CATÉGORIES DE PRODUITS (+ Divers)
 const CATEGORIES = [
   { id: 'epicerie', name: 'Épicerie', icon: require('../assets/icons/epicerie.png'), color: '#4CAF50' },
   { id: 'electro', name: 'Électro', icon: require('../assets/icons/electro.png'), color: '#2196F3' },
@@ -31,6 +30,7 @@ const CATEGORIES = [
   { id: 'sante', name: 'Santé & Optique', icon: require('../assets/icons/Soin_optique.png'), color: '#FF5722' },
   { id: 'sport', name: 'Sport & Nature', icon: require('../assets/icons/Sportnature.png'), color: '#8BC34A' },
   { id: 'vehicules', name: 'Véhicules', icon: require('../assets/icons/vehicules.png'), color: '#607D8B' },
+  { id: 'divers', name: 'Divers', icon: require('../assets/icons/divers.png'), color: '#795548' },
 ];
 
 export default function SearchScreen() {
@@ -45,7 +45,7 @@ export default function SearchScreen() {
       return;
     }
 
-    Keyboard.dismiss();  // ← AJOUTE CETTE LIGNE
+    Keyboard.dismiss();
     setLoading(true);
 
     try {
@@ -59,7 +59,7 @@ export default function SearchScreen() {
       });
 
       setResults(response.data.results || []);
-      setSearchQuery(''); // Vide la barre de recherche après les résultats
+      setSearchQuery('');
     } catch (error) {
       console.error('Erreur de recherche:', error);
       alert('Erreur lors de la recherche. Vérifiez votre connexion.');
@@ -68,25 +68,37 @@ export default function SearchScreen() {
     }
   };
 
-  const CategoryButton = ({ category }) => (
-    <TouchableOpacity
-      style={[
-        styles.categoryButton,
-        selectedCategory?.id === category.id && styles.categoryButtonSelected,
-        { borderColor: category.color }
-      ]}
-      onPress={() => setSelectedCategory(category)}
-    >
-      <Image source={category.icon} style={styles.categoryIcon} />
-      <Text style={[
-        styles.categoryText,
-        selectedCategory?.id === category.id && styles.categoryTextSelected
-      ]}>
-        {category.name}
-      </Text>
-    </TouchableOpacity>
-  );
+  const CategoryButton = ({ category }) => {
+    const isSelected = selectedCategory?.id === category.id;
+    return (
+      <TouchableOpacity
+        onPress={() => setSelectedCategory(category)}
+        activeOpacity={0.8}
+      >
+        {/* BLOC ICÔNE */}
+        <View style={[styles.categoryIconBox, { borderColor: category.color }]}>
+          <Image source={category.icon} style={styles.categoryIcon} />
+        </View>
 
+        {/* SÉPARATEUR (ligne horizontale dans le contour) */}
+        <View style={[styles.categoryDivider, { backgroundColor: category.color }]} />
+
+        {/* BLOC NOM */}
+        <View style={[
+          styles.categoryNameBox,
+          { borderColor: category.color },
+          isSelected && { backgroundColor: category.color }
+        ]}>
+          <Text style={[
+            styles.categoryText,
+            isSelected && styles.categoryTextSelected
+          ]}>
+            {category.name}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -98,10 +110,12 @@ export default function SearchScreen() {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          style={styles.categoriesScroll}
+          contentContainerStyle={styles.categoriesScrollContent}
         >
           {CATEGORIES.map(category => (
-            <CategoryButton key={category.id} category={category} />
+            <View key={category.id} style={styles.categoryWrapper}>
+              <CategoryButton category={category} />
+            </View>
           ))}
         </ScrollView>
       </View>
@@ -114,6 +128,8 @@ export default function SearchScreen() {
           value={searchQuery}
           onChangeText={setSearchQuery}
           editable={!!selectedCategory}
+          returnKeyType="search"
+          onSubmitEditing={handleSearch}
         />
         <TouchableOpacity
           style={[styles.searchButton, loading && styles.cancelButton]}
@@ -143,6 +159,7 @@ export default function SearchScreen() {
               renderItem={({ item }) => <ProductCard product={item} />}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 20 }}
             />
           </>
         ) : (
@@ -165,9 +182,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+
+  // ─── CATÉGORIES ───
   categoriesSection: {
     backgroundColor: '#fff',
-    paddingVertical: 15,
+    paddingTop: 20,       // ← plus d'espace en haut
+    paddingBottom: 18,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
@@ -176,46 +196,74 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#2c3e50',
     paddingHorizontal: 20,
-    marginBottom: 10,
+    marginBottom: 14,
   },
-  categoriesScroll: {
+  categoriesScrollContent: {
     paddingHorizontal: 15,
+    alignItems: 'flex-start',
   },
-  categoryButton: {
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    marginHorizontal: 5,
-    borderRadius: 12,
+  categoryWrapper: {
+    marginHorizontal: 6,
+  },
+
+  // Bloc icône (haut)
+  categoryIconBox: {
+    width: 90,
+    height: 75,
     borderWidth: 2,
-    borderColor: '#e0e0e0',
+    borderBottomWidth: 0,       // ← pas de bordure entre les deux blocs
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
     backgroundColor: '#fff',
-    minWidth: 100,
-  },
-  categoryButtonSelected: {
-    backgroundColor: '#e8f5e9',
-    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
   },
   categoryIcon: {
-    width: 40,
-    height: 40,
-    marginBottom: 5,
+    width: 82,
+    height: 67,
+    resizeMode: 'cover',        // ← remplit bien le bloc
+  },
+
+  // Séparateur fin
+  categoryDivider: {
+    height: 1.5,
+    width: 90,
+  },
+
+  // Bloc nom (bas)
+  categoryNameBox: {
+    width: 90,
+    borderWidth: 2,
+    borderTopWidth: 0,          // ← pas de bordure entre les deux blocs
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    paddingVertical: 5,
+    paddingHorizontal: 4,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   categoryText: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#7f8c8d',
     textAlign: 'center',
+    fontWeight: '500',
   },
   categoryTextSelected: {
-    color: '#2c3e50',
+    color: '#fff',
     fontWeight: 'bold',
   },
+
+  // ─── RECHERCHE ───
   searchSection: {
     flexDirection: 'row',
-    padding: 15,
+    paddingHorizontal: 15,
+    paddingVertical: 18,       // ← plus d'espace vertical
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
+    marginTop: 4,              // ← léger dégagement supplémentaire
   },
   searchInput: {
     flex: 1,
@@ -240,62 +288,18 @@ const styles = StyleSheet.create({
   searchButtonText: {
     fontSize: 24,
   },
+
+  // ─── RÉSULTATS ───
   resultsSection: {
     flex: 1,
     padding: 15,
+    paddingTop: 20,            // ← plus d'espace pour dégager la recherche
   },
   resultsTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#2c3e50',
     marginBottom: 15,
-  },
-  productCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 15,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  productHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  productName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    flex: 1,
-    marginRight: 10,
-  },
-  productPrice: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#4CAF50',
-  },
-  productStore: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    marginBottom: 10,
-  },
-  badgeContainer: {
-    flexDirection: 'row',
-  },
-  badge: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 12,
-  },
-  badgeText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '600',
   },
   loadingContainer: {
     flex: 1,
