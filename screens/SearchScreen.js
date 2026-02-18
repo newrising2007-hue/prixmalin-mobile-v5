@@ -40,14 +40,14 @@ export default function SearchScreen() {
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
-  if (!searchQuery.trim() || !selectedCategory) {
-    alert('Veuillez sélectionner une catégorie et entrer un produit');
-    return;
-  }
+    if (!searchQuery.trim() || !selectedCategory) {
+      alert('Veuillez sélectionner une catégorie et entrer un produit');
+      return;
+    }
 
-  Keyboard.dismiss();  // ← AJOUTE CETTE LIGNE
-  setLoading(true);
-    
+    Keyboard.dismiss();  // ← AJOUTE CETTE LIGNE
+    setLoading(true);
+
     try {
       const response = await axios.post(`${BACKEND_URL}/api/search-prices`, {
         query: searchQuery,
@@ -58,7 +58,7 @@ export default function SearchScreen() {
         }
       });
 
-      setResults(response.data.products || []);
+      setResults(response.data.results || []);
       setSearchQuery(''); // Vide la barre de recherche après les résultats
     } catch (error) {
       console.error('Erreur de recherche:', error);
@@ -87,7 +87,7 @@ export default function SearchScreen() {
     </TouchableOpacity>
   );
 
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#4CAF50" />
@@ -95,8 +95,8 @@ export default function SearchScreen() {
       {/* CATÉGORIES */}
       <View style={styles.categoriesSection}>
         <Text style={styles.sectionTitle}>Choisis une catégorie</Text>
-        <ScrollView 
-          horizontal 
+        <ScrollView
+          horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.categoriesScroll}
         >
@@ -115,7 +115,7 @@ export default function SearchScreen() {
           onChangeText={setSearchQuery}
           editable={!!selectedCategory}
         />
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.searchButton, loading && styles.cancelButton]}
           onPress={loading ? () => setLoading(false) : handleSearch}
           disabled={!selectedCategory}
@@ -149,7 +149,7 @@ export default function SearchScreen() {
           <View style={styles.emptyState}>
             <Text style={styles.emptyIcon}>🛍️</Text>
             <Text style={styles.emptyText}>
-              {selectedCategory 
+              {selectedCategory
                 ? 'Commence une recherche pour voir les meilleurs prix !'
                 : 'Sélectionne une catégorie pour commencer'}
             </Text>
