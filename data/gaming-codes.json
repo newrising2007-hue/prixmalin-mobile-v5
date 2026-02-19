@@ -1,44 +1,38 @@
 {
   "metadata": {
-    "version": "1.0",
-    "lastUpdate": "2026-02-12",
+    "version": "2.0",
+    "lastUpdate": "2026-02-19",
     "country": "CA",
     "currency": "CAD"
   },
-  
+
   "subscriptions": [
     {
       "id": "xbox-gamepass-ultimate-3m",
-      "name": "Xbox Game Pass Ultimate",
+      "name": "Xbox Game Pass Ultimate 3 mois",
       "category": "subscription",
-      "platform": "Xbox",
+      "platform": "Xbox / PC",
       "duration": "3 mois",
       "regularPrice": 49.99,
       "dealPrice": 29.99,
       "discount": 40,
       "savings": 20.00,
-      "description": "Accès à 100+ jeux + Xbox Live Gold + EA Play inclus",
+      "description": "100+ jeux + Xbox Live Gold + EA Play inclus",
       "retailers": [
         {
           "name": "Amazon.ca",
           "stock": true,
-      "affiliateLink": "https://www.amazon.ca/-/fr/Microsoft-snow-chains/dp/B08M8WSRX9?tag=prixmalin-20&linkCode=ll2&linkId=ec68630135bda231d437500c61e37e36",
-          "type": "online"
-        },
-        {
-          "name": "Microsoft Store",
-          "stock": true,
-          "affiliateLink": "https://www.microsoft.com/store?ref=prixmalin",
+          "affiliateLink": "https://www.amazon.ca/dp/B08M7HPLXS?tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-02-28",
+      "expires": "2026-04-30",
       "featured": true,
       "tags": ["deal-chaud", "xbox", "subscription"]
     },
     {
       "id": "ps-plus-premium-12m",
-      "name": "PlayStation Plus Premium",
+      "name": "PlayStation Plus Premium 12 mois",
       "category": "subscription",
       "platform": "PlayStation",
       "duration": "12 mois",
@@ -49,19 +43,13 @@
       "description": "Catalogue de jeux + essais + classiques PS1/PS2",
       "retailers": [
         {
-          "name": "Costco",
-          "stock": true,
-          "affiliateLink": "https://www.costco.ca/playstation-plus.html?ref=prixmalin",
-          "type": "local"
-        },
-        {
           "name": "Amazon.ca",
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B09TQMH95N?tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-03-15",
+      "expires": "2026-05-15",
       "featured": true,
       "tags": ["deal-chaud", "playstation", "subscription"]
     },
@@ -78,25 +66,19 @@
       "description": "Jusqu'à 8 comptes + N64 & Sega Genesis inclus",
       "retailers": [
         {
-          "name": "Nintendo eShop",
-          "stock": true,
-          "affiliateLink": "https://ec.nintendo.com/CA/en/membership?ref=prixmalin",
-          "type": "online"
-        },
-        {
           "name": "Amazon.ca",
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B0BCWHHX2K?tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-02-20",
+      "expires": "2026-04-30",
       "featured": false,
       "tags": ["nintendo", "subscription", "famille"]
     },
     {
       "id": "ea-play-12m",
-      "name": "EA Play",
+      "name": "EA Play 12 mois",
       "category": "subscription",
       "platform": "Multi-plateforme",
       "duration": "12 mois",
@@ -104,22 +86,16 @@
       "dealPrice": 19.99,
       "discount": 50,
       "savings": 20.00,
-      "description": "FIFA, Madden, Battlefield + essais anticipés",
+      "description": "FC 25, Madden, Battlefield + essais anticipés",
       "retailers": [
         {
           "name": "Amazon.ca",
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B08GD8YNFN?tag=prixmalin-20",
           "type": "online"
-        },
-        {
-          "name": "Origin",
-          "stock": true,
-          "affiliateLink": "https://www.ea.com/ea-play?ref=prixmalin",
-          "type": "online"
         }
       ],
-      "expires": "2026-02-25",
+      "expires": "2026-04-25",
       "featured": true,
       "tags": ["deal-chaud", "ea", "subscription"]
     },
@@ -138,7 +114,7 @@
         {
           "name": "Ubisoft Store",
           "stock": true,
-          "affiliateLink": "https://store.ubi.com/ca/ubisoft-plus?ref=prixmalin",
+          "affiliateLink": "https://store.ubi.com/ca/ubisoft-plus",
           "type": "online"
         }
       ],
@@ -164,17 +140,11 @@
         {
           "name": "Amazon.ca",
           "stock": true,
-          "affiliateLink": "https://www.amazon.ca/-/fr/Valve-Index-Steam-Gift-Card/dp/B00HJBPZK8?tag=prixmalin-20&linkCode=ll2&linkId=5b8579aaa83f742170a0ca64736eaa6a",
+          "affiliateLink": "https://www.amazon.ca/dp/B00HJBPZK8?tag=prixmalin-20",
           "type": "online"
-        },
-        {
-          "name": "EB Games",
-          "stock": true,
-          "affiliateLink": "https://www.ebgames.ca/steam-cards?ref=prixmalin",
-          "type": "local"
         }
       ],
-      "expires": "2026-03-01",
+      "expires": "2026-05-01",
       "featured": true,
       "tags": ["steam", "carte-cadeau", "pc"]
     },
@@ -191,19 +161,13 @@
       "description": "Crédit PSN pour jeux et contenu PlayStation",
       "retailers": [
         {
-          "name": "Costco",
-          "stock": true,
-          "affiliateLink": "https://www.costco.ca/playstation-network-card.html?ref=prixmalin",
-          "type": "local"
-        },
-        {
           "name": "Amazon.ca",
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B00GAC1D2G?tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-02-28",
+      "expires": "2026-04-28",
       "featured": true,
       "tags": ["deal-chaud", "playstation", "carte-cadeau"]
     },
@@ -220,19 +184,13 @@
       "description": "Crédit Xbox pour jeux, apps et contenu",
       "retailers": [
         {
-          "name": "Best Buy",
-          "stock": true,
-          "affiliateLink": "https://www.bestbuy.ca/xbox-gift-cards?ref=prixmalin",
-          "type": "local"
-        },
-        {
           "name": "Amazon.ca",
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B00F4CEHNK?tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-03-10",
+      "expires": "2026-05-10",
       "featured": false,
       "tags": ["xbox", "carte-cadeau"]
     },
@@ -249,19 +207,13 @@
       "description": "Crédit eShop pour jeux Nintendo Switch",
       "retailers": [
         {
-          "name": "Shoppers Drug Mart",
-          "stock": true,
-          "affiliateLink": "https://www1.shoppersdrugmart.ca/gaming?ref=prixmalin",
-          "type": "local"
-        },
-        {
           "name": "Amazon.ca",
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B01LYOCVZF?tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-02-25",
+      "expires": "2026-04-25",
       "featured": false,
       "tags": ["nintendo", "carte-cadeau"]
     },
@@ -278,19 +230,13 @@
       "description": "2000 Robux + bonus items exclusifs",
       "retailers": [
         {
-          "name": "Walmart",
-          "stock": true,
-          "affiliateLink": "https://www.walmart.ca/roblox-gift-card?ref=prixmalin",
-          "type": "local"
-        },
-        {
           "name": "Amazon.ca",
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B07DLCS8TN?tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-03-15",
+      "expires": "2026-05-15",
       "featured": false,
       "tags": ["roblox", "enfants", "carte-cadeau"]
     }
@@ -311,19 +257,13 @@
       "description": "Monnaie Fortnite pour skins, passes de combat",
       "retailers": [
         {
-          "name": "Epic Games Store",
-          "stock": true,
-          "affiliateLink": "https://www.epicgames.com/fortnite/vbucks?ref=prixmalin",
-          "type": "online"
-        },
-        {
           "name": "Amazon.ca",
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B07D3LD7L9?tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-02-20",
+      "expires": "2026-05-20",
       "featured": true,
       "tags": ["fortnite", "vbucks", "promo"]
     },
@@ -343,11 +283,11 @@
         {
           "name": "EA Origin",
           "stock": true,
-          "affiliateLink": "https://www.ea.com/games/apex-legends/apex-coins?ref=prixmalin",
+          "affiliateLink": "https://www.ea.com/games/apex-legends/apex-coins",
           "type": "online"
         }
       ],
-      "expires": "2026-03-01",
+      "expires": "2026-05-01",
       "featured": false,
       "tags": ["apex", "ea"]
     },
@@ -367,11 +307,11 @@
         {
           "name": "Riot Games",
           "stock": true,
-          "affiliateLink": "https://playvalorant.com/vp?ref=prixmalin",
+          "affiliateLink": "https://playvalorant.com/store",
           "type": "online"
         }
       ],
-      "expires": "2026-02-28",
+      "expires": "2026-04-28",
       "featured": false,
       "tags": ["valorant", "riot"]
     },
@@ -391,7 +331,7 @@
         {
           "name": "miHoYo",
           "stock": true,
-          "affiliateLink": "https://genshin.hoyoverse.com/payment?ref=prixmalin",
+          "affiliateLink": "https://genshin.hoyoverse.com/en-us/topUp",
           "type": "online"
         }
       ],
@@ -415,11 +355,11 @@
         {
           "name": "Microsoft Store",
           "stock": true,
-          "affiliateLink": "https://www.microsoft.com/minecraft/minecoins?ref=prixmalin",
+          "affiliateLink": "https://www.minecraft.net/en-us/store",
           "type": "online"
         }
       ],
-      "expires": "2026-03-31",
+      "expires": "2026-06-30",
       "featured": false,
       "tags": ["minecraft", "enfants"]
     }
@@ -427,36 +367,30 @@
 
   "games": [
     {
-      "id": "fifa-26",
-      "name": "EA Sports FC 26",
+      "id": "ea-sports-fc-25",
+      "name": "EA Sports FC 25",
       "category": "game",
       "platform": "PS5",
       "regularPrice": 89.99,
-      "dealPrice": 69.99,
-      "discount": 22,
-      "savings": 20.00,
-      "description": "Édition standard - Précommande",
+      "dealPrice": 59.99,
+      "discount": 33,
+      "savings": 30.00,
+      "description": "Le meilleur jeu de foot - Édition PS5",
       "retailers": [
         {
           "name": "Amazon.ca",
           "stock": true,
-          "affiliateLink": "https://www.amazon.ca/EA-Sports-FC-26/dp/XXXXXXX?tag=prixmalin-20",
+          "affiliateLink": "https://www.amazon.ca/dp/B0D9MQLPP2?tag=prixmalin-20",
           "type": "online"
-        },
-        {
-          "name": "Best Buy",
-          "stock": true,
-          "affiliateLink": "https://www.bestbuy.ca/ea-sports-fc-26?ref=prixmalin",
-          "type": "local"
         }
       ],
-      "expires": "2026-09-30",
+      "expires": "2026-05-30",
       "featured": true,
-      "tags": ["deal-chaud", "sports", "nouveauté"]
+      "tags": ["deal-chaud", "sports", "ea"]
     },
     {
       "id": "zelda-totk",
-      "name": "The Legend of Zelda: Tears of the Kingdom",
+      "name": "Zelda: Tears of the Kingdom",
       "category": "game",
       "platform": "Nintendo Switch",
       "regularPrice": 79.99,
@@ -466,19 +400,13 @@
       "description": "Aventure épique - AAA Nintendo",
       "retailers": [
         {
-          "name": "Costco",
-          "stock": true,
-          "affiliateLink": "https://www.costco.ca/zelda-tears-kingdom.html?ref=prixmalin",
-          "type": "local"
-        },
-        {
           "name": "Amazon.ca",
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B0BVL45TY9?tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-02-28",
+      "expires": "2026-04-28",
       "featured": true,
       "tags": ["deal-chaud", "zelda", "nintendo"]
     },
@@ -488,25 +416,19 @@
       "category": "game",
       "platform": "Xbox Series X",
       "regularPrice": 89.99,
-      "dealPrice": 74.99,
-      "discount": 17,
-      "savings": 15.00,
-      "description": "FPS multijoueur - Edition bundle",
+      "dealPrice": 49.99,
+      "discount": 44,
+      "savings": 40.00,
+      "description": "FPS multijoueur - Edition standard",
       "retailers": [
         {
-          "name": "EB Games",
+          "name": "Amazon.ca",
           "stock": true,
-          "affiliateLink": "https://www.ebgames.ca/call-of-duty-mw3?ref=prixmalin",
-          "type": "local"
-        },
-        {
-          "name": "Walmart",
-          "stock": true,
-          "affiliateLink": "https://www.walmart.ca/call-of-duty-mw3?ref=prixmalin",
+          "affiliateLink": "https://www.amazon.ca/s?k=call+of+duty+modern+warfare+3+xbox&tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-03-01",
+      "expires": "2026-05-01",
       "featured": false,
       "tags": ["cod", "fps", "activision"]
     },
@@ -516,9 +438,9 @@
       "category": "game",
       "platform": "PS5",
       "regularPrice": 79.99,
-      "dealPrice": 49.99,
-      "discount": 38,
-      "savings": 30.00,
+      "dealPrice": 39.99,
+      "discount": 50,
+      "savings": 40.00,
       "description": "RPG monde ouvert Harry Potter",
       "retailers": [
         {
@@ -526,15 +448,9 @@
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B0B1M91BFY?tag=prixmalin-20",
           "type": "online"
-        },
-        {
-          "name": "Best Buy",
-          "stock": true,
-          "affiliateLink": "https://www.bestbuy.ca/hogwarts-legacy?ref=prixmalin",
-          "type": "local"
         }
       ],
-      "expires": "2026-02-25",
+      "expires": "2026-04-25",
       "featured": true,
       "tags": ["deal-chaud", "rpg", "harry-potter"]
     },
@@ -552,17 +468,11 @@
         {
           "name": "Steam",
           "stock": true,
-          "affiliateLink": "https://store.steampowered.com/app/1086940?ref=prixmalin",
-          "type": "online"
-        },
-        {
-          "name": "GOG",
-          "stock": true,
-          "affiliateLink": "https://www.gog.com/baldurs-gate-3?ref=prixmalin",
+          "affiliateLink": "https://store.steampowered.com/app/1086940",
           "type": "online"
         }
       ],
-      "expires": "2026-03-15",
+      "expires": "2026-05-15",
       "featured": true,
       "tags": ["deal-chaud", "rpg", "goty"]
     }
@@ -581,19 +491,13 @@
       "description": "Console next-gen compacte 512GB",
       "retailers": [
         {
-          "name": "Best Buy",
+          "name": "Amazon.ca",
           "stock": true,
-          "affiliateLink": "https://www.bestbuy.ca/xbox-series-s?ref=prixmalin",
-          "type": "local"
-        },
-        {
-          "name": "Walmart",
-          "stock": true,
-          "affiliateLink": "https://www.walmart.ca/xbox-series-s?ref=prixmalin",
+          "affiliateLink": "https://www.amazon.ca/s?k=xbox+series+s&tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-02-28",
+      "expires": "2026-04-28",
       "featured": true,
       "tags": ["deal-chaud", "console", "xbox"]
     },
@@ -609,19 +513,13 @@
       "description": "Bundle avec Spider-Man 2",
       "retailers": [
         {
-          "name": "EB Games",
-          "stock": false,
-          "affiliateLink": "https://www.ebgames.ca/ps5-slim?ref=prixmalin",
-          "type": "local"
-        },
-        {
           "name": "Amazon.ca",
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B0CL5KNB9M?tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-03-10",
+      "expires": "2026-05-10",
       "featured": true,
       "tags": ["deal-chaud", "console", "playstation"]
     },
@@ -637,19 +535,13 @@
       "description": "Écran OLED 7 pouces",
       "retailers": [
         {
-          "name": "Costco",
-          "stock": true,
-          "affiliateLink": "https://www.costco.ca/nintendo-switch-oled.html?ref=prixmalin",
-          "type": "local"
-        },
-        {
           "name": "Amazon.ca",
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B098RKWHHZ?tag=prixmalin-20",
           "type": "online"
         }
       ],
-      "expires": "2026-02-20",
+      "expires": "2026-04-30",
       "featured": false,
       "tags": ["console", "nintendo", "oled"]
     },
@@ -665,19 +557,13 @@
       "description": "Manette pro avec paddles",
       "retailers": [
         {
-          "name": "Microsoft Store",
+          "name": "Amazon.ca",
           "stock": true,
-          "affiliateLink": "https://www.microsoft.com/xbox-elite-controller?ref=prixmalin",
+          "affiliateLink": "https://www.amazon.ca/s?k=xbox+elite+controller+series+2&tag=prixmalin-20",
           "type": "online"
-        },
-        {
-          "name": "Best Buy",
-          "stock": true,
-          "affiliateLink": "https://www.bestbuy.ca/xbox-elite-controller?ref=prixmalin",
-          "type": "local"
         }
       ],
-      "expires": "2026-02-28",
+      "expires": "2026-04-28",
       "featured": true,
       "tags": ["deal-chaud", "accessoire", "xbox"]
     },
@@ -697,15 +583,9 @@
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B09ZMQNL7S?tag=prixmalin-20",
           "type": "online"
-        },
-        {
-          "name": "Best Buy",
-          "stock": true,
-          "affiliateLink": "https://www.bestbuy.ca/steelseries-arctis-7?ref=prixmalin",
-          "type": "local"
         }
       ],
-      "expires": "2026-03-01",
+      "expires": "2026-05-01",
       "featured": true,
       "tags": ["deal-chaud", "casque", "wireless"]
     },
@@ -725,15 +605,9 @@
           "stock": true,
           "affiliateLink": "https://www.amazon.ca/dp/B07GBZ4Q68?tag=prixmalin-20",
           "type": "online"
-        },
-        {
-          "name": "Best Buy",
-          "stock": true,
-          "affiliateLink": "https://www.bestbuy.ca/logitech-g502?ref=prixmalin",
-          "type": "local"
         }
       ],
-      "expires": "2026-02-25",
+      "expires": "2026-04-25",
       "featured": true,
       "tags": ["deal-chaud", "souris", "logitech"]
     }
@@ -746,7 +620,7 @@
     "psn-100",
     "steam-wallet-50",
     "fortnite-1000-vbucks",
-    "fifa-26",
+    "ea-sports-fc-25",
     "zelda-totk",
     "hogwarts-legacy",
     "baldurs-gate-3",
