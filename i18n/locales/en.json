@@ -1,0 +1,59 @@
+{
+  "app_name": "PrixMalin",
+  "tagline": "Shop Smart 🍁",
+  "search_placeholder": "Search for a product...",
+  "search_button": "Search",
+  "searching": "Searching...",
+  "no_results": "No results found.",
+  "see_price": "See price on site",
+  "local_store": "Local Store",
+  "online": "Online",
+  "open_maps": "Open Maps",
+  "call": "Call",
+  "visit_site": "Visit Site",
+  "buy_now": "Buy Now",
+  "copy": "📋 Copy",
+  "copied": "✅ Copied!",
+  "free": "FREE",
+  "expires": "Expires",
+  "get_deal": "Get Deal",
+  "km_away": "km away",
+  "results_found": "results found",
+  "categories": {
+    "epicerie": "Grocery",
+    "electro": "Electronics",
+    "vetements": "Clothing",
+    "intime": "Intimates",
+    "quincaillerie": "Hardware",
+    "loisirs": "Leisure",
+    "animaux": "Pets",
+    "sante": "Health",
+    "sport": "Sports",
+    "vehicules": "Vehicles",
+    "divers": "Other"
+  },
+  "nav": {
+    "home": "Home",
+    "search": "Search",
+    "gaming_deals": "Gaming Deals",
+    "bonus_codes": "Bonus Codes",
+    "coupons": "Coupons",
+    "alerts": "Alerts"
+  },
+  "home": {
+    "welcome": "Welcome to PrixMalin",
+    "subtitle": "Find the best prices in Canada",
+    "start_search": "Start Shopping"
+  },
+  "gaming": {
+    "deals_title": "💎 Gaming Deals",
+    "codes_title": "🎁 Free Bonus Codes",
+    "codes_subtitle": "Exclusive codes for Canadian gamers",
+    "no_expiry": "No expiry"
+  },
+  "errors": {
+    "network": "Network error. Check your connection.",
+    "no_results": "No results for this search."
+  },
+  "language": "Language"
+}

@@ -1,0 +1,59 @@
+{
+  "app_name": "PrixMalin",
+  "tagline": "Magasinez malin 🍁",
+  "search_placeholder": "Rechercher un produit...",
+  "search_button": "Rechercher",
+  "searching": "Recherche en cours...",
+  "no_results": "Aucun résultat trouvé.",
+  "see_price": "Voir prix sur site",
+  "local_store": "Magasin local",
+  "online": "En ligne",
+  "open_maps": "Ouvrir Maps",
+  "call": "Appeler",
+  "visit_site": "Visiter le site",
+  "buy_now": "Acheter",
+  "copy": "📋 Copier",
+  "copied": "✅ Copié!",
+  "free": "GRATUIT",
+  "expires": "Expire",
+  "get_deal": "Obtenir le deal",
+  "km_away": "km",
+  "results_found": "résultats trouvés",
+  "categories": {
+    "epicerie": "Épicerie",
+    "electro": "Électro",
+    "vetements": "Vêtements",
+    "intime": "Intime",
+    "quincaillerie": "Quincaillerie",
+    "loisirs": "Loisirs",
+    "animaux": "Animaux",
+    "sante": "Santé",
+    "sport": "Sport",
+    "vehicules": "Véhicules",
+    "divers": "Divers"
+  },
+  "nav": {
+    "home": "Accueil",
+    "search": "Recherche",
+    "gaming_deals": "Deals Gaming",
+    "bonus_codes": "Codes Bonus",
+    "coupons": "Coupons",
+    "alerts": "Alertes"
+  },
+  "home": {
+    "welcome": "Bienvenue sur PrixMalin",
+    "subtitle": "Trouvez les meilleurs prix au Canada",
+    "start_search": "Commencer à magasiner"
+  },
+  "gaming": {
+    "deals_title": "💎 Deals Gaming",
+    "codes_title": "🎁 Codes Bonus Gratuits",
+    "codes_subtitle": "Codes exclusifs pour gamers canadiens",
+    "no_expiry": "Sans expiration"
+  },
+  "errors": {
+    "network": "Erreur réseau. Vérifiez votre connexion.",
+    "no_results": "Aucun résultat pour cette recherche."
+  },
+  "language": "Langue"
+}

@@ -14,26 +14,27 @@ import {
   Keyboard,
 } from 'react-native';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import ProductCard from '../components/ProductCard';
 
 const BACKEND_URL = 'https://prixmalin-backend.onrender.com';
 
-// 11 CATÉGORIES DE PRODUITS (+ Divers)
 const CATEGORIES = [
-  { id: 'epicerie', name: 'Épicerie', icon: require('../assets/icons/epicerie.png'), color: '#4CAF50' },
-  { id: 'electro', name: 'Électro', icon: require('../assets/icons/electro.png'), color: '#2196F3' },
-  { id: 'vetements', name: 'Vêtements', icon: require('../assets/icons/vetements.png'), color: '#E91E63' },
-  { id: 'intime', name: 'Intime', icon: require('../assets/icons/intime.png'), color: '#FF69B4' },
-  { id: 'quincaillerie', name: 'Quincaillerie', icon: require('../assets/icons/quincaillerie.png'), color: '#FF9800' },
-  { id: 'loisirs', name: 'Loisirs & Culture', icon: require('../assets/icons/loisirs_culture.png'), color: '#9C27B0' },
-  { id: 'animaux', name: 'Animaux', icon: require('../assets/icons/coin_animal.png'), color: '#00BCD4' },
-  { id: 'sante', name: 'Santé & Optique', icon: require('../assets/icons/Soin_optique.png'), color: '#FF5722' },
-  { id: 'sport', name: 'Sport & Nature', icon: require('../assets/icons/Sportnature.png'), color: '#8BC34A' },
-  { id: 'vehicules', name: 'Véhicules', icon: require('../assets/icons/vehicules.png'), color: '#607D8B' },
-  { id: 'divers', name: 'Divers', icon: require('../assets/icons/divers.png'), color: '#795548' },
+  { id: 'epicerie', icon: require('../assets/icons/epicerie.png'), color: '#4CAF50' },
+  { id: 'electro', icon: require('../assets/icons/electro.png'), color: '#2196F3' },
+  { id: 'vetements', icon: require('../assets/icons/vetements.png'), color: '#E91E63' },
+  { id: 'intime', icon: require('../assets/icons/intime.png'), color: '#FF69B4' },
+  { id: 'quincaillerie', icon: require('../assets/icons/quincaillerie.png'), color: '#FF9800' },
+  { id: 'loisirs', icon: require('../assets/icons/loisirs_culture.png'), color: '#9C27B0' },
+  { id: 'animaux', icon: require('../assets/icons/coin_animal.png'), color: '#00BCD4' },
+  { id: 'sante', icon: require('../assets/icons/Soin_optique.png'), color: '#FF5722' },
+  { id: 'sport', icon: require('../assets/icons/Sportnature.png'), color: '#8BC34A' },
+  { id: 'vehicules', icon: require('../assets/icons/vehicules.png'), color: '#607D8B' },
+  { id: 'divers', icon: require('../assets/icons/divers.png'), color: '#795548' },
 ];
 
 export default function SearchScreen() {
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -41,7 +42,7 @@ export default function SearchScreen() {
 
   const handleSearch = async () => {
     if (!searchQuery.trim() || !selectedCategory) {
-      alert('Veuillez sélectionner une catégorie et entrer un produit');
+      alert(t('errors.no_results'));
       return;
     }
 
@@ -62,7 +63,7 @@ export default function SearchScreen() {
       setSearchQuery('');
     } catch (error) {
       console.error('Erreur de recherche:', error);
-      alert('Erreur lors de la recherche. Vérifiez votre connexion.');
+      alert(t('errors.network'));
     } finally {
       setLoading(false);
     }
@@ -70,20 +71,16 @@ export default function SearchScreen() {
 
   const CategoryButton = ({ category }) => {
     const isSelected = selectedCategory?.id === category.id;
+    const name = t(`categories.${category.id}`);
     return (
       <TouchableOpacity
         onPress={() => setSelectedCategory(category)}
         activeOpacity={0.8}
       >
-        {/* BLOC ICÔNE */}
         <View style={[styles.categoryIconBox, { borderColor: category.color }]}>
           <Image source={category.icon} style={styles.categoryIcon} />
         </View>
-
-        {/* SÉPARATEUR (ligne horizontale dans le contour) */}
         <View style={[styles.categoryDivider, { backgroundColor: category.color }]} />
-
-        {/* BLOC NOM */}
         <View style={[
           styles.categoryNameBox,
           { borderColor: category.color },
@@ -93,7 +90,7 @@ export default function SearchScreen() {
             styles.categoryText,
             isSelected && styles.categoryTextSelected
           ]}>
-            {category.name}
+            {name}
           </Text>
         </View>
       </TouchableOpacity>
@@ -106,7 +103,7 @@ export default function SearchScreen() {
 
       {/* CATÉGORIES */}
       <View style={styles.categoriesSection}>
-        <Text style={styles.sectionTitle}>Choisis une catégorie</Text>
+        <Text style={styles.sectionTitle}>{t('home.start_search')}</Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -124,7 +121,9 @@ export default function SearchScreen() {
       <View style={styles.searchSection}>
         <TextInput
           style={styles.searchInput}
-          placeholder={selectedCategory ? `Rechercher dans ${selectedCategory.name}...` : "Sélectionne une catégorie d'abord"}
+          placeholder={selectedCategory
+            ? `${t('search_placeholder').replace('...', '')} ${t(`categories.${selectedCategory.id}`)}...`
+            : t('search_placeholder')}
           value={searchQuery}
           onChangeText={setSearchQuery}
           editable={!!selectedCategory}
@@ -147,12 +146,12 @@ export default function SearchScreen() {
         {loading ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#4CAF50" />
-            <Text style={styles.loadingText}>Recherche en cours...</Text>
+            <Text style={styles.loadingText}>{t('searching')}</Text>
           </View>
         ) : results.length > 0 ? (
           <>
             <Text style={styles.resultsTitle}>
-              {results.length} résultat{results.length > 1 ? 's' : ''} trouvé{results.length > 1 ? 's' : ''}
+              {results.length} {t('results_found')}
             </Text>
             <FlatList
               data={results}
@@ -167,8 +166,8 @@ export default function SearchScreen() {
             <Text style={styles.emptyIcon}>🛍️</Text>
             <Text style={styles.emptyText}>
               {selectedCategory
-                ? 'Commence une recherche pour voir les meilleurs prix !'
-                : 'Sélectionne une catégorie pour commencer'}
+                ? t('home.start_search')
+                : t('search_placeholder')}
             </Text>
           </View>
         )}
@@ -182,11 +181,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
-
-  // ─── CATÉGORIES ───
   categoriesSection: {
     backgroundColor: '#fff',
-    paddingTop: 20,       // ← plus d'espace en haut
+    paddingTop: 20,
     paddingBottom: 18,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
@@ -205,13 +202,11 @@ const styles = StyleSheet.create({
   categoryWrapper: {
     marginHorizontal: 6,
   },
-
-  // Bloc icône (haut)
   categoryIconBox: {
     width: 90,
     height: 75,
     borderWidth: 2,
-    borderBottomWidth: 0,       // ← pas de bordure entre les deux blocs
+    borderBottomWidth: 0,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     backgroundColor: '#fff',
@@ -222,20 +217,16 @@ const styles = StyleSheet.create({
   categoryIcon: {
     width: 82,
     height: 67,
-    resizeMode: 'cover',        // ← remplit bien le bloc
+    resizeMode: 'cover',
   },
-
-  // Séparateur fin
   categoryDivider: {
     height: 1.5,
     width: 90,
   },
-
-  // Bloc nom (bas)
   categoryNameBox: {
     width: 90,
     borderWidth: 2,
-    borderTopWidth: 0,          // ← pas de bordure entre les deux blocs
+    borderTopWidth: 0,
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
     paddingVertical: 5,
@@ -254,16 +245,14 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-
-  // ─── RECHERCHE ───
   searchSection: {
     flexDirection: 'row',
     paddingHorizontal: 15,
-    paddingVertical: 18,       // ← plus d'espace vertical
+    paddingVertical: 18,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
-    marginTop: 4,              // ← léger dégagement supplémentaire
+    marginTop: 4,
   },
   searchInput: {
     flex: 1,
@@ -288,12 +277,10 @@ const styles = StyleSheet.create({
   searchButtonText: {
     fontSize: 24,
   },
-
-  // ─── RÉSULTATS ───
   resultsSection: {
     flex: 1,
     padding: 15,
-    paddingTop: 20,            // ← plus d'espace pour dégager la recherche
+    paddingTop: 20,
   },
   resultsTitle: {
     fontSize: 16,

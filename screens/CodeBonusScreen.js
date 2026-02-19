@@ -10,8 +10,8 @@ import {
   Clipboard,
   Alert,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
-// CODES BONUS GRATUITS
 const BONUS_CODES = [
   {
     id: 1,
@@ -70,6 +70,7 @@ const BONUS_CODES = [
 ];
 
 export default function CodeBonusScreen() {
+  const { t } = useTranslation();
   const [copiedCode, setCopiedCode] = useState(null);
 
   const handleCopyCode = (code, gameCode) => {
@@ -77,12 +78,11 @@ export default function CodeBonusScreen() {
     setCopiedCode(code.id);
 
     Alert.alert(
-      '✅ Code copié !',
-      `${gameCode}\n\nCollez-le dans ${code.game} pour obtenir vos récompenses !`,
+      t('copied'),
+      `${gameCode}\n\n${code.game}`,
       [{ text: 'OK' }]
     );
 
-    // Reset après 3 secondes
     setTimeout(() => setCopiedCode(null), 3000);
   };
 
@@ -92,24 +92,20 @@ export default function CodeBonusScreen() {
 
       {/* HEADER */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>🎁 Codes Bonus Gratuits</Text>
-        <Text style={styles.headerSubtitle}>
-          Codes promo exclusifs pour tes jeux préférés
-        </Text>
+        <Text style={styles.headerTitle}>{t('gaming.codes_title')}</Text>
+        <Text style={styles.headerSubtitle}>{t('gaming.codes_subtitle')}</Text>
       </View>
 
       {/* LISTE DES CODES */}
       <ScrollView style={styles.scrollView}>
         {BONUS_CODES.map((code) => (
-          <View
-            key={code.id}
-            style={[styles.codeCard, { borderLeftColor: code.color }]}
-          >
+          <View key={code.id} style={[styles.codeCard, { borderLeftColor: code.color }]}>
+
             {/* GAME NAME */}
             <View style={styles.cardHeader}>
               <Text style={styles.gameName}>{code.game}</Text>
               <View style={[styles.badge, { backgroundColor: code.color }]}>
-                <Text style={styles.badgeText}>GRATUIT</Text>
+                <Text style={styles.badgeText}>{t('free')}</Text>
               </View>
             </View>
 
@@ -119,43 +115,33 @@ export default function CodeBonusScreen() {
                 <Text style={styles.codeText}>{code.code}</Text>
               </View>
               <TouchableOpacity
-                style={[
-                  styles.copyButton,
-                  copiedCode === code.id && styles.copiedButton,
-                ]}
+                style={[styles.copyButton, copiedCode === code.id && styles.copiedButton]}
                 onPress={() => handleCopyCode(code, code.code)}
               >
                 <Text style={styles.copyButtonText}>
-                  {copiedCode === code.id ? '✓ Copié' : '📋 Copier'}
+                  {copiedCode === code.id ? t('copied') : t('copy')}
                 </Text>
               </TouchableOpacity>
             </View>
 
             {/* REWARDS */}
             <View style={styles.rewardsContainer}>
-              <Text style={styles.rewardsLabel}>🎁 Récompenses :</Text>
-              <Text style={styles.rewardsText}>{code.rewards}</Text>
+              <Text style={styles.rewardsLabel}>🎁 {code.rewards}</Text>
             </View>
 
             {/* INSTRUCTIONS */}
             <View style={styles.instructionsContainer}>
-              <Text style={styles.instructionsLabel}>ℹ️ Comment activer :</Text>
-              <Text style={styles.instructionsText}>{code.instructions}</Text>
+              <Text style={styles.instructionsLabel}>ℹ️ {code.instructions}</Text>
             </View>
 
             {/* EXPIRY */}
-            <Text style={styles.expiryText}>⏰ Expire le {code.expiry}</Text>
+            <Text style={styles.expiryText}>⏰ {t('expires')} : {code.expiry}</Text>
           </View>
         ))}
 
-        {/* FOOTER INFO */}
+        {/* FOOTER */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            💡 Astuce : Ces codes sont gratuits et sans affiliation.
-          </Text>
-          <Text style={styles.footerText}>
-            Revenez régulièrement, on ajoute de nouveaux codes chaque semaine !
-          </Text>
+          <Text style={styles.footerText}>💡 {t('gaming.codes_subtitle')}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -163,29 +149,15 @@ export default function CodeBonusScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
+  container: { flex: 1, backgroundColor: '#f5f5f5' },
   header: {
     backgroundColor: '#2c3e50',
     padding: 20,
     paddingTop: 10,
   },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 5,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: '#ecf0f1',
-  },
-  scrollView: {
-    flex: 1,
-    padding: 15,
-  },
+  headerTitle: { fontSize: 24, fontWeight: 'bold', color: '#fff', marginBottom: 5 },
+  headerSubtitle: { fontSize: 14, color: '#ecf0f1' },
+  scrollView: { flex: 1, padding: 15 },
   codeCard: {
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -204,25 +176,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 15,
   },
-  gameName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-  },
-  badge: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 12,
-  },
-  badgeText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  codeContainer: {
-    flexDirection: 'row',
-    marginBottom: 15,
-  },
+  gameName: { fontSize: 20, fontWeight: 'bold', color: '#2c3e50' },
+  badge: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 12 },
+  badgeText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
+  codeContainer: { flexDirection: 'row', marginBottom: 15 },
   codeBox: {
     flex: 1,
     backgroundColor: '#ecf0f1',
@@ -244,46 +201,22 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
   },
-  copiedButton: {
-    backgroundColor: '#27ae60',
-  },
-  copyButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
+  copiedButton: { backgroundColor: '#27ae60' },
+  copyButtonText: { color: '#fff', fontSize: 14, fontWeight: 'bold' },
   rewardsContainer: {
     backgroundColor: '#e8f5e9',
     padding: 12,
     borderRadius: 8,
     marginBottom: 10,
   },
-  rewardsLabel: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#27ae60',
-    marginBottom: 5,
-  },
-  rewardsText: {
-    fontSize: 14,
-    color: '#2c3e50',
-  },
+  rewardsLabel: { fontSize: 14, color: '#27ae60', fontWeight: '600' },
   instructionsContainer: {
     backgroundColor: '#e3f2fd',
     padding: 12,
     borderRadius: 8,
     marginBottom: 10,
   },
-  instructionsLabel: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#2196f3',
-    marginBottom: 5,
-  },
-  instructionsText: {
-    fontSize: 13,
-    color: '#2c3e50',
-  },
+  instructionsLabel: { fontSize: 13, color: '#2196f3' },
   expiryText: {
     fontSize: 12,
     color: '#7f8c8d',
@@ -297,10 +230,5 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 10,
   },
-  footerText: {
-    fontSize: 13,
-    color: '#856404',
-    marginBottom: 5,
-    textAlign: 'center',
-  },
+  footerText: { fontSize: 13, color: '#856404', textAlign: 'center' },
 });

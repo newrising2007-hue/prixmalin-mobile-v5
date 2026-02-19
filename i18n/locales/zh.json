@@ -1,0 +1,59 @@
+{
+  "app_name": "PrixMalin",
+  "tagline": "精明购物 🍁",
+  "search_placeholder": "搜索产品...",
+  "search_button": "搜索",
+  "searching": "搜索中...",
+  "no_results": "未找到结果。",
+  "see_price": "在网站查看价格",
+  "local_store": "本地商店",
+  "online": "线上",
+  "open_maps": "打开地图",
+  "call": "致电",
+  "visit_site": "访问网站",
+  "buy_now": "立即购买",
+  "copy": "📋 复制",
+  "copied": "✅ 已复制!",
+  "free": "免费",
+  "expires": "到期",
+  "get_deal": "获取优惠",
+  "km_away": "公里",
+  "results_found": "个结果",
+  "categories": {
+    "epicerie": "杂货",
+    "electro": "电子产品",
+    "vetements": "服装",
+    "intime": "内衣",
+    "quincaillerie": "五金",
+    "loisirs": "休闲",
+    "animaux": "宠物",
+    "sante": "健康",
+    "sport": "运动",
+    "vehicules": "车辆",
+    "divers": "其他"
+  },
+  "nav": {
+    "home": "首页",
+    "search": "搜索",
+    "gaming_deals": "游戏优惠",
+    "bonus_codes": "奖励代码",
+    "coupons": "优惠券",
+    "alerts": "提醒"
+  },
+  "home": {
+    "welcome": "欢迎使用 PrixMalin",
+    "subtitle": "在加拿大找到最佳价格",
+    "start_search": "开始购物"
+  },
+  "gaming": {
+    "deals_title": "💎 游戏优惠",
+    "codes_title": "🎁 免费奖励代码",
+    "codes_subtitle": "加拿大玩家专属代码",
+    "no_expiry": "无到期日"
+  },
+  "errors": {
+    "network": "网络错误。请检查您的连接。",
+    "no_results": "此搜索无结果。"
+  },
+  "language": "语言"
+}

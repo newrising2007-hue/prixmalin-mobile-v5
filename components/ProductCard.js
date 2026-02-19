@@ -1,35 +1,31 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const ProductCard = ({ product }) => {
+  const { t } = useTranslation();
 
   const getBadgeInfo = () => {
     if (product.affiliationType === 'local_web') {
-      return { text: '🏷️ Affiliation Locale', color: '#4CAF50' };
+      return { text: `🏷️ ${t('local_store')}`, color: '#4CAF50' };
     } else if (product.affiliationType === 'local_maps') {
-      return { text: '📍 Commerce Local', color: '#FF9800' };
+      return { text: `📍 ${t('local_store')}`, color: '#FF9800' };
     } else if (product.affiliationType === 'online') {
-      return { text: '🌐 Partenaire En Ligne', color: '#2196F3' };
+      return { text: `🌐 ${t('online')}`, color: '#2196F3' };
     } else if (product.type === 'local_with_website') {
-      return { text: '🏪 Commerce Local', color: '#4CAF50' };
+      return { text: `🏪 ${t('local_store')}`, color: '#4CAF50' };
     } else if (product.type === 'local_no_website') {
-      return { text: '📍 Commerce Local', color: '#FF9800' };
+      return { text: `📍 ${t('local_store')}`, color: '#FF9800' };
     }
-    return { text: '✅ Prix vérifié', color: '#757575' };
+    return { text: `✅ ${t('see_price')}`, color: '#757575' };
   };
 
-  // Utilise affiliateLink, website, ou url — dans cet ordre
-  const getLink = () => {
-    return product.affiliateLink || product.website || product.url || null;
-  };
+  const getLink = () => product.affiliateLink || product.website || product.url || null;
 
   const handlePress = () => {
     const link = getLink();
-    console.log('🔍 Clic détecté ! Lien:', link);
     if (link) {
       Linking.openURL(link).catch(err => console.error('Erreur ouverture lien:', err));
-    } else {
-      console.warn('⚠️ Aucun lien disponible pour ce produit');
     }
   };
 
@@ -53,7 +49,7 @@ const ProductCard = ({ product }) => {
           <Text style={styles.price}>{product.price}$</Text>
         </View>
       ) : (
-        <Text style={styles.noPrice}>Voir prix sur le site</Text>
+        <Text style={styles.noPrice}>{t('see_price')}</Text>
       )}
 
       <Text style={styles.store}>📍 {product.store}</Text>
@@ -63,7 +59,7 @@ const ProductCard = ({ product }) => {
       ) : null}
 
       {product.distance ? (
-        <Text style={styles.distance}>🚗 {product.distance}</Text>
+        <Text style={styles.distance}>🚗 {product.distance} {t('km_away')}</Text>
       ) : null}
 
       {product.phone ? (
@@ -80,7 +76,7 @@ const ProductCard = ({ product }) => {
 
       <View style={[styles.actionButton, !hasLink && styles.actionButtonDisabled]}>
         <Text style={styles.actionButtonText}>
-          {hasLink ? 'Voir le produit →' : 'Aucun lien disponible'}
+          {hasLink ? `${t('visit_site')} →` : t('no_results')}
         </Text>
       </View>
     </TouchableOpacity>
@@ -100,56 +96,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  header: {
-    marginBottom: 8,
-  },
-  productName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  priceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  price: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#4CAF50',
-  },
-  noPrice: {
-    fontSize: 14,
-    color: '#FF9800',
-    fontStyle: 'italic',
-    marginBottom: 8,
-  },
-  store: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 4,
-  },
-  address: {
-    fontSize: 13,
-    color: '#888',
-    marginBottom: 4,
-  },
-  distance: {
-    fontSize: 14,
-    color: '#FF9800',
-    marginBottom: 4,
-    fontWeight: '600',
-  },
-  phone: {
-    fontSize: 13,
-    color: '#2196F3',
-    marginBottom: 8,
-  },
-  rating: {
-    fontSize: 13,
-    color: '#FFC107',
-    marginBottom: 8,
-  },
+  header: { marginBottom: 8 },
+  productName: { fontSize: 18, fontWeight: 'bold', color: '#333' },
+  priceContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
+  price: { fontSize: 24, fontWeight: 'bold', color: '#4CAF50' },
+  noPrice: { fontSize: 14, color: '#FF9800', fontStyle: 'italic', marginBottom: 8 },
+  store: { fontSize: 16, color: '#666', marginBottom: 4 },
+  address: { fontSize: 13, color: '#888', marginBottom: 4 },
+  distance: { fontSize: 14, color: '#FF9800', marginBottom: 4, fontWeight: '600' },
+  phone: { fontSize: 13, color: '#2196F3', marginBottom: 8 },
+  rating: { fontSize: 13, color: '#FFC107', marginBottom: 8 },
   badge: {
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -157,11 +113,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginVertical: 8,
   },
-  badgeText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '600',
-  },
+  badgeText: { color: '#fff', fontSize: 12, fontWeight: '600' },
   actionButton: {
     backgroundColor: '#2196F3',
     paddingVertical: 10,
@@ -170,14 +122,8 @@ const styles = StyleSheet.create({
     marginTop: 12,
     alignItems: 'center',
   },
-  actionButtonDisabled: {
-    backgroundColor: '#bdbdbd',
-  },
-  actionButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
+  actionButtonDisabled: { backgroundColor: '#bdbdbd' },
+  actionButtonText: { color: '#fff', fontSize: 14, fontWeight: '600' },
 });
 
 export default ProductCard;

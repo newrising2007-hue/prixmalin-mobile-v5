@@ -8,8 +8,11 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 export default function HomeScreen({ navigation }) {
+  const { t } = useTranslation();
+
   const MenuButton = ({ icon, title, subtitle, color, onPress }) => (
     <TouchableOpacity
       style={[styles.menuButton, { borderLeftColor: color }]}
@@ -42,53 +45,48 @@ export default function HomeScreen({ navigation }) {
           style={styles.logo}
         />
         <Text style={styles.title}>PrixMalin</Text>
-        <Text style={styles.subtitle}>Économise sur tous tes achats au Canada</Text>
+        <Text style={styles.subtitle}>{t('tagline')}</Text>
       </View>
 
       {/* MENU PRINCIPAL */}
       <View style={styles.menuContainer}>
 
-        {/* BOUTON 1 - RECHERCHER */}
         <MenuButton
           icon="🔍"
-          title="Rechercher"
-          subtitle="Compare les prix de produits"
+          title={t('nav.search')}
+          subtitle={t('home.subtitle')}
           color="#4CAF50"
           onPress={() => navigation.navigate('Search')}
         />
 
-        {/* BOUTON 2 - DEALS GAMING */}
         <MenuButton
           icon={require('../assets/icons/deals_gaming.png')}
-          title="Deals Gaming"
-          subtitle="Game Pass, cartes-cadeaux, V-Bucks"
-          color="🟡#FFB300"
+          title={t('nav.gaming_deals')}
+          subtitle={t('gaming.deals_title')}
+          color="#FFB300"
           onPress={() => navigation.navigate('Gaming')}
         />
 
-        {/* BOUTON 3 - CODES BONUS GRATUITS */}
         <MenuButton
           icon={require('../assets/icons/code_bonus.png')}
-          title="Codes Bonus"
-          subtitle="Codes promo gratuits World of Tanks, Fortnite..."
-          color="🟢#4CAF50"
+          title={t('nav.bonus_codes')}
+          subtitle={t('gaming.codes_subtitle')}
+          color="#4CAF50"
           onPress={() => navigation.navigate('CodeBonus')}
         />
 
-        {/* BOUTON 4 - COUPONS & PROMOS */}
         <MenuButton
           icon="💰"
-          title="Coupons & Promos"
-          subtitle="Codes de rabais actifs"
+          title={t('nav.coupons')}
+          subtitle={t('nav.coupons')}
           color="#2196F3"
           onPress={() => navigation.navigate('Coupons')}
         />
 
-        {/* BOUTON 5 - ALERTES PRIX */}
         <MenuButton
           icon="📢"
-          title="Alertes Prix"
-          subtitle="Sois notifié des baisses de prix"
+          title={t('nav.alerts')}
+          subtitle={t('nav.alerts')}
           color="#F44336"
           onPress={() => navigation.navigate('Alerts')}
         />
@@ -108,24 +106,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
-  header: {
+
+header: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    paddingVertical: 30,
+    paddingVertical: 15,  // ← réduit de 30 à 15
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
   logo: {
-    width: 80,
-    height: 80,
-    marginBottom: 15,
+    width: 60,
+    height: 60,
+    marginBottom: 8,
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
     color: '#2c3e50',
     marginBottom: 5,
+    marginTop: 10, 
   },
   subtitle: {
     fontSize: 14,
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   menuButton: {
     backgroundColor: '#fff',
     borderRadius: 12,
-    marginBottom: 15,
+    marginBottom: 10,
     borderLeftWidth: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -151,15 +151,15 @@ const styles = StyleSheet.create({
   menuButtonContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
+    padding: 14,
   },
   menuIcon: {
     fontSize: 40,
     marginRight: 15,
   },
   menuIconImage: {
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
     marginBottom: 10,
   },
   menuTextContainer: {
