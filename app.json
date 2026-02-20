@@ -24,7 +24,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#4CAF50"
       },
-      "package": "com.neosmarthing.prixmalin"
+      "package": "com.neosmarthing.prixmalin",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/icon.png"
@@ -35,7 +39,9 @@
       }
     },
     "plugins": [
-      "expo-localization"
+      "expo-localization",
+      "expo-location"
     ]
   }
 }
+

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import * as Location from 'expo-location';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -39,6 +40,20 @@ export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState({ latitude: 45.5017, longitude: -73.5673 });
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === 'granted') {
+        const loc = await Location.getCurrentPositionAsync({});
+        setLocation({
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+        });
+      }
+    })();
+  }, []);
 
   const handleSearch = async () => {
     if (!searchQuery.trim() || !selectedCategory) {
@@ -49,13 +64,15 @@ export default function SearchScreen() {
     Keyboard.dismiss();
     setLoading(true);
 
+    console.log('GPS utilisé:', location.latitude, location.longitude);
+
     try {
       const response = await axios.post(`${BACKEND_URL}/api/search-prices`, {
         query: searchQuery,
         category: selectedCategory.id,
         location: {
-          latitude: 45.5017,
-          longitude: -73.5673
+          latitude: location.latitude,
+          longitude: location.longitude,
         }
       });
 
@@ -101,7 +118,6 @@ export default function SearchScreen() {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#4CAF50" />
 
-      {/* CATÉGORIES */}
       <View style={styles.categoriesSection}>
         <Text style={styles.sectionTitle}>{t('home.start_search')}</Text>
         <ScrollView
@@ -117,7 +133,6 @@ export default function SearchScreen() {
         </ScrollView>
       </View>
 
-      {/* BARRE DE RECHERCHE */}
       <View style={styles.searchSection}>
         <TextInput
           style={styles.searchInput}
@@ -141,7 +156,6 @@ export default function SearchScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* RÉSULTATS */}
       <View style={styles.resultsSection}>
         {loading ? (
           <View style={styles.loadingContainer}>
@@ -165,9 +179,7 @@ export default function SearchScreen() {
           <View style={styles.emptyState}>
             <Text style={styles.emptyIcon}>🛍️</Text>
             <Text style={styles.emptyText}>
-              {selectedCategory
-                ? t('home.start_search')
-                : t('search_placeholder')}
+              {selectedCategory ? t('home.start_search') : t('search_placeholder')}
             </Text>
           </View>
         )}
@@ -177,140 +189,27 @@ export default function SearchScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  categoriesSection: {
-    backgroundColor: '#fff',
-    paddingTop: 20,
-    paddingBottom: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2c3e50',
-    paddingHorizontal: 20,
-    marginBottom: 14,
-  },
-  categoriesScrollContent: {
-    paddingHorizontal: 15,
-    alignItems: 'flex-start',
-  },
-  categoryWrapper: {
-    marginHorizontal: 6,
-  },
-  categoryIconBox: {
-    width: 90,
-    height: 75,
-    borderWidth: 2,
-    borderBottomWidth: 0,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
-  categoryIcon: {
-    width: 82,
-    height: 67,
-    resizeMode: 'cover',
-  },
-  categoryDivider: {
-    height: 1.5,
-    width: 90,
-  },
-  categoryNameBox: {
-    width: 90,
-    borderWidth: 2,
-    borderTopWidth: 0,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    paddingVertical: 5,
-    paddingHorizontal: 4,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  categoryText: {
-    fontSize: 11,
-    color: '#7f8c8d',
-    textAlign: 'center',
-    fontWeight: '500',
-  },
-  categoryTextSelected: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  searchSection: {
-    flexDirection: 'row',
-    paddingHorizontal: 15,
-    paddingVertical: 18,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-    marginTop: 4,
-  },
-  searchInput: {
-    flex: 1,
-    height: 50,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 25,
-    paddingHorizontal: 20,
-    fontSize: 16,
-    marginRight: 10,
-  },
-  searchButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#4CAF50',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cancelButton: {
-    backgroundColor: '#ff4444',
-  },
-  searchButtonText: {
-    fontSize: 24,
-  },
-  resultsSection: {
-    flex: 1,
-    padding: 15,
-    paddingTop: 20,
-  },
-  resultsTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 15,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#7f8c8d',
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  emptyIcon: {
-    fontSize: 64,
-    marginBottom: 20,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#7f8c8d',
-    textAlign: 'center',
-    paddingHorizontal: 40,
-  },
+  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  categoriesSection: { backgroundColor: '#fff', paddingTop: 20, paddingBottom: 18, borderBottomWidth: 1, borderBottomColor: '#e0e0e0' },
+  sectionTitle: { fontSize: 16, fontWeight: '600', color: '#2c3e50', paddingHorizontal: 20, marginBottom: 14 },
+  categoriesScrollContent: { paddingHorizontal: 15, alignItems: 'flex-start' },
+  categoryWrapper: { marginHorizontal: 6 },
+  categoryIconBox: { width: 90, height: 75, borderWidth: 2, borderBottomWidth: 0, borderTopLeftRadius: 12, borderTopRightRadius: 12, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' },
+  categoryIcon: { width: 82, height: 67, resizeMode: 'cover' },
+  categoryDivider: { height: 1.5, width: 90 },
+  categoryNameBox: { width: 90, borderWidth: 2, borderTopWidth: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, paddingVertical: 5, paddingHorizontal: 4, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' },
+  categoryText: { fontSize: 11, color: '#7f8c8d', textAlign: 'center', fontWeight: '500' },
+  categoryTextSelected: { color: '#fff', fontWeight: 'bold' },
+  searchSection: { flexDirection: 'row', paddingHorizontal: 15, paddingVertical: 18, backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#e0e0e0', marginTop: 4 },
+  searchInput: { flex: 1, height: 50, backgroundColor: '#f5f5f5', borderRadius: 25, paddingHorizontal: 20, fontSize: 16, marginRight: 10 },
+  searchButton: { width: 50, height: 50, borderRadius: 25, backgroundColor: '#4CAF50', justifyContent: 'center', alignItems: 'center' },
+  cancelButton: { backgroundColor: '#ff4444' },
+  searchButtonText: { fontSize: 24 },
+  resultsSection: { flex: 1, padding: 15, paddingTop: 20 },
+  resultsTitle: { fontSize: 16, fontWeight: 'bold', color: '#2c3e50', marginBottom: 15 },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  loadingText: { marginTop: 10, fontSize: 16, color: '#7f8c8d' },
+  emptyState: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  emptyIcon: { fontSize: 64, marginBottom: 20 },
+  emptyText: { fontSize: 16, color: '#7f8c8d', textAlign: 'center', paddingHorizontal: 40 },
 });
