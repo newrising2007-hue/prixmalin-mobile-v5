@@ -1,6 +1,41 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { useTranslation } from 'react-i18next';
+
+// Couleurs par marque - 100% local, zéro réseau requis
+const BRAND_COLORS = {
+  'yamaha':      { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'suzuki':      { bg: '#003087', text: 'SUZUKI', emoji: '🏍️' },
+  'arctic cat':  { bg: '#003087', text: 'ARCTIC CAT', emoji: '🏂' },
+  'ski-doo':     { bg: '#FFD700', text: 'SKI-DOO', emoji: '🛷', textColor: '#000' },
+  'can-am':      { bg: '#CC0000', text: 'CAN-AM', emoji: '🏍️' },
+  'sea-doo':     { bg: '#0066CC', text: 'SEA-DOO', emoji: '🚤' },
+  'honda':       { bg: '#CC0000', text: 'HONDA', emoji: '🏍️' },
+  'kawasaki':    { bg: '#00A651', text: 'KAWASAKI', emoji: '🏍️' },
+  'ktm':         { bg: '#FF6600', text: 'KTM', emoji: '🏍️' },
+  'polaris':     { bg: '#003087', text: 'POLARIS', emoji: '🏂' },
+  'cfmoto':      { bg: '#CC0000', text: 'CFMOTO', emoji: '🏍️' },
+  'lynx':        { bg: '#FFD700', text: 'LYNX', emoji: '🛷', textColor: '#000' },
+  'husqvarna':   { bg: '#0000CD', text: 'HUSQVARNA', emoji: '🏍️' },
+  'ford':        { bg: '#003087', text: 'FORD', emoji: '🚗' },
+  'toyota':      { bg: '#CC0000', text: 'TOYOTA', emoji: '🚗' },
+  'facebook marketplace': { bg: '#1877F2', text: 'Facebook Marketplace', emoji: '🛒' },
+  'kijiji':      { bg: '#FF6600', text: 'Kijiji', emoji: '🏷️' },
+  'amazon.ca':   { bg: '#FF9900', text: 'Amazon.ca', emoji: '📦', textColor: '#000' },
+  'walmart.ca':  { bg: '#0071CE', text: 'Walmart.ca', emoji: '🛒' },
+};
+
+function getBrandDisplay(product) {
+  const storeLower = (product.store || '').toLowerCase();
+  const nameLower = (product.product_name || '').toLowerCase();
+
+  for (const [brand, info] of Object.entries(BRAND_COLORS)) {
+    if (storeLower.includes(brand) || nameLower.includes(brand)) {
+      return info;
+    }
+  }
+  return { bg: '#1A1A2E', text: product.store || 'Véhicule', emoji: '🚗' };
+}
 
 const ProductCard = ({ product }) => {
   const { t } = useTranslation();
@@ -41,6 +76,11 @@ const ProductCard = ({ product }) => {
   const badge = getBadgeInfo();
   const hasLink = !!getLink();
   const hasImage = !!product.image_url;
+  const brandDisplay = getBrandDisplay(product);
+
+  // Affiche bannière colorée si catégorie véhicule OU si image_url présente
+  const showBanner = hasImage || product.type === 'marketplace' || product.verified ||
+    product.type === 'local_with_website' || product.type === 'local_no_website';
 
   return (
     <TouchableOpacity
@@ -48,14 +88,13 @@ const ProductCard = ({ product }) => {
       onPress={handlePress}
       activeOpacity={hasLink ? 0.7 : 1}
     >
-      {/* IMAGE EN HAUT */}
-      {hasImage && (
-        <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: product.image_url }}
-            style={styles.image}
-            resizeMode="contain"
-          />
+      {/* BANNIÈRE COLORÉE EN HAUT */}
+      {showBanner && (
+        <View style={[styles.imageContainer, { backgroundColor: brandDisplay.bg }]}>
+          <Text style={[styles.brandEmoji]}>{brandDisplay.emoji}</Text>
+          <Text style={[styles.brandText, { color: brandDisplay.textColor || '#FFFFFF' }]}>
+            {brandDisplay.text}
+          </Text>
           {/* Badge vérifié sur l'image */}
           <View style={[styles.imgBadge, { backgroundColor: badge.color }]}>
             <Text style={styles.imgBadgeText}>{badge.text}</Text>
@@ -97,8 +136,8 @@ const ProductCard = ({ product }) => {
           <Text style={styles.noPrice}>{t('see_price')}</Text>
         )}
 
-        {/* Pas de badge si image (déjà affiché dessus) */}
-        {!hasImage && (
+        {/* Badge si pas de bannière */}
+        {!showBanner && (
           <View style={[styles.badge, { backgroundColor: badge.color }]}>
             <Text style={styles.badgeText}>{badge.text}</Text>
           </View>
@@ -131,17 +170,21 @@ const styles = StyleSheet.create({
     elevation: 4,
     overflow: 'hidden',
   },
-  // IMAGE
+  // BANNIÈRE
   imageContainer: {
     height: 160,
-    backgroundColor: '#1A1A2E',
     position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  image: {
-    width: '70%',
-    height: '70%',
+  brandEmoji: {
+    fontSize: 48,
+    marginBottom: 8,
+  },
+  brandText: {
+    fontSize: 20,
+    fontWeight: '900',
+    letterSpacing: 2,
   },
   imgBadge: {
     position: 'absolute',
