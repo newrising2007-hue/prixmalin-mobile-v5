@@ -1,0 +1,545 @@
+[1mdiff --git a/screens/CodeBonusScreen.js b/screens/CodeBonusScreen.js[m
+[1mindex cf46d99..97c63d3 100644[m
+[1m--- a/screens/CodeBonusScreen.js[m
+[1m+++ b/screens/CodeBonusScreen.js[m
+[36m@@ -1,234 +1,353 @@[m
+[32m+[m[32m/**[m
+[32m+[m[32m * CodeBonusScreen - PrixMalin V5[m
+[32m+[m[32m * Codes mis à jour : 21 février 2026[m
+[32m+[m[32m * Sources : Perplexity - À revérifier aux 15 de chaque mois[m
+[32m+[m[32m */[m
+[32m+[m
+ import React, { useState } from 'react';[m
+ import {[m
+[31m-  StyleSheet,[m
+[31m-  Text,[m
+   View,[m
+[32m+[m[32m  Text,[m
+   ScrollView,[m
+   TouchableOpacity,[m
+[31m-  SafeAreaView,[m
+[31m-  StatusBar,[m
+[32m+[m[32m  StyleSheet,[m
+   Clipboard,[m
+   Alert,[m
+[32m+[m[32m  StatusBar,[m
+ } from 'react-native';[m
+[31m-import { useTranslation } from 'react-i18next';[m
+ [m
+[31m-const BONUS_CODES = [[m
+[31m-  {[m
+[31m-    id: 1,[m
+[31m-    game: 'World of Tanks',[m
+[31m-    code: 'TANKSROCKS2026',[m
+[31m-    rewards: '7 jours Premium + 500 Gold',[m
+[31m-    color: '#FF6B35',[m
+[31m-    expiry: '28 février 2026',[m
+[31m-    instructions: 'Activer sur worldoftanks.com/code',[m
+[31m-  },[m
+[31m-  {[m
+[31m-    id: 2,[m
+[31m-    game: 'Fortnite',[m
+[31m-    code: 'EPICWIN2026',[m
+[31m-    rewards: '500 V-Bucks + Skin exclusif',[m
+[31m-    color: '#4ECDC4',[m
+[31m-    expiry: '15 mars 2026',[m
+[31m-    instructions: 'Activer dans le jeu > Casier > Échanger code',[m
+[32m+[m[32mconst GAME_DATA = {[m
+[32m+[m[32m  pc: {[m
+[32m+[m[32m    label: '🖥️ PC',[m
+[32m+[m[32m    accent: '#4a9eff',[m
+[32m+[m[32m    games: [[m
+[32m+[m[32m      {[m
+[32m+[m[32m        id: 'genshin',[m
+[32m+[m[32m        name: 'Genshin Impact',[m
+[32m+[m[32m        icon: '✨',[m
+[32m+[m[32m        codes: [[m
+[32m+[m[32m          { id: 'g1', description: 'Mora + Hero\'s Wit + matériaux Anémo', code: 'GS64YTW65O', expires: 'Limité', value: 'Ressources' },[m
+[32m+[m[32m          { id: 'g2', description: '60 Primogems + Adventurer\'s Experience', code: '8BHA0KFRG94K', expires: 'Limité', value: '60 Primogems' },[m
+[32m+[m[32m          { id: 'g3', description: '60 Primogems + Adventurer\'s Experience', code: '8X73KH58KDHN', expires: 'Limité', value: '60 Primogems' },[m
+[32m+[m[32m          { id: 'g4', description: 'Mora + Moonfall Silver + Hero\'s Wit', code: 'TSUKINOARIKAE', expires: 'Limité', value: 'Ressources' },[m
+[32m+[m[32m          { id: 'g5', description: '50 Primogems + 3 Hero\'s Wit (récurrent)', code: 'GENSHINGIFT', expires: 'Récurrent', value: '50 Primogems' },[m
+[32m+[m[32m        ],[m
+[32m+[m[32m      },[m
+[32m+[m[32m      {[m
+[32m+[m[32m        id: 'wot',[m
+[32m+[m[32m        name: 'World of Tanks',[m
+[32m+[m[32m        icon: '🪖',[m
+[32m+[m[32m        codes: [[m
+[32m+[m[32m          { id: 'wot1', description: 'Tank T14 + 3 jours Premium + 1 000 Gold', code: 'WOTGURU', expires: 'Limité', value: 'Tank + Gold' },[m
+[32m+[m[32m          { id: 'wot2', description: '7 jours Premium + 1 000 Gold + 200 000 crédits', code: 'SUPERNOVA', expires: 'Limité', value: '7j Premium' },[m
+[32m+[m[32m          { id: 'wot3', description: 'Tank T2 Light + 7 jours Premium + 500 Gold', code: 'WORLDOFCOBI', expires: 'Limité', value: 'Tank + Gold' },[m
+[32m+[m[32m          { id: 'wot4', description: 'Tank Excelsior + 7 jours Premium + 1 000 Gold', code: 'YOGSCAST', expires: 'Limité', value: 'Tank + Gold' },[m
+[32m+[m[32m          { id: 'wot5', description: 'Tank Excelsior + 14 jours Premium + 250 000 crédits', code: 'PEWDIEPIE', expires: 'Limité', value: '14j Premium' },[m
+[32m+[m[32m        ],[m
+[32m+[m[32m      },[m
+[32m+[m[32m      {[m
+[32m+[m[32m        id: 'wows',[m
+[32m+[m[32m        name: 'World of Warships',[m
+[32m+[m[32m        icon: '⚓',[m
+[32m+[m[32m        codes: [[m
+[32m+[m[32m          { id: 'ws1', description: '1 Award Container', code: 'WOWSBATTLEDIGEST', expires: 'Limité', value: 'Container' },[m
+[32m+[m[32m          { id: 'ws2', description: 'Mission Brandon Herrera + containers', code: 'AKMISSION', expires: 'Limité', value: 'Mission' },[m
+[32m+[m[32m          { id: 'ws3', description: '1 container More Coal', code: 'IHEARTWOWS', expires: 'Limité', value: 'Container' },[m
+[32m+[m[32m          { id: 'ws4', description: '1 container More Coal', code: '9BDWOWSWHO', expires: 'Limité', value: 'Container' },[m
+[32m+[m[32m          { id: 'ws5', description: '5 bonus Commander XP +200%', code: 'LS7GQCNMD', expires: 'Limité', value: 'XP Boost' },[m
+[32m+[m[32m          { id: 'ws6', description: '5 bonus Crédits +40%', code: 'U7SVMPCNP24', expires: 'Limité', value: 'Crédits Boost' },[m
+[32m+[m[32m        ],[m
+[32m+[m[32m      },[m
+[32m+[m[32m      {[m
+[32m+[m[32m        id: 'warzone_pc',[m
+[32m+[m[32m        name: 'Call of Duty: Warzone',[m
+[32m+[m[32m        icon: '🎯',[m
+[32m+[m[32m        codes: [[m
+[32m+[m[32m          { id: 'wz1', description: 'Carte de visite KB High Road', code: 'KZE3K7ENKV6RW', expires: 'Limité', value: 'Cosmétique' },[m
+[32m+[m[32m          { id: 'wz2', description: 'Carte Verdansk is Back + 30 min Double XP', code: 'KYHPCVYSNP6HY', expires: 'Limité', value: 'XP + Cosmétique' },[m
+[32m+[m[32m        ],[m
+[32m+[m[32m      },[m
+[32m+[m[32m    ],[m
+   },[m
+[31m-  {[m
+[31m-    id: 3,[m
+[31m-    game: 'Valorant',[m
+[31m-    code: 'RIOT2026',[m
+[31m-    rewards: 'Agent gratuit + Spray',[m
+[31m-    color: '#FF4655',[m
+[31m-    expiry: '20 mars 2026',[m
+[31m-    instructions: 'Activer sur playvalorant.com/redeem',[m
+[32m+[m[32m  ps: {[m
+[32m+[m[32m    label: '🎮 PlayStation',[m
+[32m+[m[32m    accent: '#00aaff',[m
+[32m+[m[32m    games: [[m
+[32m+[m[32m      {[m
+[32m+[m[32m        id: 'genshin_ps',[m
+[32m+[m[32m        name: 'Genshin Impact',[m
+[32m+[m[32m        icon: '✨',[m
+[32m+[m[32m        codes: [[m
+[32m+[m[32m          { id: 'gps1', description: '60 Primogems + Adventurer\'s Experience', code: '8BHA0KFRG94K', expires: 'Limité', value: '60 Primogems' },[m
+[32m+[m[32m          { id: 'gps2', description: '60 Primogems + Adventurer\'s Experience', code: '8X73KH58KDHN', expires: 'Limité', value: '60 Primogems' },[m
+[32m+[m[32m          { id: 'gps3', description: '50 Primogems + 3 Hero\'s Wit (récurrent)', code: 'GENSHINGIFT', expires: 'Récurrent', value: '50 Primogems' },[m
+[32m+[m[32m        ],[m
+[32m+[m[32m      },[m
+[32m+[m[32m      {[m
+[32m+[m[32m        id: 'wows_legends_ps',[m
+[32m+[m[32m        name: 'WoWs: Legends',[m
+[32m+[m[32m        icon: '⚓',[m
+[32m+[m[32m        codes: [[m
+[32m+[m[32m          { id: 'wl1', description: 'Récompenses / caisse bonus', code: 'E7S8MD6MK5', expires: 'Limité', value: 'Caisse' },[m
+[32m+[m[32m          { id: 'wl2', description: 'Récompenses diverses', code: '4X9GP5WASG', expires: 'Limité', value: 'Bonus' },[m
+[32m+[m[32m          { id: 'wl3', description: 'Récompenses caisse/bonus', code: 'NOFLYZONE', expires: 'Limité', value: 'Bonus' },[m
+[32m+[m[32m          { id: 'wl4', description: '1 Winter Big Crate', code: '2026WAVE7AL', expires: 'Limité', value: 'Grosse caisse' },[m
+[32m+[m[32m        ],[m
+[32m+[m[32m      },[m
+[32m+[m[32m      {[m
+[32m+[m[32m        id: 'warzone_ps',[m
+[32m+[m[32m        name: 'Call of Duty: Warzone',[m
+[32m+[m[32m        icon: '🎯',[m
+[32m+[m[32m        codes: [[m
+[32m+[m[32m          { id: 'wzps1', description: 'Carte de visite KB High Road', code: 'KZE3K7ENKV6RW', expires: 'Limité', value: 'Cosmétique' },[m
+[32m+[m[32m          { id: 'wzps2', description: 'Carte Verdansk is Back + 30 min Double XP', code: 'KYHPCVYSNP6HY', expires: 'Limité', value: 'XP + Cosmétique' },[m
+[32m+[m[32m        ],[m
+[32m+[m[32m      },[m
+[32m+[m[32m    ],[m
+   },[m
+[31m-  {[m
+[31m-    id: 4,[m
+[31m-    game: 'Roblox',[m
+[31m-    code: 'ROBUX2026',[m
+[31m-    rewards: 'Accessoire avatar exclusif',[m
+[31m-    color: '#00A2FF',[m
+[31m-    expiry: '31 mars 2026',[m
+[31m-    instructions: 'Roblox > Paramètres > Promo Codes',[m
+[32m+[m[32m  xbox: {[m
+[32m+[m[32m    label: '🟢 Xbox',[m
+[32m+[m[32m    accent: '#52d463',[m
+[32m+[m[32m    games: [[m
+[32m+[m[32m      {[m
+[32m+[m[32m        id: 'wows_legends_xbox',[m
+[32m+[m[32m        name: 'WoWs: Legends',[m
+[32m+[m[32m        icon: '⚓',[m
+[32m+[m[32m        codes: [[m
+[32m+[m[32m          { id: 'wx1', description: 'Récompenses / caisse bonus', code: 'E7S8MD6MK5', expires: 'Limité', value: 'Caisse' },[m
+[32m+[m[32m          { id: 'wx2', description: 'Récompenses diverses', code: '4X9GP5WASG', expires: 'Limité', value: 'Bonus' },[m
+[32m+[m[32m          { id: 'wx3', description: 'Récompenses caisse/bonus', code: 'NOFLYZONE', expires: 'Limité', value: 'Bonus' },[m
+[32m+[m[32m          { id: 'wx4', description: '1 Winter Big Crate', code: '2026WAVE7AL', expires: 'Limité', value: 'Grosse caisse' },[m
+[32m+[m[32m        ],[m
+[32m+[m[32m      },[m
+[32m+[m[32m      {[m
+[32m+[m[32m        id: 'warzone_xbox',[m
+[32m+[m[32m        name: 'Call of Duty: Warzone',[m
+[32m+[m[32m        icon: '🎯',[m
+[32m+[m[32m        codes: [[m
+[32m+[m[32m          { id: 'wzx1', description: 'Carte de visite KB High Road', code: 'KZE3K7ENKV6RW', expires: 'Limité', value: 'Cosmétique' },[m
+[32m+[m[32m          { id: 'wzx2', description: 'Carte Verdansk is Back + 30 min Double XP', code: 'KYHPCVYSNP6HY', expires: 'Limité', value: 'XP + Cosmétique' },[m
+[32m+[m[32m        ],[m
+[32m+[m[32m      },[m
+[32m+[m[32m    ],[m
+   },[m
+[31m-  {[m
+[31m-    id: 5,[m
+[31m-    game: 'Call of Duty',[m
+[31m-    code: 'CODWARZONE2026',[m
+[31m-    rewards: 'Blueprint arme + Double XP 2h',[m
+[31m-    color: '#6C757D',[m
+[31m-    expiry: '10 mars 2026',[m
+[31m-    instructions: 'Activer sur callofduty.com/redeem',[m
+[31m-  },[m
+[31m-  {[m
+[31m-    id: 6,[m
+[31m-    game: 'Apex Legends',[m
+[31m-    code: 'APEX2026',[m
+[31m-    rewards: '600 Apex Coins + Charm',[m
+[31m-    color: '#DA291C',[m
+[31m-    expiry: '25 février 2026',[m
+[31m-    instructions: 'EA App > Apex > Échanger code',[m
+[32m+[m[32m  cross: {[m
+[32m+[m[32m    label: '🎯 Multi-Plateforme',[m
+[32m+[m[32m    accent: '#d084ff',[m
+[32m+[m[32m    games: [[m
+[32m+[m[32m      {[m
+[32m+[m[32m        id: 'fortnite',[m
+[32m+[m[32m        name: 'Fortnite ⚠️',[m
+[32m+[m[32m        icon: '⚡',[m
+[32m+[m[32m        codes: [[m
+[32m+[m[32m          { id: 'fn1', description: 'Emote Nanner Ringer (à vérifier)', code: 'BANAN-NANAN-ANA', expires: '⚠️ Possiblement expiré', value: 'Emote' },[m
+[32m+[m[32m          { id: 'fn2', description: 'Décor December Fish and Bonfire (à vérifier)', code: 'FAT6P-PPE2E-4WQKV-UXP95', expires: '⚠️ Possiblement expiré', value: 'Décor' },[m
+[32m+[m[32m          { id: 'fn3', description: 'Spray Squeezy Life (à vérifier)', code: '8Z35X-3ZWAB-BC57H-EQTQZ', expires: '⚠️ Possiblement expiré', value: 'Spray' },[m
+[32m+[m[32m          { id: 'fn4', description: 'Spray Shaka (à vérifier)', code: 'YGGWX-38PNW-6TE2Q-JVKLS', expires: '⚠️ Possiblement expiré', value: 'Spray' },[m
+[32m+[m[32m          { id: 'fn5', description: 'Objet Noble de Corazon (à vérifier)', code: 'FGNHR-LWLW5-698CN-DMZXL', expires: '⚠️ Possiblement expiré', value: 'Objet' },[m
+[32m+[m[32m        ],[m
+[32m+[m[32m      },[m
+[32m+[m[32m    ],[m
+   },[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mconst PLATFORMS = [[m
+[32m+[m[32m  { key: 'all', label: '⭐ Tous' },[m
+[32m+[m[32m  { key: 'pc', label: '🖥️ PC' },[m
+[32m+[m[32m  { key: 'ps', label: '🎮 PS' },[m
+[32m+[m[32m  { key: 'xbox', label: '🟢 Xbox' },[m
+[32m+[m[32m  { key: 'cross', label: '🎯 Multi' },[m
+ ];[m
+ [m
+[31m-export default function CodeBonusScreen() {[m
+[31m-  const { t } = useTranslation();[m
+[31m-  const [copiedCode, setCopiedCode] = useState(null);[m
+[32m+[m[32mconst CodeCard = ({ code, accent }) => {[m
+[32m+[m[32m  const handleCopy = () => {[m
+[32m+[m[32m    Clipboard.setString(code.code);[m
+[32m+[m[32m    Alert.alert('✅ Copié !', 'Code copié dans le presse-papier');[m
+[32m+[m[32m  };[m
+[32m+[m
+[32m+[m[32m  return ([m
+[32m+[m[32m    <View style={styles.codeCard}>[m
+[32m+[m[32m      <View style={styles.codeCardHeader}>[m
+[32m+[m[32m        <Text style={styles.codeDescription}>{code.description}</Text>[m
+[32m+[m[32m        <View style={[styles.valueBadge, { backgroundColor: accent + '33' }]}>[m
+[32m+[m[32m          <Text style={[styles.valueText, { color: accent }]}>{code.value}</Text>[m
+[32m+[m[32m        </View>[m
+[32m+[m[32m      </View>[m
+[32m+[m[32m      <View style={styles.codeRow}>[m
+[32m+[m[32m        <View style={styles.codeBox}>[m
+[32m+[m[32m          <Text style={styles.codeText}>{code.code}</Text>[m
+[32m+[m[32m        </View>[m
+[32m+[m[32m        <TouchableOpacity[m
+[32m+[m[32m          style={[styles.copyBtn, { backgroundColor: accent }]}[m
+[32m+[m[32m          onPress={handleCopy}[m
+[32m+[m[32m          activeOpacity={0.8}[m
+[32m+[m[32m        >[m
+[32m+[m[32m          <Text style={styles.copyBtnText}>📋</Text>[m
+[32m+[m[32m        </TouchableOpacity>[m
+[32m+[m[32m      </View>[m
+[32m+[m[32m      <Text style={styles.expiresText}>⏰ {code.expires}</Text>[m
+[32m+[m[32m    </View>[m
+[32m+[m[32m  );[m
+[32m+[m[32m};[m
+ [m
+[31m-  const handleCopyCode = (code, gameCode) => {[m
+[31m-    Clipboard.setString(gameCode);[m
+[31m-    setCopiedCode(code.id);[m
+[32m+[m[32mconst GameSection = ({ game, accent, isExpanded, onToggle }) => ([m
+[32m+[m[32m  <View style={styles.gameSection}>[m
+[32m+[m[32m    <TouchableOpacity[m
+[32m+[m[32m      style={[styles.gameHeader, isExpanded && { borderBottomWidth: 1, borderBottomColor: '#ffffff22' }]}[m
+[32m+[m[32m      onPress={onToggle}[m
+[32m+[m[32m      activeOpacity={0.8}[m
+[32m+[m[32m    >[m
+[32m+[m[32m      <View style={styles.gameHeaderLeft}>[m
+[32m+[m[32m        <Text style={styles.gameIcon}>{game.icon}</Text>[m
+[32m+[m[32m        <Text style={styles.gameName}>{game.name}</Text>[m
+[32m+[m[32m        <View style={styles.codeCountBadge}>[m
+[32m+[m[32m          <Text style={styles.codeCountText}>{game.codes.length} code{game.codes.length > 1 ? 's' : ''}</Text>[m
+[32m+[m[32m        </View>[m
+[32m+[m[32m      </View>[m
+[32m+[m[32m      <Text style={styles.chevron}>{isExpanded ? '▲' : '▼'}</Text>[m
+[32m+[m[32m    </TouchableOpacity>[m
+[32m+[m[32m    {isExpanded && ([m
+[32m+[m[32m      <View style={styles.codesContainer}>[m
+[32m+[m[32m        {game.codes.map((code) => ([m
+[32m+[m[32m          <CodeCard key={code.id} code={code} accent={accent} />[m
+[32m+[m[32m        ))}[m
+[32m+[m[32m      </View>[m
+[32m+[m[32m    )}[m
+[32m+[m[32m  </View>[m
+[32m+[m[32m);[m
+ [m
+[31m-    Alert.alert([m
+[31m-      t('copied'),[m
+[31m-      `${gameCode}\n\n${code.game}`,[m
+[31m-      [{ text: 'OK' }][m
+[31m-    );[m
+[32m+[m[32mexport default function CodeBonusScreen() {[m
+[32m+[m[32m  const [selectedPlatform, setSelectedPlatform] = useState('all');[m
+[32m+[m[32m  const [expandedGame, setExpandedGame] = useState(null);[m
+ [m
+[31m-    setTimeout(() => setCopiedCode(null), 3000);[m
+[32m+[m[32m  const getPlatformsToShow = () => {[m
+[32m+[m[32m    if (selectedPlatform === 'all') return Object.entries(GAME_DATA);[m
+[32m+[m[32m    const platform = GAME_DATA[selectedPlatform];[m
+[32m+[m[32m    return platform ? [[selectedPlatform, platform]] : [];[m
+   };[m
+ [m
+   return ([m
+[31m-    <SafeAreaView style={styles.container}>[m
+[31m-      <StatusBar barStyle="light-content" backgroundColor="#2c3e50" />[m
+[32m+[m[32m    <View style={styles.container}>[m
+[32m+[m[32m      <StatusBar barStyle="light-content" backgroundColor="#0d0d1a" />[m
+ [m
+[31m-      {/* HEADER */}[m
+       <View style={styles.header}>[m
+[31m-        <Text style={styles.headerTitle}>{t('gaming.codes_title')}</Text>[m
+[31m-        <Text style={styles.headerSubtitle}>{t('gaming.codes_subtitle')}</Text>[m
+[32m+[m[32m        <Text style={styles.headerTitle}>🎁 Codes Bonus</Text>[m
+[32m+[m[32m        <Text style={styles.headerSubtitle}>Mis à jour aux 15 de chaque mois</Text>[m
+       </View>[m
+ [m
+[31m-      {/* LISTE DES CODES */}[m
+[31m-      <ScrollView style={styles.scrollView}>[m
+[31m-        {BONUS_CODES.map((code) => ([m
+[31m-          <View key={code.id} style={[styles.codeCard, { borderLeftColor: code.color }]}>[m
+[31m-[m
+[31m-            {/* GAME NAME */}[m
+[31m-            <View style={styles.cardHeader}>[m
+[31m-              <Text style={styles.gameName}>{code.game}</Text>[m
+[31m-              <View style={[styles.badge, { backgroundColor: code.color }]}>[m
+[31m-                <Text style={styles.badgeText}>{t('free')}</Text>[m
+[31m-              </View>[m
+[31m-            </View>[m
+[32m+[m[32m      <ScrollView[m
+[32m+[m[32m        horizontal[m
+[32m+[m[32m        showsHorizontalScrollIndicator={false}[m
+[32m+[m[32m        style={styles.tabsScroll}[m
+[32m+[m[32m        contentContainerStyle={styles.tabsContainer}[m
+[32m+[m[32m      >[m
+[32m+[m[32m        {PLATFORMS.map((platform) => ([m
+[32m+[m[32m          <TouchableOpacity[m
+[32m+[m[32m            key={platform.key}[m
+[32m+[m[32m            style={[styles.tab, selectedPlatform === platform.key && styles.tabActive]}[m
+[32m+[m[32m            onPress={() => { setSelectedPlatform(platform.key); setExpandedGame(null); }}[m
+[32m+[m[32m            activeOpacity={0.8}[m
+[32m+[m[32m          >[m
+[32m+[m[32m            <Text style={[styles.tabText, selectedPlatform === platform.key && styles.tabTextActive]}>[m
+[32m+[m[32m              {platform.label}[m
+[32m+[m[32m            </Text>[m
+[32m+[m[32m          </TouchableOpacity>[m
+[32m+[m[32m        ))}[m
+[32m+[m[32m      </ScrollView>[m
+ [m
+[31m-            {/* CODE */}[m
+[31m-            <View style={styles.codeContainer}>[m
+[31m-              <View style={styles.codeBox}>[m
+[31m-                <Text style={styles.codeText}>{code.code}</Text>[m
+[32m+[m[32m      <ScrollView[m
+[32m+[m[32m        style={styles.content}[m
+[32m+[m[32m        showsVerticalScrollIndicator={false}[m
+[32m+[m[32m        contentContainerStyle={{ paddingBottom: 30 }}[m
+[32m+[m[32m      >[m
+[32m+[m[32m        {getPlatformsToShow().map(([platformKey, platformData]) => ([m
+[32m+[m[32m          <View key={platformKey} style={styles.platformBlock}>[m
+[32m+[m[32m            {selectedPlatform === 'all' && ([m
+[32m+[m[32m              <View style={[styles.platformTitle, { borderLeftColor: platformData.accent }]}>[m
+[32m+[m[32m                <Text style={styles.platformTitleText}>{platformData.label}</Text>[m
+               </View>[m
+[31m-              <TouchableOpacity[m
+[31m-                style={[styles.copyButton, copiedCode === code.id && styles.copiedButton]}[m
+[31m-                onPress={() => handleCopyCode(code, code.code)}[m
+[31m-              >[m
+[31m-                <Text style={styles.copyButtonText}>[m
+[31m-                  {copiedCode === code.id ? t('copied') : t('copy')}[m
+[31m-                </Text>[m
+[31m-              </TouchableOpacity>[m
+[31m-            </View>[m
+[31m-[m
+[31m-            {/* REWARDS */}[m
+[31m-            <View style={styles.rewardsContainer}>[m
+[31m-              <Text style={styles.rewardsLabel}>🎁 {code.rewards}</Text>[m
+[31m-            </View>[m
+[31m-[m
+[31m-            {/* INSTRUCTIONS */}[m
+[31m-            <View style={styles.instructionsContainer}>[m
+[31m-              <Text style={styles.instructionsLabel}>ℹ️ {code.instructions}</Text>[m
+[31m-            </View>[m
+[31m-[m
+[31m-            {/* EXPIRY */}[m
+[31m-            <Text style={styles.expiryText}>⏰ {t('expires')} : {code.expiry}</Text>[m
+[32m+[m[32m            )}[m
+[32m+[m[32m            {platformData.games.map((game) => ([m
+[32m+[m[32m              <GameSection[m
+[32m+[m[32m                key={game.id}[m
+[32m+[m[32m                game={game}[m
+[32m+[m[32m                accent={platformData.accent}[m
+[32m+[m[32m                isExpanded={expandedGame === game.id}[m
+[32m+[m[32m                onToggle={() => setExpandedGame(expandedGame === game.id ? null : game.id)}[m
+[32m+[m[32m              />[m
+[32m+[m[32m            ))}[m
+           </View>[m
+         ))}[m
+ [m
+[31m-        {/* FOOTER */}[m
+         <View style={styles.footer}>[m
+[31m-          <Text style={styles.footerText}>💡 {t('gaming.codes_subtitle')}</Text>[m
+[32m+[m[32m          <Text style={styles.footerText}>[m
+[32m+[m[32m            🔄 Codes mis à jour aux 15 de chaque mois{'\n'}[m
+[32m+[m[32m            ⚠️ Vérifiez la validité avant utilisation{'\n'}[m
+[32m+[m[32m            ⚠️ Codes Fortnite possiblement expirés[m
+[32m+[m[32m          </Text>[m
+         </View>[m
+       </ScrollView>[m
+[31m-    </SafeAreaView>[m
+[32m+[m[32m    </View>[m
+   );[m
+ }[m
+ [m
+ const styles = StyleSheet.create({[m
+[31m-  container: { flex: 1, backgroundColor: '#f5f5f5' },[m
+[32m+[m[32m  container: { flex: 1, backgroundColor: '#0d0d1a' },[m
+   header: {[m
+[31m-    backgroundColor: '#2c3e50',[m
+[31m-    padding: 20,[m
+[31m-    paddingTop: 10,[m
+[32m+[m[32m    paddingTop: 50, paddingBottom: 16, paddingHorizontal: 20,[m
+[32m+[m[32m    backgroundColor: '#0d0d1a', borderBottomWidth: 1, borderBottomColor: '#ffffff11',[m
+   },[m
+[31m-  headerTitle: { fontSize: 24, fontWeight: 'bold', color: '#fff', marginBottom: 5 },[m
+[31m-  headerSubtitle: { fontSize: 14, color: '#ecf0f1' },[m
+[31m-  scrollView: { flex: 1, padding: 15 },[m
+[31m-  codeCard: {[m
+[31m-    backgroundColor: '#fff',[m
+[31m-    borderRadius: 12,[m
+[31m-    padding: 15,[m
+[31m-    marginBottom: 15,[m
+[31m-    borderLeftWidth: 5,[m
+[31m-    shadowColor: '#000',[m
+[31m-    shadowOffset: { width: 0, height: 2 },[m
+[31m-    shadowOpacity: 0.1,[m
+[31m-    shadowRadius: 4,[m
+[31m-    elevation: 3,[m
+[32m+[m[32m  headerTitle: { fontSize: 26, fontWeight: '800', color: '#ffffff', letterSpacing: 0.5 },[m
+[32m+[m[32m  headerSubtitle: { fontSize: 13, color: '#ffffff66', marginTop: 4 },[m
+[32m+[m[32m  tabsScroll: { maxHeight: 56, backgroundColor: '#0d0d1a' },[m
+[32m+[m[32m  tabsContainer: { paddingHorizontal: 16, paddingVertical: 10, gap: 8, flexDirection: 'row' },[m
+[32m+[m[32m  tab: {[m
+[32m+[m[32m    paddingHorizontal: 16, paddingVertical: 7, borderRadius: 20,[m
+[32m+[m[32m    backgroundColor: '#1a1a2e', borderWidth: 1, borderColor: '#ffffff22',[m
+   },[m
+[31m-  cardHeader: {[m
+[31m-    flexDirection: 'row',[m
+[31m-    justifyContent: 'space-between',[m
+[31m-    alignItems: 'center',[m
+[31m-    marginBottom: 15,[m
+[31m-  },[m
+[31m-  gameName: { fontSize: 20, fontWeight: 'bold', color: '#2c3e50' },[m
+[31m-  badge: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 12 },[m
+[31m-  badgeText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },[m
+[31m-  codeContainer: { flexDirection: 'row', marginBottom: 15 },[m
+[31m-  codeBox: {[m
+[31m-    flex: 1,[m
+[31m-    backgroundColor: '#ecf0f1',[m
+[31m-    padding: 15,[m
+[31m-    borderRadius: 8,[m
+[31m-    marginRight: 10,[m
+[32m+[m[32m  tabActive: { backgroundColor: '#ff6b35', borderColor: '#ff6b35' },[m
+[32m+[m[32m  tabText: { color: '#ffffff88', fontSize: 13, fontWeight: '600' },[m
+[32m+[m[32m  tabTextActive: { color: '#ffffff' },[m
+[32m+[m[32m  content: { flex: 1, paddingTop: 12, paddingHorizontal: 16 },[m
+[32m+[m[32m  platformBlock: { marginBottom: 8 },[m
+[32m+[m[32m  platformTitle: { borderLeftWidth: 3, paddingLeft: 12, marginBottom: 10, marginTop: 8 },[m
+[32m+[m[32m  platformTitleText: { color: '#ffffffcc', fontSize: 16, fontWeight: '700' },[m
+[32m+[m[32m  gameSection: {[m
+[32m+[m[32m    backgroundColor: '#1a1a2e', borderRadius: 12, marginBottom: 8,[m
+[32m+[m[32m    overflow: 'hidden', borderWidth: 1, borderColor: '#ffffff11',[m
+   },[m
+[31m-  codeText: {[m
+[31m-    fontSize: 18,[m
+[31m-    fontWeight: 'bold',[m
+[31m-    color: '#2c3e50',[m
+[31m-    textAlign: 'center',[m
+[31m-    letterSpacing: 2,[m
+[32m+[m[32m  gameHeader: {[m
+[32m+[m[32m    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',[m
+[32m+[m[32m    paddingHorizontal: 16, paddingVertical: 14,[m
+   },[m
+[31m-  copyButton: {[m
+[31m-    backgroundColor: '#3498db',[m
+[31m-    paddingHorizontal: 20,[m
+[31m-    paddingVertical: 15,[m
+[31m-    borderRadius: 8,[m
+[31m-    justifyContent: 'center',[m
+[31m-  },[m
+[31m-  copiedButton: { backgroundColor: '#27ae60' },[m
+[31m-  copyButtonText: { color: '#fff', fontSize: 14, fontWeight: 'bold' },[m
+[31m-  rewardsContainer: {[m
+[31m-    backgroundColor: '#e8f5e9',[m
+[31m-    padding: 12,[m
+[31m-    borderRadius: 8,[m
+[31m-    marginBottom: 10,[m
+[31m-  },[m
+[31m-  rewardsLabel: { fontSize: 14, color: '#27ae60', fontWeight: '600' },[m
+[31m-  instructionsContainer: {[m
+[31m-    backgroundColor: '#e3f2fd',[m
+[31m-    padding: 12,[m
+[31m-    borderRadius: 8,[m
+[31m-    marginBottom: 10,[m
+[32m+[m[32m  gameHeaderLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },[m
+[32m+[m[32m  gameIcon: { fontSize: 20 },[m
+[32m+[m[32m  gameName: { color: '#ffffff', fontSize: 15, fontWeight: '700' },[m
+[32m+[m[32m  codeCountBadge: { backgroundColor: '#ffffff22', borderRadius: 10, paddingHorizontal: 8, paddingVertical: 2 },[m
+[32m+[m[32m  codeCountText: { color: '#ffffffaa', fontSize: 11, fontWeight: '600' },[m
+[32m+[m[32m  chevron: { color: '#ffffff55', fontSize: 12 },[m
+[32m+[m[32m  codesContainer: { paddingHorizontal: 12, paddingBottom: 12, paddingTop: 8, gap: 8 },[m
+[32m+[m[32m  codeCard: {[m
+[32m+[m[32m    backgroundColor: '#0d0d1a', borderRadius: 10, padding: 12,[m
+[32m+[m[32m    borderWidth: 1, borderColor: '#ffffff11', gap: 8,[m
+   },[m
+[31m-  instructionsLabel: { fontSize: 13, color: '#2196f3' },[m
+[31m-  expiryText: {[m
+[31m-    fontSize: 12,[m
+[31m-    color: '#7f8c8d',[m
+[31m-    fontStyle: 'italic',[m
+[31m-    textAlign: 'right',[m
+[32m+[m[32m  codeCardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 },[m
+[32m+[m[32m  codeDescription: { color: '#ffffffcc', fontSize: 13, flex: 1, fontWeight: '500' },[m
+[32m+[m[32m  valueBadge: { borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },[m
+[32m+[m[32m  valueText: { fontSize: 11, fontWeight: '700' },[m
+[32m+[m[32m  codeRow: { flexDirection: 'row', gap: 8, alignItems: 'center' },[m
+[32m+[m[32m  codeBox: {[m
+[32m+[m[32m    flex: 1, backgroundColor: '#ffffff11', borderRadius: 8,[m
+[32m+[m[32m    paddingHorizontal: 12, paddingVertical: 10,[m
+[32m+[m[32m    borderWidth: 1, borderColor: '#ffffff22', borderStyle: 'dashed',[m
+   },[m
+[32m+[m[32m  codeText: { color: '#ffffff', fontSize: 13, fontWeight: '800', letterSpacing: 1, fontFamily: 'monospace' },[m
+[32m+[m[32m  copyBtn: { width: 42, height: 42, borderRadius: 10, justifyContent: 'center', alignItems: 'center' },[m
+[32m+[m[32m  copyBtnText: { fontSize: 18 },[m
+[32m+[m[32m  expiresText: { color: '#ffffff55', fontSize: 11 },[m
+   footer: {[m
+[31m-    backgroundColor: '#fff3cd',[m
+[31m-    padding: 15,[m
+[31m-    borderRadius: 8,[m
+[31m-    marginBottom: 20,[m
+[31m-    marginTop: 10,[m
+[32m+[m[32m    marginTop: 20, padding: 16, backgroundColor: '#1a1a2e',[m
+[32m+[m[32m    borderRadius: 12, borderWidth: 1, borderColor: '#ffffff11',[m
+   },[m
+[31m-  footerText: { fontSize: 13, color: '#856404', textAlign: 'center' },[m
+[32m+[m[32m  footerText: { color: '#ffffff55', fontSize: 12, textAlign: 'center', lineHeight: 20 },[m
+ });[m
