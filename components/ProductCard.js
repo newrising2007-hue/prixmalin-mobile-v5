@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 // Couleurs par marque - 100% local, zéro réseau requis
 const BRAND_COLORS = {
+  // MARQUES
   'yamaha':      { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
   'suzuki':      { bg: '#003087', text: 'SUZUKI', emoji: '🏍️' },
   'arctic cat':  { bg: '#003087', text: 'ARCTIC CAT', emoji: '🏂' },
@@ -19,6 +20,63 @@ const BRAND_COLORS = {
   'husqvarna':   { bg: '#0000CD', text: 'HUSQVARNA', emoji: '🏍️' },
   'ford':        { bg: '#003087', text: 'FORD', emoji: '🚗' },
   'toyota':      { bg: '#CC0000', text: 'TOYOTA', emoji: '🚗' },
+  'chevrolet':   { bg: '#CC0000', text: 'CHEVROLET', emoji: '🚗' },
+  'chevy':       { bg: '#CC0000', text: 'CHEVROLET', emoji: '🚗' },
+  'dodge':       { bg: '#CC0000', text: 'DODGE', emoji: '🚗' },
+  'ram':         { bg: '#CC0000', text: 'RAM', emoji: '🚚' },
+  'gmc':         { bg: '#CC0000', text: 'GMC', emoji: '🚚' },
+  // MODÈLES YAMAHA
+  'yz450':       { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'yz250':       { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'yz125':       { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'yz85':        { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'wr450':       { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'wr250':       { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'mt-07':       { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'mt-09':       { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'r1':          { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'r6':          { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'raptor':      { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'grizzly':     { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'viking':      { bg: '#CC0000', text: 'YAMAHA', emoji: '🏍️' },
+  'sidewinder':  { bg: '#CC0000', text: 'YAMAHA', emoji: '🛷' },
+  'viper':       { bg: '#CC0000', text: 'YAMAHA', emoji: '🛷' },
+  // MODÈLES SKI-DOO
+  'mxz':         { bg: '#FFD700', text: 'SKI-DOO', emoji: '🛷', textColor: '#000' },
+  'summit':      { bg: '#FFD700', text: 'SKI-DOO', emoji: '🛷', textColor: '#000' },
+  'renegade':    { bg: '#FFD700', text: 'SKI-DOO', emoji: '🛷', textColor: '#000' },
+  'expedition':  { bg: '#FFD700', text: 'SKI-DOO', emoji: '🛷', textColor: '#000' },
+  'skandic':     { bg: '#FFD700', text: 'SKI-DOO', emoji: '🛷', textColor: '#000' },
+  'backcountry': { bg: '#FFD700', text: 'SKI-DOO', emoji: '🛷', textColor: '#000' },
+  // MODÈLES CAN-AM
+  'outlander':   { bg: '#CC0000', text: 'CAN-AM', emoji: '🏍️' },
+  'maverick':    { bg: '#CC0000', text: 'CAN-AM', emoji: '🏍️' },
+  'defender':    { bg: '#CC0000', text: 'CAN-AM', emoji: '🏍️' },
+  'spyder':      { bg: '#CC0000', text: 'CAN-AM', emoji: '🏍️' },
+  'ryker':       { bg: '#CC0000', text: 'CAN-AM', emoji: '🏍️' },
+  // MODÈLES HONDA
+  'crf':         { bg: '#CC0000', text: 'HONDA', emoji: '🏍️' },
+  'cbr':         { bg: '#CC0000', text: 'HONDA', emoji: '🏍️' },
+  'foreman':     { bg: '#CC0000', text: 'HONDA', emoji: '🏍️' },
+  'rancher':     { bg: '#CC0000', text: 'HONDA', emoji: '🏍️' },
+  'pioneer':     { bg: '#CC0000', text: 'HONDA', emoji: '🏍️' },
+  // MODÈLES KAWASAKI
+  'kx450':       { bg: '#00A651', text: 'KAWASAKI', emoji: '🏍️' },
+  'kx250':       { bg: '#00A651', text: 'KAWASAKI', emoji: '🏍️' },
+  'ninja':       { bg: '#00A651', text: 'KAWASAKI', emoji: '🏍️' },
+  'brute force': { bg: '#00A651', text: 'KAWASAKI', emoji: '🏍️' },
+  // MODÈLES POLARIS
+  'rzr':         { bg: '#003087', text: 'POLARIS', emoji: '🏍️' },
+  'ranger':      { bg: '#003087', text: 'POLARIS', emoji: '🏍️' },
+  'sportsman':   { bg: '#003087', text: 'POLARIS', emoji: '🏍️' },
+  'indy':        { bg: '#003087', text: 'POLARIS', emoji: '🛷' },
+  'rush':        { bg: '#003087', text: 'POLARIS', emoji: '🛷' },
+  // MODÈLES ARCTIC CAT
+  'zr':          { bg: '#003087', text: 'ARCTIC CAT', emoji: '🏂' },
+  'xf':          { bg: '#003087', text: 'ARCTIC CAT', emoji: '🏂' },
+  'alterra':     { bg: '#003087', text: 'ARCTIC CAT', emoji: '🏍️' },
+  'wildcat':     { bg: '#003087', text: 'ARCTIC CAT', emoji: '🏍️' },
+  // STORES ONLINE
   'facebook marketplace': { bg: '#1877F2', text: 'Facebook Marketplace', emoji: '🛒' },
   'kijiji':      { bg: '#FF6600', text: 'Kijiji', emoji: '🏷️' },
   'amazon.ca':   { bg: '#FF9900', text: 'Amazon.ca', emoji: '📦', textColor: '#000' },
@@ -28,7 +86,6 @@ const BRAND_COLORS = {
 function getBrandDisplay(product) {
   const storeLower = (product.store || '').toLowerCase();
   const nameLower = (product.product_name || '').toLowerCase();
-
   for (const [brand, info] of Object.entries(BRAND_COLORS)) {
     if (storeLower.includes(brand) || nameLower.includes(brand)) {
       return info;
@@ -75,11 +132,9 @@ const ProductCard = ({ product }) => {
 
   const badge = getBadgeInfo();
   const hasLink = !!getLink();
-  const hasImage = !!product.image_url;
   const brandDisplay = getBrandDisplay(product);
 
-  // Affiche bannière colorée si catégorie véhicule OU si image_url présente
-  const showBanner = hasImage || product.type === 'marketplace' || product.verified ||
+  const showBanner = product.image_url || product.type === 'marketplace' || product.verified ||
     product.type === 'local_with_website' || product.type === 'local_no_website';
 
   return (
@@ -88,18 +143,15 @@ const ProductCard = ({ product }) => {
       onPress={handlePress}
       activeOpacity={hasLink ? 0.7 : 1}
     >
-      {/* BANNIÈRE COLORÉE EN HAUT */}
       {showBanner && (
         <View style={[styles.imageContainer, { backgroundColor: brandDisplay.bg }]}>
-          <Text style={[styles.brandEmoji]}>{brandDisplay.emoji}</Text>
+          <Text style={styles.brandEmoji}>{brandDisplay.emoji}</Text>
           <Text style={[styles.brandText, { color: brandDisplay.textColor || '#FFFFFF' }]}>
             {brandDisplay.text}
           </Text>
-          {/* Badge vérifié sur l'image */}
           <View style={[styles.imgBadge, { backgroundColor: badge.color }]}>
             <Text style={styles.imgBadgeText}>{badge.text}</Text>
           </View>
-          {/* Distance sur l'image */}
           {product.distance ? (
             <View style={styles.imgDistance}>
               <Text style={styles.imgDistanceText}>🚗 {product.distance}</Text>
@@ -108,41 +160,24 @@ const ProductCard = ({ product }) => {
         </View>
       )}
 
-      {/* CORPS DE LA CARTE */}
       <View style={styles.body}>
-        <Text style={styles.storeName} numberOfLines={1}>
-          {product.store}
-        </Text>
-
+        <Text style={styles.storeName} numberOfLines={1}>{product.store}</Text>
         <Text style={styles.productName} numberOfLines={2}>
           {product.product_name?.replace(`${product.store} - `, '').replace(` - ${product.store}`, '')}
         </Text>
-
-        {product.address ? (
-          <Text style={styles.info}>📌 {product.address}</Text>
-        ) : null}
-
-        {product.phone ? (
-          <Text style={styles.info}>📞 {product.phone}</Text>
-        ) : null}
-
-        {product.rating ? (
-          <Text style={styles.rating}>⭐ {product.rating}/5</Text>
-        ) : null}
-
+        {product.address ? <Text style={styles.info}>📌 {product.address}</Text> : null}
+        {product.phone ? <Text style={styles.info}>📞 {product.phone}</Text> : null}
+        {product.rating ? <Text style={styles.rating}>⭐ {product.rating}/5</Text> : null}
         {product.price ? (
           <Text style={styles.price}>{product.price}$</Text>
         ) : (
           <Text style={styles.noPrice}>{t('see_price')}</Text>
         )}
-
-        {/* Badge si pas de bannière */}
         {!showBanner && (
           <View style={[styles.badge, { backgroundColor: badge.color }]}>
             <Text style={styles.badgeText}>{badge.text}</Text>
           </View>
         )}
-
         <TouchableOpacity
           style={[styles.actionButton, { backgroundColor: hasLink ? getButtonColor() : '#bdbdbd' }]}
           onPress={handlePress}
@@ -170,7 +205,6 @@ const styles = StyleSheet.create({
     elevation: 4,
     overflow: 'hidden',
   },
-  // BANNIÈRE
   imageContainer: {
     height: 160,
     position: 'relative',
@@ -213,68 +247,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
   },
-  // CORPS
-  body: {
-    padding: 14,
-  },
-  storeName: {
-    fontSize: 19,
-    fontWeight: 'bold',
-    color: '#1A1A2E',
-    marginBottom: 2,
-  },
-  productName: {
-    fontSize: 13,
-    color: '#888',
-    marginBottom: 8,
-  },
-  info: {
-    fontSize: 13,
-    color: '#555',
-    marginBottom: 3,
-  },
-  rating: {
-    fontSize: 13,
-    color: '#FFA000',
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  price: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#2ECC71',
-    marginBottom: 8,
-  },
-  noPrice: {
-    fontSize: 13,
-    color: '#FF9800',
-    fontStyle: 'italic',
-    marginBottom: 8,
-  },
-  badge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 6,
-    alignSelf: 'flex-start',
-    marginBottom: 10,
-  },
-  badgeText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  actionButton: {
-    paddingVertical: 11,
-    paddingHorizontal: 16,
-    borderRadius: 10,
-    marginTop: 6,
-    alignItems: 'center',
-  },
-  actionButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '700',
-  },
+  body: { padding: 14 },
+  storeName: { fontSize: 19, fontWeight: 'bold', color: '#1A1A2E', marginBottom: 2 },
+  productName: { fontSize: 13, color: '#888', marginBottom: 8 },
+  info: { fontSize: 13, color: '#555', marginBottom: 3 },
+  rating: { fontSize: 13, color: '#FFA000', fontWeight: '600', marginBottom: 4 },
+  price: { fontSize: 22, fontWeight: 'bold', color: '#2ECC71', marginBottom: 8 },
+  noPrice: { fontSize: 13, color: '#FF9800', fontStyle: 'italic', marginBottom: 8 },
+  badge: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 6, alignSelf: 'flex-start', marginBottom: 10 },
+  badgeText: { color: '#fff', fontSize: 12, fontWeight: '600' },
+  actionButton: { paddingVertical: 11, paddingHorizontal: 16, borderRadius: 10, marginTop: 6, alignItems: 'center' },
+  actionButtonText: { color: '#fff', fontSize: 14, fontWeight: '700' },
 });
 
 export default ProductCard;
