@@ -1,4 +1,4 @@
-{
+kk{
   "app_name": "PrixMalin",
   "tagline": "精明购物 🍁",
   "search_placeholder": "搜索产品...",
@@ -30,6 +30,7 @@
     "sante": "健康",
     "sport": "运动",
     "vehicules": "车辆",
+    "pieces": "汽车零件",
     "divers": "其他"
   },
   "nav": {

@@ -31,6 +31,7 @@ const CATEGORIES = [
   { id: 'sante', icon: require('../assets/icons/Soin_optique.png'), color: '#FF5722' },
   { id: 'sport', icon: require('../assets/icons/Sportnature.png'), color: '#8BC34A' },
   { id: 'vehicules', icon: require('../assets/icons/vehicules.png'), color: '#607D8B' },
+  { id: 'pieces', icon: require('../assets/icons/pieces_accessoires.png'), color: '#B0BEC5' },
   { id: 'divers', icon: require('../assets/icons/divers.png'), color: '#795548' },
 ];
 
