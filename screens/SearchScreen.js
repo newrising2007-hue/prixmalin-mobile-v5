@@ -24,7 +24,13 @@ const CATEGORIES = [
   { id: 'epicerie', icon: require('../assets/icons/epicerie.png'), color: '#4CAF50' },
   { id: 'electro', icon: require('../assets/icons/electro.png'), color: '#2196F3' },
   { id: 'vetements', icon: require('../assets/icons/vetements.png'), color: '#E91E63' },
-  { id: 'intime', icon: require('../assets/icons/intime.png'), color: '#FF69B4' },
+  { id: 'intime', icon: require('../assets/icons/intime.png'), color: '#FF69B4', keywords: [
+    'jouets adultes', 'vibromasseur', 'lubrifiant', 'lingerie sexy', 'stimulateur',
+    'huile massage', 'accessoires couple', 'dildo', 'plug anal', 'gode', 'menottes',
+    'anneau pénien', 'masturbateur', 'adult toys', 'vibrator', 'lubricant',
+    'sexy lingerie', 'massager', 'dildo', 'anal plug', 'handcuffs', 'cock ring',
+    'masturbator', 'bondage', 'massage oil'
+  ]},
   { id: 'quincaillerie', icon: require('../assets/icons/quincaillerie.png'), color: '#FF9800' },
   { id: 'loisirs', icon: require('../assets/icons/loisirs_culture.png'), color: '#9C27B0' },
   { id: 'animaux', icon: require('../assets/icons/coin_animal.png'), color: '#00BCD4' },
