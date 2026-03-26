@@ -2,13 +2,11 @@ import './i18n';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
-import CodeBonusScreen from './screens/CodeBonusScreen';
-import CouponsScreen from './screens/CouponsScreen';
-import AlertsScreen from './screens/AlertsScreen';
-import GamingCodesScreen from './screens/GamingCodesScreen';
+import RestaurantScreen from './screens/RestaurantScreen';
+import GamingHubScreen from './screens/GamingHubScreen';
+import PartenairesScreen from './screens/PartenairesScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,47 +16,35 @@ export default function App() {
       <Stack.Navigator
         initialRouteName="Home"
         screenOptions={{
-          headerStyle: {
-            backgroundColor: '#4CAF50',
-          },
+          headerStyle: { backgroundColor: '#16a34a' },
           headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
+          headerTitleStyle: { fontWeight: 'bold' },
         }}
       >
-        <Stack.Screen 
-          name="Home" 
+        <Stack.Screen
+          name="Home"
           component={HomeScreen}
-          options={{ 
-            title: 'PrixMalin',
-            headerShown: false // Cache le header sur la page d'accueil
-          }}
+          options={{ headerShown: false }}
         />
-        <Stack.Screen 
-          name="Search" 
+        <Stack.Screen
+          name="Search"
           component={SearchScreen}
-          options={{ title: 'Rechercher' }}
+          options={{ headerShown: false }}
         />
-<Stack.Screen 
-          name="Gaming" 
-          component={GamingCodesScreen}
-          options={{ title: 'Codes Gaming' }}
+        <Stack.Screen
+          name="Restaurants"
+          component={RestaurantScreen}
+          options={{ title: 'Restaurants' }}
         />
-        <Stack.Screen 
-          name="CodeBonus" 
-          component={CodeBonusScreen}
-          options={{ title: 'Code Bonus' }}
+        <Stack.Screen
+          name="GamingHub"
+          component={GamingHubScreen}
+          options={{ title: 'Gaming' }}
         />
-        <Stack.Screen 
-          name="Coupons" 
-          component={CouponsScreen}
-          options={{ title: 'Coupons & Promos' }}
-        />
-        <Stack.Screen 
-          name="Alerts" 
-          component={AlertsScreen}
-          options={{ title: 'Alertes Prix' }}
+        <Stack.Screen
+          name="Partenaires"
+          component={PartenairesScreen}
+          options={{ title: 'Partenaires locaux' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

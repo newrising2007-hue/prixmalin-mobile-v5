@@ -7,27 +7,63 @@ import {
   Image,
   SafeAreaView,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+
+const MENU_ITEMS = [
+  {
+    key: 'search',
+    icon: require('../assets/icons/search-icon.png'),
+    title: 'Recherche',
+    subtitle: 'Cherche ton prix',
+    color: '#16a34a',
+    screen: 'Search',
+  },
+  {
+    key: 'restaurants',
+    icon: '🍽️',
+    title: 'Restaurants',
+    subtitle: 'Découvrez les restos près de vous',
+    color: '#f97316',
+    screen: 'Restaurants',
+  },
+  {
+    key: 'partenaires',
+    icon: '🤝',
+    title: 'Partenaires locaux',
+    subtitle: 'Rabais exclusifs PrixMalin',
+    color: '#3b82f6',
+    screen: 'Partenaires',
+  },
+  {
+    key: 'gaming',
+    icon: '🎮',
+    title: 'Gaming',
+    subtitle: 'Produits, codes et deals gaming',
+    color: '#8b5cf6',
+    screen: 'GamingHub',
+  },
+];
 
 export default function HomeScreen({ navigation }) {
   const { t } = useTranslation();
 
-  const MenuButton = ({ icon, title, subtitle, color, onPress }) => (
+  const MenuButton = ({ item }) => (
     <TouchableOpacity
-      style={[styles.menuButton, { borderLeftColor: color }]}
-      onPress={onPress}
+      style={[styles.menuButton, { borderLeftColor: item.color }]}
+      onPress={() => navigation.navigate(item.screen)}
       activeOpacity={0.7}
     >
       <View style={styles.menuButtonContent}>
-        {typeof icon === 'string' ? (
-          <Text style={styles.menuIcon}>{icon}</Text>
+        {typeof item.icon === 'string' ? (
+          <Text style={styles.menuIconEmoji}>{item.icon}</Text>
         ) : (
-          <Image source={icon} style={styles.menuIconImage} />
+          <Image source={item.icon} style={styles.menuIconImage} />
         )}
         <View style={styles.menuTextContainer}>
-          <Text style={styles.menuTitle}>{title}</Text>
-          <Text style={styles.menuSubtitle}>{subtitle}</Text>
+          <Text style={styles.menuTitle}>{item.title}</Text>
+          <Text style={styles.menuSubtitle}>{item.subtitle}</Text>
         </View>
         <Text style={styles.menuArrow}>›</Text>
       </View>
@@ -36,67 +72,45 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#f5f5f5" />
+      <StatusBar barStyle="dark-content" backgroundColor="#f8faf8" />
 
-      {/* HEADER */}
-      <View style={styles.header}>
-        <Image
-          source={require('../assets/icon.png')}
-          style={styles.logo}
-        />
-        <Text style={styles.title}>PrixMalin</Text>
-        <Text style={styles.subtitle}>{t('tagline')}</Text>
-      </View>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* HEADER */}
+        <View style={styles.header}>
+          <Image
+            source={require('../assets/icon.png')}
+            style={styles.logo}
+          />
+          <Text style={styles.title}>PrixMalin</Text>
+          <Text style={styles.subtitle}>{t('tagline')}</Text>
+        </View>
 
-      {/* MENU PRINCIPAL */}
-      <View style={styles.menuContainer}>
+        {/* MENU */}
+        <View style={styles.menuContainer}>
+          {MENU_ITEMS.map(item => (
+            <MenuButton key={item.key} item={item} />
+          ))}
+        </View>
 
-        <MenuButton
-          icon="🔍"
-          title={t('nav.search')}
-          subtitle={t('home.subtitle')}
-          color="#4CAF50"
-          onPress={() => navigation.navigate('Search')}
-        />
-
-        <MenuButton
-          icon={require('../assets/icons/deals_gaming.png')}
-          title={t('nav.gaming_deals')}
-          subtitle={t('gaming.deals_title')}
-          color="#FFB300"
-          onPress={() => navigation.navigate('Gaming')}
-        />
-
-        <MenuButton
-          icon={require('../assets/icons/code_bonus.png')}
-          title={t('nav.bonus_codes')}
-          subtitle={t('gaming.codes_subtitle')}
-          color="#4CAF50"
-          onPress={() => navigation.navigate('CodeBonus')}
-        />
-
-        <MenuButton
-          icon="💰"
-          title={t('nav.coupons')}
-          subtitle={t('nav.coupons')}
-          color="#2196F3"
-          onPress={() => navigation.navigate('Coupons')}
-        />
-
-        <MenuButton
-          icon="📢"
-          title={t('nav.alerts')}
-          subtitle={t('nav.alerts')}
-          color="#F44336"
-          onPress={() => navigation.navigate('Alerts')}
-        />
-
-      </View>
-
-      {/* FOOTER */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>Version 5.0 - Février 2026</Text>
-      </View>
+        {/* BLOC RECRUTEMENT PARTENAIRE */}
+        <View style={styles.recrutement}>
+          <Text style={styles.recrutementTitre}>Devenez partenaire local 🤝</Text>
+          <Text style={styles.recrutementSub}>Rejoignez PrixMalin et attirez plus de clients</Text>
+          <Text
+            style={styles.recrutementEmail}
+            onPress={() => require('react-native').Linking.openURL('mailto:partenaires@prixmalin.ca')}
+          >
+            partenaires@prixmalin.ca
+          </Text>
+        </View>
+        {/* FOOTER */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Version 5.1 — Mars 2026</Text>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -104,47 +118,52 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f8faf8',
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
 
-header: {
+  // ── HEADER ──
+  header: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    paddingVertical: 15,  // ← réduit de 30 à 15
+    paddingVertical: 20,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#e5e7eb',
   },
   logo: {
-    width: 60,
-    height: 60,
+    width: 64,
+    height: 64,
     marginBottom: 8,
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 5,
-    marginTop: 10, 
+    color: '#1f2937',
+    marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: '#7f8c8d',
+    color: '#6b7280',
     textAlign: 'center',
   },
+
+  // ── MENU ──
   menuContainer: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center',
+    paddingTop: 24,
   },
   menuButton: {
     backgroundColor: '#fff',
-    borderRadius: 12,
-    marginBottom: 10,
+    borderRadius: 14,
+    marginBottom: 12,
     borderLeftWidth: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.07,
     shadowRadius: 4,
     elevation: 3,
   },
@@ -153,39 +172,72 @@ header: {
     alignItems: 'center',
     padding: 14,
   },
-  menuIcon: {
+  menuIconEmoji: {
     fontSize: 40,
-    marginRight: 15,
+    marginRight: 14,
+    width: 52,
+    textAlign: 'center',
   },
   menuIconImage: {
-    width: 60,
-    height: 60,
-    marginBottom: 10,
+    width: 52,
+    height: 52,
+    marginRight: 14,
+    resizeMode: 'contain',
   },
   menuTextContainer: {
     flex: 1,
   },
   menuTitle: {
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 5,
+    color: '#1f2937',
+    marginBottom: 4,
   },
   menuSubtitle: {
-    fontSize: 14,
-    color: '#7f8c8d',
+    fontSize: 13,
+    color: '#6b7280',
+    lineHeight: 18,
   },
   menuArrow: {
-    fontSize: 40,
-    color: '#bdc3c7',
+    fontSize: 36,
+    color: '#d1d5db',
     fontWeight: 'bold',
   },
+
+  // ── RECRUTEMENT ──
+  recrutement: {
+    alignItems: 'center',
+    paddingVertical: 24,
+    paddingHorizontal: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
+    marginTop: 8,
+  },
+  recrutementTitre: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: '#2eaabf',
+    marginBottom: 6,
+  },
+  recrutementSub: {
+    fontSize: 13,
+    color: '#6b7280',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  recrutementEmail: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#8b5cf6',
+    textDecorationLine: 'underline',
+  },
+  // ── FOOTER ──
   footer: {
-    padding: 20,
+    padding: 24,
     alignItems: 'center',
   },
   footerText: {
     fontSize: 12,
-    color: '#95a5a6',
+    color: '#9ca3af',
   },
 });

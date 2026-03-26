@@ -56,5 +56,15 @@
     "network": "Erreur réseau. Vérifiez votre connexion.",
     "no_results": "Aucun résultat pour cette recherche."
   },
-  "language": "Langue"
+  "language": "Langue",
+  "en_ligne": "En ligne",
+  "magasins_pres": "Magasins près de vous",
+  "via_google": "via Google",
+  "position_non_detectee": "Position non détectée — résultats pour l'Abitibi",
+  "position_detectee": "Position détectée",
+  "recherches_recentes": "Recherches récentes",
+  "categorie_detectee": "Catégorie détectée",
+  "chargement": "Chargement...",
+  "recherche_magasins": "Recherche de magasins...",
+  "aucun_magasin": "Aucun magasin trouvé dans votre région"
 }

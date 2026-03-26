@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
-import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,216 +8,799 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  Image,
-  ScrollView,
   ActivityIndicator,
   SafeAreaView,
   StatusBar,
   Keyboard,
+  ScrollView,
 } from 'react-native';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import ProductCard from '../components/ProductCard';
 
 const BACKEND_URL = 'https://prixmalin-backend.onrender.com';
+const ONLINE_API_URL = 'https://prixmalin.ca/api/search';
+const RECENT_SEARCHES_KEY = 'prixmalin_recent_searches';
+const GPS_FALLBACK = { latitude: 47.3283, longitude: -79.4338 };
 
-const CATEGORIES = [
-  { id: 'epicerie', icon: require('../assets/icons/epicerie.png'), color: '#4CAF50' },
-  { id: 'electro', icon: require('../assets/icons/electro.png'), color: '#2196F3' },
-  { id: 'vetements', icon: require('../assets/icons/vetements.png'), color: '#E91E63' },
-  { id: 'intime', icon: require('../assets/icons/intime.png'), color: '#FF69B4', keywords: [
-    'jouets adultes', 'vibromasseur', 'lubrifiant', 'lingerie sexy', 'stimulateur',
-    'huile massage', 'accessoires couple', 'dildo', 'plug anal', 'gode', 'menottes',
-    'anneau pénien', 'masturbateur', 'adult toys', 'vibrator', 'lubricant',
-    'sexy lingerie', 'massager', 'dildo', 'anal plug', 'handcuffs', 'cock ring',
-    'masturbator', 'bondage', 'massage oil'
-  ]},
-  { id: 'quincaillerie', icon: require('../assets/icons/quincaillerie.png'), color: '#FF9800' },
-  { id: 'loisirs', icon: require('../assets/icons/loisirs_culture.png'), color: '#9C27B0' },
-  { id: 'animaux', icon: require('../assets/icons/coin_animal.png'), color: '#00BCD4' },
-  { id: 'sante', icon: require('../assets/icons/Soin_optique.png'), color: '#FF5722' },
-  { id: 'sport', icon: require('../assets/icons/Sportnature.png'), color: '#8BC34A' },
-  { id: 'vehicules', icon: require('../assets/icons/vehicules.png'), color: '#607D8B' },
-  { id: 'pieces', icon: require('../assets/icons/pieces_accessoires.png'), color: '#B0BEC5' },
-  { id: 'divers', icon: require('../assets/icons/divers.png'), color: '#795548' },
-];
+// ── NORMALISATION QUERY ──────────────────────────────────────────────
+// Retire accents, tirets, espaces multiples avant envoi au backend
+function normalizeQuery(query) {
+  return query
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/œ/g, 'oe')
+    .replace(/æ/g, 'ae')
+    .replace(/-/g, ' ')
+    .replace(/\s+/g, ' ')
+    .toLowerCase();
+}
+
+// ── DÉTECTION AUTOMATIQUE DE CATÉGORIE ──────────────────────────────
+const CATEGORY_KEYWORDS = {
+  vehicules: [
+    'voiture', 'auto', 'camion', 'moto', 'motocyclette', 'motoneige',
+    'ski-doo', 'skidoo', 'vtt', 'quad', 'bateau', 'chaloupe', 'kayak',
+    'canot', 'sea-doo', 'seadoo', 'can-am', 'canam', 'yamaha', 'honda',
+    'kawasaki', 'suzuki', 'polaris', 'arctic cat', 'bombardier', 'brp',
+    'lynx', 'ktm', 'husqvarna', 'ford', 'toyota', 'chevrolet', 'dodge',
+    'gmc', 'ram', 'jeep', 'hyundai', 'kia', 'mazda', 'nissan', 'subaru',
+    'harley', 'ducati', 'triumph', 'rzr', 'maverick', 'outlander',
+    'mxz', 'summit', 'renegade', 'expedition', 'skandic',
+  ],
+  pieces: [
+    'pneu', 'pneus', 'pare-brise', 'freins', 'frein', 'filtre a huile',
+    'piece auto', 'pieces auto', 'amortisseur', 'courroie', 'batterie auto',
+    'echappement', 'radiateur', 'alternateur', 'demarreur', 'embrayage',
+    'transmission', 'huile moteur', 'essuie-glace', 'plaquettes',
+    'rotule', 'roulement', 'catalyseur', 'silencieux',
+  ],
+  boucherie: [
+    'viande', 'boeuf', 'beef', 'poulet', 'chicken', 'porc', 'pork',
+    'steak', 'saucisse', 'saucisses', 'bacon', 'agneau', 'veau',
+    'boucherie', 'charcuterie', 'jambon', 'cote de porc', 'cote levee',
+    'filet mignon', 'faux filet', 'hamburger', 'boulette', 'merguez',
+    'roti', 'gigot', 'crevette', 'crevettes', 'poisson',
+  ],
+  epicerie: [
+    'pain', 'lait', 'beurre', 'fromage', 'oeuf', 'oeufs', 'yaourt',
+    'yogourt', 'creme', 'farine', 'sucre', 'riz', 'pates', 'cereales',
+    'jus', 'eau', 'cafe', 'the', 'chocolat', 'biscuits', 'chips',
+    'epicerie', 'alimentation', 'nourriture', 'legume', 'fruit',
+    'huile', 'vinaigre', 'sel', 'poivre', 'confiture', 'miel',
+  ],
+  nautique: [
+    'chaloupe', 'bateau', 'kayak', 'canot', 'moteur hors-bord',
+    'moteur hors bord', 'voilier', 'zodiac', 'pedalo', 'planche',
+  ],
+  electro: [
+    'telephone', 'cellulaire', 'ordinateur', 'laptop', 'tablette',
+    'ecran', 'moniteur', 'clavier', 'souris', 'casque', 'ecouteurs',
+    'television', 'tele', 'tv', 'imprimante', 'camera', 'appareil photo',
+    'console', 'playstation', 'xbox', 'nintendo', 'switch', 'manette',
+    'disque dur', 'ssd', 'processeur', 'carte graphique', 'gpu', 'cpu',
+    'routeur', 'modem', 'speaker', 'enceinte', 'drone', 'smartwatch',
+  ],
+  pieces_electroniques: [
+    'composante', 'arduino', 'raspberry', 'cable', 'adaptateur',
+    'chargeur', 'batterie telephone',
+  ],
+};
+
+function detectCategory(query) {
+  const normalized = normalizeQuery(query);
+  for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
+    if (keywords.some(kw => normalized.includes(kw))) {
+      // pieces_electroniques → electro côté backend
+      if (category === 'pieces_electroniques') return 'electro';
+      return category;
+    }
+  }
+  return 'divers';
+}
+
+// ── BADGE CATÉGORIE DÉTECTÉE ─────────────────────────────────────────
+const CATEGORY_LABELS = {
+  vehicules: '🚗 Véhicules',
+  pieces: '🔧 Pièces auto',
+  boucherie: '🥩 Boucherie',
+  epicerie: '🛒 Épicerie',
+  nautique: '⛵ Nautique',
+  electro: '💻 Électronique',
+  divers: null,
+};
 
 export default function SearchScreen() {
   const { t } = useTranslation();
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [location, setLocation] = useState({ latitude: 45.5017, longitude: -73.5673 });
+  const [onlineResults, setOnlineResults] = useState([]);
+  const [localResults, setLocalResults] = useState([]);
+  const [loadingOnline, setLoadingOnline] = useState(false);
+  const [loadingLocal, setLoadingLocal] = useState(false);
+  const [gpsStatus, setGpsStatus] = useState('idle'); // idle | asking | granted | denied
+  const [userCity, setUserCity] = useState('');
+  const [detectedCategory, setDetectedCategory] = useState(null);
+  const [recentSearches, setRecentSearches] = useState([]);
+  const [hasSearched, setHasSearched] = useState(false);
+  const inputRef = useRef(null);
 
+  // Charger historique au montage
   useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === 'granted') {
-        const loc = await Location.getCurrentPositionAsync({});
-        setLocation({
-          latitude: loc.coords.latitude,
-          longitude: loc.coords.longitude,
-        });
-      }
-    })();
+    loadRecentSearches();
   }, []);
 
-  const handleSearch = async () => {
-    if (!searchQuery.trim() || !selectedCategory) {
-      alert(t('errors.no_results'));
-      return;
+  async function loadRecentSearches() {
+    try {
+      const stored = await AsyncStorage.getItem(RECENT_SEARCHES_KEY);
+      if (stored) setRecentSearches(JSON.parse(stored));
+    } catch {}
+  }
+
+  async function saveRecentSearch(query) {
+    try {
+      const updated = [query, ...recentSearches.filter(q => q !== query)].slice(0, 5);
+      setRecentSearches(updated);
+      await AsyncStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+    } catch {}
+  }
+
+  async function getLocation() {
+    setGpsStatus('asking');
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setGpsStatus('denied');
+        return GPS_FALLBACK;
+      }
+      const loc = await Location.getCurrentPositionAsync({ timeout: 8000 });
+      setGpsStatus('granted');
+      // Reverse geocoding pour afficher la ville
+      try {
+        const geo = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${loc.coords.latitude}&lon=${loc.coords.longitude}&format=json`
+        );
+        const geoData = await geo.json();
+        const city = geoData.address?.city || geoData.address?.town || geoData.address?.village || '';
+        const province = geoData.address?.state || '';
+        if (city) setUserCity(`${city}, ${province}`);
+      } catch {}
+      return { latitude: loc.coords.latitude, longitude: loc.coords.longitude };
+    } catch {
+      setGpsStatus('denied');
+      return GPS_FALLBACK;
     }
+  }
+
+  const handleSearch = async () => {
+    const q = searchQuery.trim();
+    if (!q) return;
 
     Keyboard.dismiss();
-    setLoading(true);
+    setHasSearched(true);
+    setOnlineResults([]);
+    setLocalResults([]);
+    setUserCity('');
 
-    console.log('GPS utilisé:', location.latitude, location.longitude);
+    const category = detectCategory(q);
+    setDetectedCategory(category !== 'divers' ? category : null);
 
-    try {
-      const response = await axios.post(`${BACKEND_URL}/api/search-prices`, {
-        query: searchQuery,
-        category: selectedCategory.id,
-        location: {
-          latitude: location.latitude,
-          longitude: location.longitude,
-        }
-      });
+    await saveRecentSearch(q);
 
-      setResults(response.data.results || []);
-      setSearchQuery('');
-    } catch (error) {
-      console.error('Erreur de recherche:', error);
-      alert(t('errors.network'));
-    } finally {
-      setLoading(false);
-    }
+    // Lancer les deux appels en parallèle
+    loadOnline(q, category);
+    loadLocalResults(q, category);
   };
 
-  const CategoryButton = ({ category }) => {
-    const isSelected = selectedCategory?.id === category.id;
-    const name = t(`categories.${category.id}`);
+  async function loadOnline(q, category) {
+    setLoadingOnline(true);
+    try {
+      const res = await fetch(
+        `${ONLINE_API_URL}?q=${encodeURIComponent(q)}&cat=${category}`
+      );
+      const data = await res.json();
+      setOnlineResults(data.results || []);
+    } catch {
+      setOnlineResults([]);
+    }
+    setLoadingOnline(false);
+  }
+
+  async function loadLocalResults(q, category) {
+    setLoadingLocal(true);
+    const location = await getLocation();
+    try {
+      const response = await axios.post(`${BACKEND_URL}/api/search-prices`, {
+        query: normalizeQuery(q),
+        category: category,
+        location: location,
+        radiusKm: 150,
+      });
+      const locals = (response.data.results || []).filter(
+        r => r.type === 'local_with_website' || r.type === 'local_no_website'
+      );
+      setLocalResults(locals);
+    } catch {
+      setLocalResults([]);
+    }
+    setLoadingLocal(false);
+  }
+
+  const isLoading = loadingOnline || loadingLocal;
+
+  // ── RENDU RÉSULTAT EN LIGNE ──────────────────────────────────────
+  function renderOnlineItem({ item }) {
+    const logoMap = {
+      'Amazon.ca': '📦',
+      'Walmart.ca': '🛒',
+      'eBay.ca': '🏷️',
+      'Facebook Marketplace': '📘',
+      'Kijiji': '📢',
+    };
+    const colorMap = {
+      'Amazon.ca': '#FF9900',
+      'Walmart.ca': '#0071CE',
+      'eBay.ca': '#E53238',
+      'Facebook Marketplace': '#1877F2',
+      'Kijiji': '#373373',
+    };
+    const logo = logoMap[item.store] || '🌐';
+    const color = item.color || colorMap[item.store] || '#16a34a';
+    const url = item.url || item.affiliate_url || '#';
+
     return (
       <TouchableOpacity
-        onPress={() => setSelectedCategory(category)}
-        activeOpacity={0.8}
+        style={styles.onlineCard}
+        onPress={() => {
+          const { Linking } = require('react-native');
+          Linking.openURL(url).catch(() => {});
+        }}
+        activeOpacity={0.75}
       >
-        <View style={[styles.categoryIconBox, { borderColor: category.color }]}>
-          <Image source={category.icon} style={styles.categoryIcon} />
+        <Text style={styles.onlineLogo}>{logo}</Text>
+        <View style={styles.onlineInfo}>
+          <Text style={styles.onlineStore}>{item.store}</Text>
+          <Text style={styles.onlineSubtitle}>En ligne · Livraison disponible</Text>
         </View>
-        <View style={[styles.categoryDivider, { backgroundColor: category.color }]} />
-        <View style={[
-          styles.categoryNameBox,
-          { borderColor: category.color },
-          isSelected && { backgroundColor: category.color }
-        ]}>
-          <Text style={[
-            styles.categoryText,
-            isSelected && styles.categoryTextSelected
-          ]}>
-            {name}
-          </Text>
+        <View style={[styles.onlineButton, { backgroundColor: color }]}>
+          <Text style={styles.onlineButtonText}>Voir les prix →</Text>
         </View>
       </TouchableOpacity>
     );
-  };
+  }
+
+  // ── RENDU RÉSULTAT LOCAL ─────────────────────────────────────────
+  function renderLocalItem({ item }) {
+    const isFromGoogle = !item.verified && item.type !== undefined;
+    const hasWebsite = item.type === 'local_with_website';
+    const url = item.website || item.affiliate_url ||
+      `https://www.google.com/maps/search/?q=${encodeURIComponent(item.store)}`;
+
+    return (
+      <TouchableOpacity
+        style={styles.localCard}
+        onPress={() => {
+          const { Linking } = require('react-native');
+          Linking.openURL(url).catch(() => {});
+        }}
+        activeOpacity={0.75}
+      >
+        <Text style={styles.localPin}>📍</Text>
+        <View style={styles.localInfo}>
+          <View style={styles.localNameRow}>
+            <Text style={styles.localStore} numberOfLines={1}>{item.store}</Text>
+            {isFromGoogle && !item.verified && (
+              <Text style={styles.viaGoogle}>
+                via <Text style={{ color: '#4285F4' }}>G</Text>
+                <Text style={{ color: '#EA4335' }}>o</Text>
+                <Text style={{ color: '#FBBC05' }}>o</Text>
+                <Text style={{ color: '#34A853' }}>g</Text>
+                <Text style={{ color: '#EA4335' }}>l</Text>
+                <Text style={{ color: '#4285F4' }}>e</Text>
+              </Text>
+            )}
+            {item.verified && (
+              <Text style={styles.verifiedBadge}>✓ PrixMalin</Text>
+            )}
+          </View>
+          {item.address ? (
+            <Text style={styles.localAddress} numberOfLines={1}>{item.address}</Text>
+          ) : null}
+          {item.distance ? (
+            <Text style={styles.localDistance}>📏 {item.distance}</Text>
+          ) : null}
+          {item.rating ? (
+            <Text style={styles.localRating}>⭐ {item.rating}/5</Text>
+          ) : null}
+        </View>
+        <View style={styles.localRight}>
+          {item.phone ? (
+            <TouchableOpacity onPress={(e) => {
+              e.stopPropagation && e.stopPropagation();
+              const { Linking } = require('react-native');
+              Linking.openURL(`tel:${item.phone}`).catch(() => {});
+            }}>
+              <Text style={styles.localPhone}>📞 {item.phone}</Text>
+            </TouchableOpacity>
+          ) : null}
+          <View style={[
+            styles.localButton,
+            { backgroundColor: hasWebsite ? '#16a34a' : '#6b7280' }
+          ]}>
+            <Text style={styles.localButtonText}>
+              {hasWebsite ? 'Voir site →' : 'Maps →'}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
+  // ── ÉTAT VIDE / INITIAL ──────────────────────────────────────────
+  function renderEmptyState() {
+    if (hasSearched && !isLoading && onlineResults.length === 0 && localResults.length === 0) {
+      return (
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyIcon}>🔍</Text>
+          <Text style={styles.emptyTitle}>Aucun résultat</Text>
+          <Text style={styles.emptySubtitle}>Essayez avec d'autres mots-clés</Text>
+        </View>
+      );
+    }
+    if (!hasSearched) {
+      return (
+        <View style={styles.initialState}>
+          <Text style={styles.initialIcon}>🛍️</Text>
+          <Text style={styles.initialText}>Recherchez un produit pour trouver les meilleurs prix près de chez vous</Text>
+          {recentSearches.length > 0 && (
+            <View style={styles.recentSection}>
+              <Text style={styles.recentTitle}>🕐 Recherches récentes</Text>
+              {recentSearches.map((q, i) => (
+                <TouchableOpacity
+                  key={i}
+                  style={styles.recentItem}
+                  onPress={() => {
+                    setSearchQuery(q);
+                    setTimeout(() => handleSearch(), 100);
+                  }}
+                >
+                  <Text style={styles.recentText}>{q}</Text>
+                  <Text style={styles.recentArrow}>→</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+        </View>
+      );
+    }
+    return null;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4CAF50" />
+      <StatusBar barStyle="dark-content" backgroundColor="#f8faf8" />
 
-      <View style={styles.categoriesSection}>
-        <Text style={styles.sectionTitle}>{t('home.start_search')}</Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoriesScrollContent}
-        >
-          {CATEGORIES.map(category => (
-            <View key={category.id} style={styles.categoryWrapper}>
-              <CategoryButton category={category} />
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-
+      {/* ── BARRE DE RECHERCHE ── */}
       <View style={styles.searchSection}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder={selectedCategory
-            ? `${t('search_placeholder').replace('...', '')} ${t(`categories.${selectedCategory.id}`)}...`
-            : t('search_placeholder')}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          editable={!!selectedCategory}
-          returnKeyType="search"
-          onSubmitEditing={handleSearch}
-        />
-        <TouchableOpacity
-          style={[styles.searchButton, loading && styles.cancelButton]}
-          onPress={loading ? () => setLoading(false) : handleSearch}
-          disabled={!selectedCategory}
-        >
-          <Text style={styles.searchButtonText}>
-            {loading ? '✖️' : '🔍'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.searchRow}>
+          <TextInput
+            ref={inputRef}
+            style={styles.searchInput}
+            placeholder={t('search_placeholder')}
+            placeholderTextColor="#9ca3af"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            returnKeyType="search"
+            onSubmitEditing={handleSearch}
+            autoCorrect={false}
+          />
+          <TouchableOpacity
+            style={[styles.searchButton, isLoading && styles.searchButtonLoading]}
+            onPress={isLoading ? () => {} : handleSearch}
+          >
+            {isLoading
+              ? <ActivityIndicator size="small" color="#fff" />
+              : <Text style={styles.searchButtonIcon}>🔍</Text>
+            }
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.resultsSection}>
-        {loading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#4CAF50" />
-            <Text style={styles.loadingText}>{t('searching')}</Text>
-          </View>
-        ) : results.length > 0 ? (
-          <>
-            <Text style={styles.resultsTitle}>
-              {results.length} {t('results_found')}
-            </Text>
-            <FlatList
-              data={results}
-              renderItem={({ item }) => <ProductCard product={item} />}
-              keyExtractor={(item, index) => index.toString()}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: 20 }}
-            />
-          </>
-        ) : (
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyIcon}>🛍️</Text>
-            <Text style={styles.emptyText}>
-              {selectedCategory ? t('home.start_search') : t('search_placeholder')}
+        {/* Badge catégorie détectée */}
+        {detectedCategory && hasSearched && (
+          <View style={styles.categoryBadge}>
+            <Text style={styles.categoryBadgeText}>
+              {CATEGORY_LABELS[detectedCategory]}
             </Text>
           </View>
         )}
+
+        {/* Statut GPS */}
+        {hasSearched && (
+          <View style={styles.gpsRow}>
+            {gpsStatus === 'denied' && (
+              <Text style={styles.gpsWarning}>⚠️ Position non détectée — résultats pour l'Abitibi</Text>
+            )}
+            {gpsStatus === 'granted' && userCity ? (
+              <Text style={styles.gpsOk}>📍 {userCity}</Text>
+            ) : null}
+            {gpsStatus === 'asking' && (
+              <Text style={styles.gpsAsking}>📡 Localisation...</Text>
+            )}
+          </View>
+        )}
       </View>
+
+      <ScrollView
+        style={styles.resultsScroll}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        {/* ── SECTION EN LIGNE ── */}
+        {hasSearched && (
+          <View style={styles.section}>
+            <Text style={styles.sectionLabel}>🌐 EN LIGNE</Text>
+            {loadingOnline ? (
+              <View style={styles.sectionLoading}>
+                <ActivityIndicator size="small" color="#16a34a" />
+                <Text style={styles.sectionLoadingText}>Chargement...</Text>
+              </View>
+            ) : onlineResults.length > 0 ? (
+              onlineResults.map((item, i) => (
+                <View key={i}>{renderOnlineItem({ item })}</View>
+              ))
+            ) : !loadingOnline && (
+              <Text style={styles.sectionEmpty}>Aucun résultat en ligne</Text>
+            )}
+          </View>
+        )}
+
+        {/* ── SECTION MAGASINS LOCAUX ── */}
+        {hasSearched && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeaderRow}>
+              <Text style={styles.sectionLabel}>📍 MAGASINS PRÈS DE VOUS</Text>
+              {loadingLocal && (
+                <ActivityIndicator size="small" color="#16a34a" style={{ marginLeft: 8 }} />
+              )}
+            </View>
+            {loadingLocal && localResults.length === 0 ? (
+              <View style={styles.sectionLoading}>
+                <Text style={styles.sectionLoadingText}>Recherche de magasins...</Text>
+              </View>
+            ) : localResults.length > 0 ? (
+              localResults.map((item, i) => (
+                <View key={i}>{renderLocalItem({ item })}</View>
+              ))
+            ) : !loadingLocal && (
+              <Text style={styles.sectionEmpty}>Aucun magasin trouvé dans votre région</Text>
+            )}
+          </View>
+        )}
+
+        {/* ── ÉTAT INITIAL / VIDE ── */}
+        {renderEmptyState()}
+
+        <View style={{ height: 40 }} />
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
-  categoriesSection: { backgroundColor: '#fff', paddingTop: 20, paddingBottom: 18, borderBottomWidth: 1, borderBottomColor: '#e0e0e0' },
-  sectionTitle: { fontSize: 16, fontWeight: '600', color: '#2c3e50', paddingHorizontal: 20, marginBottom: 14 },
-  categoriesScrollContent: { paddingHorizontal: 15, alignItems: 'flex-start' },
-  categoryWrapper: { marginHorizontal: 6 },
-  categoryIconBox: { width: 90, height: 75, borderWidth: 2, borderBottomWidth: 0, borderTopLeftRadius: 12, borderTopRightRadius: 12, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' },
-  categoryIcon: { width: 82, height: 67, resizeMode: 'cover' },
-  categoryDivider: { height: 1.5, width: 90 },
-  categoryNameBox: { width: 90, borderWidth: 2, borderTopWidth: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, paddingVertical: 5, paddingHorizontal: 4, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' },
-  categoryText: { fontSize: 11, color: '#7f8c8d', textAlign: 'center', fontWeight: '500' },
-  categoryTextSelected: { color: '#fff', fontWeight: 'bold' },
-  searchSection: { flexDirection: 'row', paddingHorizontal: 15, paddingVertical: 18, backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#e0e0e0', marginTop: 4 },
-  searchInput: { flex: 1, height: 50, backgroundColor: '#f5f5f5', borderRadius: 25, paddingHorizontal: 20, fontSize: 16, marginRight: 10 },
-  searchButton: { width: 50, height: 50, borderRadius: 25, backgroundColor: '#4CAF50', justifyContent: 'center', alignItems: 'center' },
-  cancelButton: { backgroundColor: '#ff4444' },
-  searchButtonText: { fontSize: 24 },
-  resultsSection: { flex: 1, padding: 15, paddingTop: 20 },
-  resultsTitle: { fontSize: 16, fontWeight: 'bold', color: '#2c3e50', marginBottom: 15 },
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { marginTop: 10, fontSize: 16, color: '#7f8c8d' },
-  emptyState: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  emptyIcon: { fontSize: 64, marginBottom: 20 },
-  emptyText: { fontSize: 16, color: '#7f8c8d', textAlign: 'center', paddingHorizontal: 40 },
+  container: {
+    flex: 1,
+    backgroundColor: '#f8faf8',
+  },
+
+  // ── BARRE RECHERCHE ──
+  searchSection: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingTop: 48,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e7eb',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  searchInput: {
+    flex: 1,
+    height: 48,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 24,
+    paddingHorizontal: 20,
+    fontSize: 16,
+    color: '#1f2937',
+  },
+  searchButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#16a34a',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  searchButtonLoading: {
+    backgroundColor: '#6b7280',
+  },
+  searchButtonIcon: {
+    fontSize: 20,
+  },
+
+  // ── BADGE CATÉGORIE ──
+  categoryBadge: {
+    marginTop: 8,
+    alignSelf: 'flex-start',
+    backgroundColor: '#dcfce7',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  categoryBadgeText: {
+    fontSize: 12,
+    color: '#16a34a',
+    fontWeight: '600',
+  },
+
+  // ── GPS ──
+  gpsRow: {
+    marginTop: 6,
+  },
+  gpsWarning: {
+    fontSize: 12,
+    color: '#d97706',
+  },
+  gpsOk: {
+    fontSize: 12,
+    color: '#16a34a',
+    fontWeight: '600',
+  },
+  gpsAsking: {
+    fontSize: 12,
+    color: '#6b7280',
+  },
+
+  // ── SCROLL ──
+  resultsScroll: {
+    flex: 1,
+  },
+
+  // ── SECTIONS ──
+  section: {
+    paddingHorizontal: 16,
+    paddingTop: 20,
+  },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  sectionLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#6b7280',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    marginBottom: 12,
+  },
+  sectionLoading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    gap: 8,
+  },
+  sectionLoadingText: {
+    fontSize: 14,
+    color: '#9ca3af',
+  },
+  sectionEmpty: {
+    fontSize: 14,
+    color: '#9ca3af',
+    paddingVertical: 12,
+    fontStyle: 'italic',
+  },
+
+  // ── CARTE EN LIGNE ──
+  onlineCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 10,
+    borderWidth: 1.5,
+    borderColor: '#e5e7eb',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
+    gap: 12,
+  },
+  onlineLogo: {
+    fontSize: 28,
+  },
+  onlineInfo: {
+    flex: 1,
+  },
+  onlineStore: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#1f2937',
+  },
+  onlineSubtitle: {
+    fontSize: 12,
+    color: '#9ca3af',
+    marginTop: 2,
+  },
+  onlineButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 12,
+  },
+  onlineButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+
+  // ── CARTE LOCALE ──
+  localCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 10,
+    borderWidth: 1.5,
+    borderColor: '#e5e7eb',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
+    gap: 10,
+  },
+  localPin: {
+    fontSize: 24,
+    marginTop: 2,
+  },
+  localInfo: {
+    flex: 1,
+  },
+  localNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  localStore: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#1f2937',
+  },
+  viaGoogle: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#6b7280',
+  },
+  verifiedBadge: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#16a34a',
+    backgroundColor: '#dcfce7',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  localAddress: {
+    fontSize: 12,
+    color: '#6b7280',
+    marginTop: 3,
+  },
+  localDistance: {
+    fontSize: 12,
+    color: '#16a34a',
+    fontWeight: '600',
+    marginTop: 3,
+  },
+  localRating: {
+    fontSize: 12,
+    color: '#d97706',
+    marginTop: 2,
+  },
+  localRight: {
+    alignItems: 'flex-end',
+    gap: 6,
+  },
+  localPhone: {
+    fontSize: 11,
+    color: '#3b82f6',
+  },
+  localButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 10,
+  },
+  localButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+
+  // ── ÉTAT INITIAL ──
+  initialState: {
+    padding: 24,
+    alignItems: 'center',
+  },
+  initialIcon: {
+    fontSize: 56,
+    marginBottom: 16,
+    marginTop: 20,
+  },
+  initialText: {
+    fontSize: 15,
+    color: '#6b7280',
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: 24,
+  },
+  recentSection: {
+    width: '100%',
+    marginTop: 8,
+  },
+  recentTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#374151',
+    marginBottom: 10,
+  },
+  recentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  recentText: {
+    fontSize: 14,
+    color: '#374151',
+  },
+  recentArrow: {
+    fontSize: 14,
+    color: '#9ca3af',
+  },
+
+  // ── ÉTAT VIDE ──
+  emptyState: {
+    padding: 40,
+    alignItems: 'center',
+  },
+  emptyIcon: {
+    fontSize: 48,
+    marginBottom: 12,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#374151',
+    marginBottom: 6,
+  },
+  emptySubtitle: {
+    fontSize: 14,
+    color: '#9ca3af',
+  },
 });
