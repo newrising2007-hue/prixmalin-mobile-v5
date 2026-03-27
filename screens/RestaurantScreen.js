@@ -931,7 +931,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff7ed',
   },
   cuisineChipActive: { backgroundColor: '#f97316', borderColor: '#f97316' },
-  cuisineChipText: { fontSize: 12, fontWeight: '600', color: '#ea580c', whiteSpace: 'nowrap' },
+  cuisineChipText: { fontSize: 12, fontWeight: '600', color: '#ea580c' },
   cuisineChipTextActive: { color: '#fff' },
 
   // ── CHIPS SERVICE ──

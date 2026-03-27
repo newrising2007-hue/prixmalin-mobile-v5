@@ -10,6 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Linking } from 'react-native';
 
 const MENU_ITEMS = [
   {
@@ -101,14 +102,14 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.recrutementSub}>Rejoignez PrixMalin et attirez plus de clients</Text>
           <Text
             style={styles.recrutementEmail}
-            onPress={() => require('react-native').Linking.openURL('mailto:partenaires@prixmalin.ca')}
+            onPress={() => Linking.openURL('mailto:partenaires@prixmalin.ca')}
           >
             partenaires@prixmalin.ca
           </Text>
         </View>
         {/* FOOTER */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Version 5.1 — Mars 2026</Text>
+          <Text style={styles.footerText}>Version 1.0.0 — 2026</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

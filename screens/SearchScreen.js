@@ -13,6 +13,7 @@ import {
   StatusBar,
   Keyboard,
   ScrollView,
+  Linking,
 } from 'react-native';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
@@ -252,7 +253,6 @@ export default function SearchScreen() {
       <TouchableOpacity
         style={styles.onlineCard}
         onPress={() => {
-          const { Linking } = require('react-native');
           Linking.openURL(url).catch(() => {});
         }}
         activeOpacity={0.75}
@@ -280,7 +280,6 @@ export default function SearchScreen() {
       <TouchableOpacity
         style={styles.localCard}
         onPress={() => {
-          const { Linking } = require('react-native');
           Linking.openURL(url).catch(() => {});
         }}
         activeOpacity={0.75}
@@ -316,8 +315,6 @@ export default function SearchScreen() {
         <View style={styles.localRight}>
           {item.phone ? (
             <TouchableOpacity onPress={(e) => {
-              e.stopPropagation && e.stopPropagation();
-              const { Linking } = require('react-native');
               Linking.openURL(`tel:${item.phone}`).catch(() => {});
             }}>
               <Text style={styles.localPhone}>📞 {item.phone}</Text>
