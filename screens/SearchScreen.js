@@ -301,6 +301,9 @@ export default function SearchScreen() {
             {item.verified && (
               <Text style={styles.verifiedBadge}>✓ PrixMalin</Text>
             )}
+            {item.partner && (
+              <Text style={styles.partnerBadge}>🤝 Fier Partenaire</Text>
+            )}
           </View>
           {item.address ? (
             <Text style={styles.localAddress} numberOfLines={1}>{item.address}</Text>
@@ -688,6 +691,18 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
     color: '#6b7280',
+  },
+  partnerBadge: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#2eaabf',
+    backgroundColor: 'rgba(46,170,191,0.12)',
+    borderRadius: 8,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderWidth: 1,
+    borderColor: 'rgba(46,170,191,0.4)',
+    overflow: 'hidden',
   },
   verifiedBadge: {
     fontSize: 11,
