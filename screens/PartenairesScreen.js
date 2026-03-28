@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,23 +9,27 @@ import {
   Image,
   Linking,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 
-const PARTENAIRES = [
-  {
-    slug: 'bergerons',
-    nom: 'Bergeron Électronique',
-    slogan: 'Un sourire implacable, pour un service impeccable.',
-    ville: 'Ville-Marie, QC',
-    logo: require('../assets/partenaires/bergerons-logo.png'),
-    url: 'https://prixmalin.ca/fr/partenaires/bergerons',
-    couleur: '#2eaabf',
-  },
-];
+const BACKEND_URL = 'https://prixmalin-backend.onrender.com';
 
 export default function PartenairesScreen() {
+  const [partenaires, setPartenaires] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${BACKEND_URL}/api/partenaires`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) setPartenaires(data.partenaires);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
   const ouvrirCirculaire = (url) => {
-    Linking.openURL(url);
+    Linking.openURL(url).catch(() => {});
   };
 
   return (
@@ -39,49 +43,55 @@ export default function PartenairesScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll}>
-        {PARTENAIRES.map((p) => (
-          <TouchableOpacity
-            key={p.slug}
-            style={styles.carte}
-            onPress={() => ouvrirCirculaire(p.url)}
-            activeOpacity={0.85}
-          >
-            {/* Bande couleur top */}
-            <View style={[styles.bandeCouleur, { backgroundColor: p.couleur }]} />
+        {loading ? (
+          <ActivityIndicator size="large" color="#2eaabf" style={{ marginTop: 40 }} />
+        ) : (
+          <>
+            {partenaires.map((p) => (
+              <TouchableOpacity
+                key={p.slug}
+                style={styles.carte}
+                onPress={() => ouvrirCirculaire(p.url)}
+                activeOpacity={0.85}
+              >
+                {/* Bande couleur top */}
+                <View style={[styles.bandeCouleur, { backgroundColor: p.couleur }]} />
 
-            {/* Logo */}
-            <View style={styles.logoContainer}>
-              <Image
-                source={p.logo}
-                style={styles.logo}
-                resizeMode="contain"
-              />
+                {/* Logo */}
+                <View style={styles.logoContainer}>
+                  <Image
+                    source={{ uri: p.logo_url }}
+                    style={styles.logo}
+                    resizeMode="contain"
+                  />
+                </View>
+
+                {/* Info */}
+                <View style={styles.info}>
+                  <Text style={styles.nom}>{p.nom}</Text>
+                  {p.ville ? <Text style={styles.ville}>📍 {p.ville}</Text> : null}
+                  <Text style={styles.slogan}>{p.slogan}</Text>
+                </View>
+
+                {/* Bouton circulaire */}
+                <View style={[styles.bouton, { backgroundColor: p.couleur }]}>
+                  <Text style={styles.boutonTexte}>Voir la circulaire →</Text>
+                </View>
+
+                {/* Badge coupon */}
+                <View style={styles.badge}>
+                  <Text style={styles.badgeTexte}>🏷️ Rabais sur produits désignés</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+
+            {/* Placeholder futur partenaire */}
+            <View style={styles.carteProchaine}>
+              <Text style={styles.prochaineEmoji}>🚧</Text>
+              <Text style={styles.prochaineTexte}>Prochain partenaire à venir</Text>
             </View>
-
-            {/* Info */}
-            <View style={styles.info}>
-              <Text style={styles.nom}>{p.nom}</Text>
-              <Text style={styles.ville}>📍 {p.ville}</Text>
-              <Text style={styles.slogan}>{p.slogan}</Text>
-            </View>
-
-            {/* Bouton circulaire */}
-            <View style={[styles.bouton, { backgroundColor: p.couleur }]}>
-              <Text style={styles.boutonTexte}>Voir la circulaire →</Text>
-            </View>
-
-            {/* Badge coupon */}
-            <View style={styles.badge}>
-              <Text style={styles.badgeTexte}>🏷️ Rabais sur produits désignés</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-
-        {/* Placeholder futur partenaire */}
-        <View style={styles.carteProchaine}>
-          <Text style={styles.prochaineEmoji}>🚧</Text>
-          <Text style={styles.prochaineTexte}>Prochain partenaire à venir</Text>
-        </View>
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
