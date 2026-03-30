@@ -125,6 +125,7 @@ export default function SearchScreen() {
   const [recentSearches, setRecentSearches] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
   const inputRef = useRef(null);
+  const cancelRef = useRef(false); // flag annulation recherche
 
   // Charger historique au montage
   useEffect(() => {
@@ -177,6 +178,7 @@ export default function SearchScreen() {
     const q = searchQuery.trim();
     if (!q) return;
 
+    cancelRef.current = false;
     Keyboard.dismiss();
     setHasSearched(true);
     setOnlineResults([]);
@@ -193,6 +195,20 @@ export default function SearchScreen() {
     loadLocalResults(q, category);
   };
 
+  function handleCancel() {
+    cancelRef.current = true;
+    setLoadingOnline(false);
+    setLoadingLocal(false);
+    setOnlineResults([]);
+    setLocalResults([]);
+    setHasSearched(false);
+    setDetectedCategory(null);
+    setSearchQuery('');
+    setUserCity('');
+    setGpsStatus('idle');
+    inputRef.current?.focus();
+  }
+
   async function loadOnline(q, category) {
     setLoadingOnline(true);
     try {
@@ -200,11 +216,11 @@ export default function SearchScreen() {
         `${ONLINE_API_URL}?q=${encodeURIComponent(q)}&cat=${category}`
       );
       const data = await res.json();
-      setOnlineResults(data.results || []);
+      if (!cancelRef.current) setOnlineResults(data.results || []);
     } catch {
-      setOnlineResults([]);
+      if (!cancelRef.current) setOnlineResults([]);
     }
-    setLoadingOnline(false);
+    if (!cancelRef.current) setLoadingOnline(false);
   }
 
   async function loadLocalResults(q, category) {
@@ -220,11 +236,11 @@ export default function SearchScreen() {
       const locals = (response.data.results || []).filter(
         r => r.type === 'local_with_website' || r.type === 'local_no_website'
       );
-      setLocalResults(locals);
+      if (!cancelRef.current) setLocalResults(locals);
     } catch {
-      setLocalResults([]);
+      if (!cancelRef.current) setLocalResults([]);
     }
-    setLoadingLocal(false);
+    if (!cancelRef.current) setLoadingLocal(false);
   }
 
   const isLoading = loadingOnline || loadingLocal;
@@ -272,18 +288,13 @@ export default function SearchScreen() {
   // ── RENDU RÉSULTAT LOCAL ─────────────────────────────────────────
   function renderLocalItem({ item }) {
     const isFromGoogle = !item.verified && item.type !== undefined;
-    const hasWebsite = item.type === 'local_with_website';
-    const url = item.website || item.affiliate_url ||
-      `https://www.google.com/maps/search/?q=${encodeURIComponent(item.store)}`;
+    const hasWebsite = item.type === 'local_with_website' && (item.website || item.affiliate_url);
+    const mapsUrl = item.latitude && item.longitude
+      ? `https://www.google.com/maps/dir/?api=1&destination=${item.latitude},${item.longitude}`
+      : `https://www.google.com/maps/search/?q=${encodeURIComponent(item.address || item.store)}`;
 
     return (
-      <TouchableOpacity
-        style={styles.localCard}
-        onPress={() => {
-          Linking.openURL(url).catch(() => {});
-        }}
-        activeOpacity={0.75}
-      >
+      <View style={styles.localCard}>
         <Text style={styles.localPin}>📍</Text>
         <View style={styles.localInfo}>
           <View style={styles.localNameRow}>
@@ -314,25 +325,36 @@ export default function SearchScreen() {
           {item.rating ? (
             <Text style={styles.localRating}>⭐ {item.rating}/5</Text>
           ) : null}
-        </View>
-        <View style={styles.localRight}>
-          {item.phone ? (
-            <TouchableOpacity onPress={(e) => {
-              Linking.openURL(`tel:${item.phone}`).catch(() => {});
-            }}>
-              <Text style={styles.localPhone}>📞 {item.phone}</Text>
+
+          {/* ── 3 BOUTONS D'ACTION ── */}
+          <View style={styles.localActions}>
+            <TouchableOpacity
+              style={[styles.actionBtn, styles.actionBtnDirections]}
+              onPress={() => Linking.openURL(mapsUrl).catch(() => {})}
+            >
+              <Text style={styles.actionBtnText}>📍 Directions</Text>
             </TouchableOpacity>
-          ) : null}
-          <View style={[
-            styles.localButton,
-            { backgroundColor: hasWebsite ? '#16a34a' : '#6b7280' }
-          ]}>
-            <Text style={styles.localButtonText}>
-              {hasWebsite ? 'Voir site →' : 'Maps →'}
-            </Text>
+
+            {hasWebsite && (
+              <TouchableOpacity
+                style={[styles.actionBtn, styles.actionBtnWebsite]}
+                onPress={() => Linking.openURL(item.website || item.affiliate_url).catch(() => {})}
+              >
+                <Text style={styles.actionBtnText}>🌐 Site web</Text>
+              </TouchableOpacity>
+            )}
+
+            {item.phone ? (
+              <TouchableOpacity
+                style={[styles.actionBtn, styles.actionBtnPhone]}
+                onPress={() => Linking.openURL(`tel:${item.phone}`).catch(() => {})}
+              >
+                <Text style={styles.actionBtnText}>📞 Appeler</Text>
+              </TouchableOpacity>
+            ) : null}
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
     );
   }
 
@@ -395,11 +417,11 @@ export default function SearchScreen() {
             autoCorrect={false}
           />
           <TouchableOpacity
-            style={[styles.searchButton, isLoading && styles.searchButtonLoading]}
-            onPress={isLoading ? () => {} : handleSearch}
+            style={[styles.searchButton, isLoading && styles.searchButtonCancel]}
+            onPress={isLoading ? handleCancel : handleSearch}
           >
             {isLoading
-              ? <ActivityIndicator size="small" color="#fff" />
+              ? <Text style={styles.searchButtonIcon}>✕</Text>
               : <Text style={styles.searchButtonIcon}>🔍</Text>
             }
           </TouchableOpacity>
@@ -530,6 +552,9 @@ const styles = StyleSheet.create({
   },
   searchButtonLoading: {
     backgroundColor: '#6b7280',
+  },
+  searchButtonCancel: {
+    backgroundColor: '#dc2626',
   },
   searchButtonIcon: {
     fontSize: 20,
@@ -729,20 +754,27 @@ const styles = StyleSheet.create({
     color: '#d97706',
     marginTop: 2,
   },
-  localRight: {
-    alignItems: 'flex-end',
+  localActions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 6,
+    marginTop: 10,
   },
-  localPhone: {
-    fontSize: 11,
-    color: '#3b82f6',
-  },
-  localButton: {
+  actionBtn: {
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 10,
   },
-  localButtonText: {
+  actionBtnDirections: {
+    backgroundColor: '#16a34a',
+  },
+  actionBtnWebsite: {
+    backgroundColor: '#3b82f6',
+  },
+  actionBtnPhone: {
+    backgroundColor: '#d97706',
+  },
+  actionBtnText: {
     color: '#fff',
     fontSize: 12,
     fontWeight: '700',
