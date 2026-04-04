@@ -75,6 +75,11 @@ const CATEGORY_KEYWORDS = {
     'chaloupe', 'bateau', 'kayak', 'canot', 'moteur hors-bord',
     'moteur hors bord', 'voilier', 'zodiac', 'pedalo', 'planche',
   ],
+  bijoux: [
+    'bijou', 'bijoux', 'bague', 'collier', 'bracelet', 'jonc',
+    'or', 'argent', 'diamant', 'pendentif', 'alliance', 'medaille',
+    'bijouterie', 'joaillerie', 'montre', 'horlogerie',
+  ],
   electro: [
     'telephone', 'cellulaire', 'ordinateur', 'laptop', 'tablette',
     'ecran', 'moniteur', 'clavier', 'souris', 'casque', 'ecouteurs',
