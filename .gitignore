@@ -43,3 +43,4 @@ yarn-error.*
 # Keystore — NE JAMAIS COMMITTER
 credentials.json
 credentials/
+*.bak
