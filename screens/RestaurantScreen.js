@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   StyleSheet,
   Text,
@@ -359,6 +360,7 @@ function CarteRestaurant({ restaurant }) {
 
 // ── ÉCRAN PRINCIPAL ───────────────────────────────────────────────────
 export default function RestaurantScreen() {
+  const { i18n } = useTranslation();
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -428,7 +430,8 @@ export default function RestaurantScreen() {
     setRestaurants([]);
     const rayon = isVille ? 20 : 45;
     try {
-      const res = await fetch(`${BACKEND_URL}/api/restaurants/google?lat=${lat}&lng=${lng}&rayon=${rayon}`);
+      const lang = i18n.language?.split('-')[0] || 'fr';
+      const res = await fetch(`${BACKEND_URL}/api/restaurants/google?lat=${lat}&lng=${lng}&rayon=${rayon}&lang=${lang}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setRestaurants(data.restaurants || []);
@@ -473,6 +476,9 @@ export default function RestaurantScreen() {
         setVilleCoords({ lat: data.lat, lng: data.lng });
         setVilleActive(data.nom || ville);
         setVilleInput('');
+        setCuisine('all');
+        setServicesActifs([]);
+        setSearch('');
         fetchRestaurants(data.lat, data.lng, true);
       }
     } catch {}
@@ -492,6 +498,9 @@ export default function RestaurantScreen() {
         setVilleCoords({ lat: data.lat, lng: data.lng });
         setVilleActive(data.nom || villeInput);
         setVilleInput('');
+        setCuisine('all');
+        setServicesActifs([]);
+        setSearch('');
         fetchRestaurants(data.lat, data.lng, true);
       }
     } catch {}
@@ -504,6 +513,9 @@ export default function RestaurantScreen() {
     setVilleCoords(null);
     setVilleInput('');
     setSuggestions([]);
+    setCuisine('all');
+    setServicesActifs([]);
+    setSearch('');
     const pos = userPos || GPS_FALLBACK;
     fetchRestaurants(pos.lat, pos.lng, false);
   }
@@ -582,7 +594,7 @@ export default function RestaurantScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.modeBtn, modeVille && styles.modeBtnActive]}
-            onPress={() => setModeVille(true)}
+            onPress={() => { setModeVille(true); setCuisine('all'); setServicesActifs([]); setSearch(''); }}
           >
             <Text style={[styles.modeBtnText, modeVille && styles.modeBtnTextActive]}>🗺️ Autre ville</Text>
           </TouchableOpacity>

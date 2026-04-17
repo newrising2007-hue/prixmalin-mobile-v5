@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import ProductCard from '../components/ProductCard';
 
 const BACKEND_URL = 'https://prixmalin-backend.onrender.com';
 const ONLINE_API_URL = 'https://prixmalin.ca/api/search';
@@ -317,12 +318,7 @@ export default function SearchScreen() {
               <Text style={styles.verifiedBadge}>✓ PrixMalin</Text>
             )}
             {item.partner && (
-              <TouchableOpacity
-                onPress={() => Linking.openURL(`https://prixmalin.ca/fr/partenaires/${item.partner}`).catch(() => {})}
-                activeOpacity={0.75}
-              >
-                <Text style={styles.partnerBadge}>🤝 Fier Partenaire</Text>
-              </TouchableOpacity>
+              <Text style={styles.partnerBadge}>🤝 Fier Partenaire</Text>
             )}
           </View>
           {item.address ? (

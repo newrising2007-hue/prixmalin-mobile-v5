@@ -109,7 +109,7 @@ export default function HomeScreen({ navigation }) {
         </View>
         {/* FOOTER */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Version 1.0.0 — 2026</Text>
+          <Text style={styles.footerText}>Version 1.0.1 — 2026</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
