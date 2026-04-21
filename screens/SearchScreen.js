@@ -193,6 +193,7 @@ export default function SearchScreen() {
     setDetectedCategory(category !== 'divers' ? category : null);
 
     await saveRecentSearch(q);
+    setSearchQuery('');
 
     // Lancer les deux appels en parallèle
     loadOnline(q, category);
