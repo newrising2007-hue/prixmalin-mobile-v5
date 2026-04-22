@@ -62,7 +62,7 @@ const CATEGORY_KEYWORDS = {
   epicerie: [
     'pain', 'lait', 'beurre', 'fromage', 'oeuf', 'oeufs', 'yaourt',
     'yogourt', 'creme', 'farine', 'sucre', 'riz', 'pates', 'cereales',
-    'jus', 'eau', 'cafe', 'the', 'chocolat', 'biscuits', 'chips',
+    'jus', 'cafe', 'the', 'chocolat', 'biscuits', 'chips',
     'epicerie', 'alimentation', 'nourriture', 'legume', 'fruit',
     'huile', 'vinaigre', 'sel', 'poivre', 'confiture', 'miel',
     'viande', 'boeuf', 'poulet', 'porc', 'steak', 'saucisse', 'bacon',
@@ -158,8 +158,18 @@ const CATEGORY_KEYWORDS = {
 
 function detectCategory(query) {
   const normalized = normalizeQuery(query);
+  // Word boundary matching — 'eau' ne doit pas matcher dans 'manteau'
+  const wordMatch = (text, kw) => {
+    if (kw.includes(' ')) {
+      // Expression multi-mots → substring OK (assez spécifique)
+      return text.includes(kw);
+    }
+    // Mot simple → doit être un mot entier (entouré de espaces ou début/fin)
+    const re = new RegExp('(^|\\s)' + kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\s|$)');
+    return re.test(text);
+  };
   for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
-    if (keywords.some(kw => normalized.includes(kw))) {
+    if (keywords.some(kw => wordMatch(normalized, kw))) {
       return category;
     }
   }
