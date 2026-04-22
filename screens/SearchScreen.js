@@ -48,6 +48,7 @@ const CATEGORY_KEYWORDS = {
     'gmc', 'ram', 'jeep', 'hyundai', 'kia', 'mazda', 'nissan', 'subaru',
     'harley', 'ducati', 'triumph', 'rzr', 'maverick', 'outlander',
     'mxz', 'summit', 'renegade', 'expedition', 'skandic',
+    'motoneige', 'motomarine', 'concessionnaire',
   ],
   pieces: [
     'pneu', 'pneus', 'pare-brise', 'freins', 'frein', 'filtre a huile',
@@ -55,13 +56,8 @@ const CATEGORY_KEYWORDS = {
     'echappement', 'radiateur', 'alternateur', 'demarreur', 'embrayage',
     'transmission', 'huile moteur', 'essuie-glace', 'plaquettes',
     'rotule', 'roulement', 'catalyseur', 'silencieux',
-  ],
-  boucherie: [
-    'viande', 'boeuf', 'beef', 'poulet', 'chicken', 'porc', 'pork',
-    'steak', 'saucisse', 'saucisses', 'bacon', 'agneau', 'veau',
-    'boucherie', 'charcuterie', 'jambon', 'cote de porc', 'cote levee',
-    'filet mignon', 'faux filet', 'hamburger', 'boulette', 'merguez',
-    'roti', 'gigot', 'crevette', 'crevettes', 'poisson',
+    'outil mecanique', 'cle dynamometrique', 'cric', 'soudeuse', 'soudure',
+    'meuleuse', 'piece detachee', 'carrosserie', 'debosselage',
   ],
   epicerie: [
     'pain', 'lait', 'beurre', 'fromage', 'oeuf', 'oeufs', 'yaourt',
@@ -69,15 +65,9 @@ const CATEGORY_KEYWORDS = {
     'jus', 'eau', 'cafe', 'the', 'chocolat', 'biscuits', 'chips',
     'epicerie', 'alimentation', 'nourriture', 'legume', 'fruit',
     'huile', 'vinaigre', 'sel', 'poivre', 'confiture', 'miel',
-  ],
-  nautique: [
-    'chaloupe', 'bateau', 'kayak', 'canot', 'moteur hors-bord',
-    'moteur hors bord', 'voilier', 'zodiac', 'pedalo', 'planche',
-  ],
-  bijoux: [
-    'bijou', 'bijoux', 'bague', 'collier', 'bracelet', 'jonc',
-    'or', 'argent', 'diamant', 'pendentif', 'alliance', 'medaille',
-    'bijouterie', 'joaillerie', 'montre', 'horlogerie',
+    'viande', 'boeuf', 'poulet', 'porc', 'steak', 'saucisse', 'bacon',
+    'boucherie', 'charcuterie', 'jambon', 'boulangerie', 'viennoiserie',
+    'traiteur', 'depanneur',
   ],
   electro: [
     'telephone', 'cellulaire', 'ordinateur', 'laptop', 'tablette',
@@ -86,10 +76,83 @@ const CATEGORY_KEYWORDS = {
     'console', 'playstation', 'xbox', 'nintendo', 'switch', 'manette',
     'disque dur', 'ssd', 'processeur', 'carte graphique', 'gpu', 'cpu',
     'routeur', 'modem', 'speaker', 'enceinte', 'drone', 'smartwatch',
-  ],
-  pieces_electroniques: [
     'composante', 'arduino', 'raspberry', 'cable', 'adaptateur',
-    'chargeur', 'batterie telephone',
+    'chargeur', 'reseau', 'securite', 'camera surveillance',
+  ],
+  quincaillerie: [
+    'quincaillerie', 'outil', 'marteau', 'tournevis', 'perceuse', 'scie',
+    'clou', 'vis', 'boulon', 'ecrou', 'rondelle', 'peinture', 'plomberie',
+    'tuyau', 'robinet', 'drain', 'electricite', 'fil electrique', 'disjoncteur',
+    'prise', 'interrupteur', 'colle', 'scellant', 'mastic', 'calfeutrage',
+    'meuleuse', 'sableuse', 'compresseur', 'niveau', 'ruban a mesurer',
+    'paysagement', 'gazon', 'engrais', 'tondeuse', 'souffleuse feuilles',
+  ],
+  maison: [
+    'electromenager', 'refrigerateur', 'laveuse', 'secheuse', 'lave-vaisselle',
+    'cuisiniere', 'four', 'micro-ondes', 'congelateur', 'hotte',
+    'meuble', 'canape', 'sofa', 'lit', 'matelas', 'armoire', 'commode',
+    'table', 'chaise', 'bureau', 'etagere', 'rangement', 'garde-robe',
+    'decoration', 'rideau', 'tapis', 'lampe', 'tableau', 'coussin',
+    'cuisine', 'batterie de cuisine', 'chaudron', 'poele', 'ustensile',
+  ],
+  mode: [
+    'vetement', 'habit', 'manteau', 'pantalon', 'chemise', 'robe',
+    'chandail', 'veste', 'blouson', 'jupe', 't-shirt', 'sous-vetement',
+    'chaussure', 'botte', 'espadrille', 'sandales', 'talon',
+    'boutique', 'mode', 'fashion', 'collection',
+    'vetement enfant', 'vetement femme', 'vetement homme',
+  ],
+  sport: [
+    'sport', 'hockey', 'patin', 'raquette', 'tennis', 'soccer', 'ballon',
+    'natation', 'velo', 'ski', 'snowboard', 'golf', 'basketball', 'volleyball',
+    'baseball', 'football', 'course', 'running', 'musculation', 'gym',
+    'fitness', 'haltere', 'tapis roulant', 'equipement sportif',
+    'vetement sport', 'maillot', 'short sport',
+  ],
+  plein_air: [
+    'chasse', 'peche', 'camping', 'randonnee', 'raquette neige',
+    'tente', 'sac de couchage', 'lampe frontale', 'boussole', 'gps',
+    'fusil', 'carabine', 'munition', 'appat', 'leurre', 'canne a peche',
+    'moulinet', 'fil peche', 'gilet de peche', 'waders', 'canoeing',
+    'survie', 'couteau', 'hache', 'allume-feu', 'rations',
+  ],
+  machinerie: [
+    'tracteur', 'john deere', 'kubota', 'case', 'new holland', 'massey',
+    'machinerie', 'excavatrice', 'chargeuse', 'niveleuse', 'compacteur',
+    'agricole', 'ferme', 'agriculture', 'faucheuse', 'semoir', 'charrue',
+    'grue', 'camion benne', 'camion citerne', 'remorque',
+  ],
+  sante: [
+    'pharmacie', 'medicament', 'ordonnance', 'vitamine', 'supplement',
+    'sante', 'optique', 'lunette', 'lentille', 'verres',
+    'coiffure', 'coiffeur', 'salon', 'coupe', 'teinture', 'meche',
+    'esthetique', 'esthete', 'massage', 'soin visage', 'epilation',
+    'manucure', 'pedicure', 'soins personnels', 'creme', 'lotion',
+    'shampooing', 'deodorant', 'parfum', 'maquillage',
+  ],
+  animalerie: [
+    'animal', 'animaux', 'chien', 'chat', 'oiseau', 'poisson', 'lapin',
+    'hamster', 'animalerie', 'veterinaire', 'veto', 'clinique veterinaire',
+    'nourriture animaux', 'croquette', 'litiere', 'cage', 'aquarium',
+    'collier chien', 'laisse', 'jouet chien', 'jouet chat',
+  ],
+  loisirs: [
+    'jeux', 'jouet', 'puzzle', 'lego', 'figurine', 'jeux de societe',
+    'hobby', 'modélisme', 'maquette', 'collection', 'carte collectionnable',
+    'peinture hobby', 'bricolage', 'couture', 'tricot', 'crochet',
+    'instrument musique', 'guitare', 'piano', 'batterie',
+  ],
+  bijoux: [
+    'bijou', 'bijoux', 'bague', 'collier', 'bracelet', 'jonc',
+    'or', 'argent', 'diamant', 'pendentif', 'alliance', 'medaille',
+    'bijouterie', 'joaillerie', 'montre', 'horlogerie',
+    'sac', 'sac a main', 'portefeuille', 'ceinture', 'accessoire mode',
+  ],
+  bureautique: [
+    'bureau', 'imprimante', 'cartouche', 'toner', 'papier bureau',
+    'classeur', 'chemise', 'reliure', 'laminage', 'plastification',
+    'papeterie', 'crayon', 'stylo', 'marqueur', 'cahier', 'bloc-notes',
+    'imprimerie', 'impression', 'affiche', 'carte affaire',
   ],
 };
 
@@ -97,8 +160,6 @@ function detectCategory(query) {
   const normalized = normalizeQuery(query);
   for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
     if (keywords.some(kw => normalized.includes(kw))) {
-      // pieces_electroniques → electro côté backend
-      if (category === 'pieces_electroniques') return 'electro';
       return category;
     }
   }
@@ -107,13 +168,22 @@ function detectCategory(query) {
 
 // ── BADGE CATÉGORIE DÉTECTÉE ─────────────────────────────────────────
 const CATEGORY_LABELS = {
-  vehicules: '🚗 Véhicules',
-  pieces: '🔧 Pièces auto',
-  boucherie: '🥩 Boucherie',
-  epicerie: '🛒 Épicerie',
-  nautique: '⛵ Nautique',
-  electro: '💻 Électronique',
-  divers: null,
+  vehicules:    '🚗 Véhicules',
+  pieces:       '🔧 Pièces & mécanique',
+  epicerie:     '🛒 Épicerie & alimentation',
+  electro:      '💻 Électronique',
+  quincaillerie:'🔨 Quincaillerie',
+  maison:       '🏠 Maison & meubles',
+  mode:         '👕 Mode & vêtements',
+  sport:        '⚽ Sport',
+  plein_air:    '🌲 Plein air & chasse',
+  machinerie:   '🚜 Machinerie',
+  sante:        '💊 Santé & beauté',
+  animalerie:   '🐾 Animalerie',
+  loisirs:      '🎲 Loisirs',
+  bijoux:       '💍 Bijoux & accessoires',
+  bureautique:  '🖨️ Bureautique',
+  divers:       null,
 };
 
 export default function SearchScreen() {
