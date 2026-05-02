@@ -32,7 +32,7 @@ function normalizeQuery(query) {
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/œ/g, 'oe')
     .replace(/æ/g, 'ae')
-    .replace(/-/g, ' ')
+    //.replace(/-/g, ' ') // retiré — casse F-150 et modèles avec tiret
     .replace(/\s+/g, ' ')
     .toLowerCase();
 }
