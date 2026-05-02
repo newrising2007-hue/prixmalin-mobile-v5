@@ -56,5 +56,15 @@
     "network": "Error de red. Verifica tu conexión.",
     "no_results": "Sin resultados para esta búsqueda."
   },
-  "language": "Idioma"
+  "language": "Idioma",
+  "en_ligne": "En línea",
+  "magasins_pres": "Tiendas cerca de usted",
+  "via_google": "via Google",
+  "position_non_detectee": "Ubicación no detectada — mostrando resultados predeterminados",
+  "position_detectee": "Ubicación detectada",
+  "recherches_recentes": "Búsquedas recientes",
+  "categorie_detectee": "Categoría detectada",
+  "chargement": "Cargando...",
+  "recherche_magasins": "Buscando tiendas...",
+  "aucun_magasin": "No se encontraron tiendas en su región"
 }

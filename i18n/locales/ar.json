@@ -56,5 +56,15 @@
     "network": "خطأ في الشبكة. تحقق من اتصالك.",
     "no_results": "لا توجد نتائج لهذا البحث."
   },
-  "language": "اللغة"
+  "language": "اللغة",
+  "en_ligne": "عبر الإنترنت",
+  "magasins_pres": "المتاجر القريبة منك",
+  "via_google": "عبر Google",
+  "position_non_detectee": "لم يتم اكتشاف الموقع — عرض النتائج الافتراضية",
+  "position_detectee": "تم اكتشاف الموقع",
+  "recherches_recentes": "عمليات البحث الأخيرة",
+  "categorie_detectee": "تم اكتشاف الفئة",
+  "chargement": "جارٍ التحميل...",
+  "recherche_magasins": "جارٍ البحث عن المتاجر...",
+  "aucun_magasin": "لم يتم العثور على متاجر في منطقتك"
 }

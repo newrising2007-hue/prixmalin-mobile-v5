@@ -56,5 +56,15 @@
     "network": "网络错误。请检查您的连接。",
     "no_results": "此搜索无结果。"
   },
-  "language": "语言"
+  "language": "语言",
+  "en_ligne": "在线",
+  "magasins_pres": "附近的商店",
+  "via_google": "通过 Google",
+  "position_non_detectee": "未检测到位置 — 显示默认结果",
+  "position_detectee": "已检测到位置",
+  "recherches_recentes": "最近搜索",
+  "categorie_detectee": "已检测到类别",
+  "chargement": "加载中...",
+  "recherche_magasins": "正在搜索商店...",
+  "aucun_magasin": "在您所在地区未找到商店"
 }

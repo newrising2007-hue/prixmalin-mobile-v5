@@ -56,5 +56,15 @@
     "network": "Network error. Check your connection.",
     "no_results": "No results for this search."
   },
-  "language": "Language"
+  "language": "Language",
+  "en_ligne": "Online",
+  "magasins_pres": "Stores near you",
+  "via_google": "via Google",
+  "position_non_detectee": "Location not detected — showing default results",
+  "position_detectee": "Location detected",
+  "recherches_recentes": "Recent searches",
+  "categorie_detectee": "Category detected",
+  "chargement": "Loading...",
+  "recherche_magasins": "Searching for stores...",
+  "aucun_magasin": "No stores found in your area"
 }
