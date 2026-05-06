@@ -12,8 +12,16 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
 
+const LANGUAGES = ['fr', 'en', 'es', 'ar', 'zh'];
+
 export default function HomeScreen({ navigation }) {
-  const { t } = useTranslation();
+  const { t, i18n: i18nInstance } = useTranslation();
+  const [, forceUpdate] = React.useState(0);
+  React.useEffect(() => {
+    const handler = () => forceUpdate(n => n + 1);
+    i18nInstance.on('languageChanged', handler);
+    return () => i18nInstance.off('languageChanged', handler);
+  }, [i18nInstance]);
 
   const MENU_ITEMS = [
     {
@@ -25,22 +33,6 @@ export default function HomeScreen({ navigation }) {
       screen: 'Search',
     },
     {
-      key: 'restaurants',
-      icon: '🍽️',
-      title: t('menu.restaurants_title'),
-      subtitle: t('menu.restaurants_sub'),
-      color: '#f97316',
-      screen: 'Restaurants',
-    },
-    {
-      key: 'partenaires',
-      icon: '🤝',
-      title: t('menu.partenaires_title'),
-      subtitle: t('menu.partenaires_sub'),
-      color: '#3b82f6',
-      screen: 'Partenaires',
-    },
-    {
       key: 'epicerie',
       icon: '🏷️',
       title: t('menu.epicerie_title'),
@@ -49,12 +41,28 @@ export default function HomeScreen({ navigation }) {
       screen: 'Epicerie',
     },
     {
+      key: 'restaurants',
+      icon: '🍽️',
+      title: t('menu.restaurants_title'),
+      subtitle: t('menu.restaurants_sub'),
+      color: '#f97316',
+      screen: 'Restaurants',
+    },
+    {
       key: 'gaming',
       icon: '🎮',
       title: t('menu.gaming_title'),
       subtitle: t('menu.gaming_sub'),
       color: '#8b5cf6',
       screen: 'GamingHub',
+    },
+    {
+      key: 'partenaires',
+      icon: '🤝',
+      title: t('menu.partenaires_title'),
+      subtitle: t('menu.partenaires_sub'),
+      color: '#3b82f6',
+      screen: 'Partenaires',
     },
   ];
 
@@ -94,6 +102,25 @@ export default function HomeScreen({ navigation }) {
           />
           <Text style={styles.title}>PrixMalin</Text>
           <Text style={styles.subtitle}>{t('tagline')}</Text>
+
+          {/* TOGGLE LANGUE TEST */}
+          <View style={styles.langToggle}>
+            {LANGUAGES.map(lang => (
+              <TouchableOpacity
+                key={lang}
+                onPress={() => i18nInstance.changeLanguage(lang)}
+                style={[
+                  styles.langBtn,
+                  i18nInstance.language === lang && styles.langBtnActive,
+                ]}
+              >
+                <Text style={[
+                  styles.langBtnText,
+                  i18nInstance.language === lang && styles.langBtnTextActive,
+                ]}>{lang.toUpperCase()}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
 
         {/* MENU */}
@@ -136,7 +163,8 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingTop: 20,
+    paddingBottom: 10,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#e5e7eb',
@@ -156,12 +184,39 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#6b7280',
     textAlign: 'center',
+    marginBottom: 8,
+  },
+  // ── TOGGLE LANGUE ──
+  langToggle: {
+    flexDirection: 'row',
+    gap: 6,
+    marginTop: 4,
+  },
+  langBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#d1d5db',
+    backgroundColor: '#f9fafb',
+  },
+  langBtnActive: {
+    backgroundColor: '#16a34a',
+    borderColor: '#16a34a',
+  },
+  langBtnText: {
+    fontSize: 11,
+    color: '#6b7280',
+    fontWeight: '600',
+  },
+  langBtnTextActive: {
+    color: '#fff',
   },
   // ── MENU ──
   menuContainer: {
     flex: 1,
-    padding: 16,
-    paddingTop: 16,
+    padding: 12,
+    paddingTop: 12,
   },
   menuButton: {
     backgroundColor: '#fff',
@@ -213,11 +268,11 @@ const styles = StyleSheet.create({
   // ── RECRUTEMENT ──
   recrutement: {
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: 16,
     paddingHorizontal: 20,
     borderTopWidth: 1,
     borderTopColor: '#e5e7eb',
-    marginTop: 8,
+    marginTop: 4,
   },
   recrutementTitre: {
     fontSize: 17,
@@ -239,7 +294,7 @@ const styles = StyleSheet.create({
   },
   // ── FOOTER ──
   footer: {
-    padding: 20,
+    padding: 16,
     alignItems: 'center',
   },
   footerText: {
