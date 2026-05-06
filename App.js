@@ -7,6 +7,7 @@ import SearchScreen from './screens/SearchScreen';
 import RestaurantScreen from './screens/RestaurantScreen';
 import GamingHubScreen from './screens/GamingHubScreen';
 import PartenairesScreen from './screens/PartenairesScreen';
+import EpicerieScreen from './screens/EpicerieScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +46,11 @@ export default function App() {
           name="Partenaires"
           component={PartenairesScreen}
           options={{ title: 'Partenaires locaux' }}
+        />
+        <Stack.Screen
+          name="Epicerie"
+          component={EpicerieScreen}
+          options={{ title: 'Aubaines Épicerie' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

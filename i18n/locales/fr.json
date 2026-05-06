@@ -66,5 +66,17 @@
   "categorie_detectee": "Catégorie détectée",
   "chargement": "Chargement...",
   "recherche_magasins": "Recherche de magasins...",
-  "aucun_magasin": "Aucun magasin trouvé dans votre région"
+  "aucun_magasin": "Aucun magasin trouvé dans votre région",
+  "menu": {
+    "search_title": "Recherche",
+    "search_sub": "Cherche ton prix",
+    "restaurants_title": "Restaurants",
+    "restaurants_sub": "Découvrez les restos près de vous",
+    "partenaires_title": "Partenaires locaux",
+    "partenaires_sub": "Rabais exclusifs PrixMalin",
+    "epicerie_title": "Aubaines Épicerie",
+    "epicerie_sub": "Meilleurs prix par région cette semaine",
+    "gaming_title": "Gaming",
+    "gaming_sub": "Produits, codes et deals gaming"
+  }
 }

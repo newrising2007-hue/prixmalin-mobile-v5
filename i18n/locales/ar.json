@@ -66,5 +66,17 @@
   "categorie_detectee": "تم اكتشاف الفئة",
   "chargement": "جارٍ التحميل...",
   "recherche_magasins": "جارٍ البحث عن المتاجر...",
-  "aucun_magasin": "لم يتم العثور على متاجر في منطقتك"
+  "aucun_magasin": "لم يتم العثور على متاجر في منطقتك",
+  "menu": {
+    "search_title": "بحث",
+    "search_sub": "ابحث عن سعرك",
+    "restaurants_title": "مطاعم",
+    "restaurants_sub": "اكتشف المطاعم القريبة منك",
+    "partenaires_title": "شركاء محليون",
+    "partenaires_sub": "خصومات حصرية من PrixMalin",
+    "epicerie_title": "عروض البقالة",
+    "epicerie_sub": "أفضل الأسعار حسب المنطقة هذا الأسبوع",
+    "gaming_title": "ألعاب",
+    "gaming_sub": "منتجات وأكواد وعروض الألعاب"
+  }
 }

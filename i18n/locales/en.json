@@ -66,5 +66,17 @@
   "categorie_detectee": "Category detected",
   "chargement": "Loading...",
   "recherche_magasins": "Searching for stores...",
-  "aucun_magasin": "No stores found in your area"
+  "aucun_magasin": "No stores found in your area",
+  "menu": {
+    "search_title": "Search",
+    "search_sub": "Find your price",
+    "restaurants_title": "Restaurants",
+    "restaurants_sub": "Discover restaurants near you",
+    "partenaires_title": "Local Partners",
+    "partenaires_sub": "Exclusive PrixMalin discounts",
+    "epicerie_title": "Grocery Deals",
+    "epicerie_sub": "Best prices by region this week",
+    "gaming_title": "Gaming",
+    "gaming_sub": "Products, codes and gaming deals"
+  }
 }

@@ -12,43 +12,51 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
 
-const MENU_ITEMS = [
-  {
-    key: 'search',
-    icon: require('../assets/icons/search-icon.png'),
-    title: 'Recherche',
-    subtitle: 'Cherche ton prix',
-    color: '#16a34a',
-    screen: 'Search',
-  },
-  {
-    key: 'restaurants',
-    icon: '🍽️',
-    title: 'Restaurants',
-    subtitle: 'Découvrez les restos près de vous',
-    color: '#f97316',
-    screen: 'Restaurants',
-  },
-  {
-    key: 'partenaires',
-    icon: '🤝',
-    title: 'Partenaires locaux',
-    subtitle: 'Rabais exclusifs PrixMalin',
-    color: '#3b82f6',
-    screen: 'Partenaires',
-  },
-  {
-    key: 'gaming',
-    icon: '🎮',
-    title: 'Gaming',
-    subtitle: 'Produits, codes et deals gaming',
-    color: '#8b5cf6',
-    screen: 'GamingHub',
-  },
-];
-
 export default function HomeScreen({ navigation }) {
   const { t } = useTranslation();
+
+  const MENU_ITEMS = [
+    {
+      key: 'search',
+      icon: require('../assets/icons/search-icon.png'),
+      title: t('menu.search_title'),
+      subtitle: t('menu.search_sub'),
+      color: '#16a34a',
+      screen: 'Search',
+    },
+    {
+      key: 'restaurants',
+      icon: '🍽️',
+      title: t('menu.restaurants_title'),
+      subtitle: t('menu.restaurants_sub'),
+      color: '#f97316',
+      screen: 'Restaurants',
+    },
+    {
+      key: 'partenaires',
+      icon: '🤝',
+      title: t('menu.partenaires_title'),
+      subtitle: t('menu.partenaires_sub'),
+      color: '#3b82f6',
+      screen: 'Partenaires',
+    },
+    {
+      key: 'epicerie',
+      icon: '🏷️',
+      title: t('menu.epicerie_title'),
+      subtitle: t('menu.epicerie_sub'),
+      color: '#10b981',
+      screen: 'Epicerie',
+    },
+    {
+      key: 'gaming',
+      icon: '🎮',
+      title: t('menu.gaming_title'),
+      subtitle: t('menu.gaming_sub'),
+      color: '#8b5cf6',
+      screen: 'GamingHub',
+    },
+  ];
 
   const MenuButton = ({ item }) => (
     <TouchableOpacity
@@ -74,7 +82,6 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#f8faf8" />
-
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -107,6 +114,7 @@ export default function HomeScreen({ navigation }) {
             partenaires@prixmalin.ca
           </Text>
         </View>
+
         {/* FOOTER */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>Version 1.0.1 — 2026</Text>
@@ -124,43 +132,41 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
   },
-
   // ── HEADER ──
   header: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: 12,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#e5e7eb',
   },
   logo: {
-    width: 64,
-    height: 64,
-    marginBottom: 8,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#1f2937',
+    width: 48,
+    height: 48,
     marginBottom: 4,
   },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#1f2937',
+    marginBottom: 2,
+  },
   subtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#6b7280',
     textAlign: 'center',
   },
-
   // ── MENU ──
   menuContainer: {
     flex: 1,
-    padding: 20,
-    paddingTop: 24,
+    padding: 16,
+    paddingTop: 16,
   },
   menuButton: {
     backgroundColor: '#fff',
     borderRadius: 14,
-    marginBottom: 12,
+    marginBottom: 8,
     borderLeftWidth: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -171,44 +177,43 @@ const styles = StyleSheet.create({
   menuButtonContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 14,
+    padding: 10,
   },
   menuIconEmoji: {
-    fontSize: 40,
-    marginRight: 14,
-    width: 52,
+    fontSize: 32,
+    marginRight: 12,
+    width: 44,
     textAlign: 'center',
   },
   menuIconImage: {
-    width: 52,
-    height: 52,
-    marginRight: 14,
+    width: 44,
+    height: 44,
+    marginRight: 12,
     resizeMode: 'contain',
   },
   menuTextContainer: {
     flex: 1,
   },
   menuTitle: {
-    fontSize: 19,
+    fontSize: 17,
     fontWeight: 'bold',
     color: '#1f2937',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   menuSubtitle: {
-    fontSize: 13,
+    fontSize: 12,
     color: '#6b7280',
-    lineHeight: 18,
+    lineHeight: 16,
   },
   menuArrow: {
-    fontSize: 36,
+    fontSize: 32,
     color: '#d1d5db',
     fontWeight: 'bold',
   },
-
   // ── RECRUTEMENT ──
   recrutement: {
     alignItems: 'center',
-    paddingVertical: 24,
+    paddingVertical: 20,
     paddingHorizontal: 20,
     borderTopWidth: 1,
     borderTopColor: '#e5e7eb',
@@ -234,7 +239,7 @@ const styles = StyleSheet.create({
   },
   // ── FOOTER ──
   footer: {
-    padding: 24,
+    padding: 20,
     alignItems: 'center',
   },
   footerText: {

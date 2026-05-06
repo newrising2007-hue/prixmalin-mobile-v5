@@ -66,5 +66,17 @@
   "categorie_detectee": "已检测到类别",
   "chargement": "加载中...",
   "recherche_magasins": "正在搜索商店...",
-  "aucun_magasin": "在您所在地区未找到商店"
+  "aucun_magasin": "在您所在地区未找到商店",
+  "menu": {
+    "search_title": "搜索",
+    "search_sub": "查找您的价格",
+    "restaurants_title": "餐厅",
+    "restaurants_sub": "发现附近的餐厅",
+    "partenaires_title": "本地合作伙伴",
+    "partenaires_sub": "PrixMalin专属折扣",
+    "epicerie_title": "杂货优惠",
+    "epicerie_sub": "本周各地区最优惠价格",
+    "gaming_title": "游戏",
+    "gaming_sub": "产品、代码和游戏优惠"
+  }
 }
