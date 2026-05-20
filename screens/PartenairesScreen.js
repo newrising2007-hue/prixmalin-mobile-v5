@@ -11,10 +11,12 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const BACKEND_URL = 'https://prixmalin-backend.onrender.com';
 
 export default function PartenairesScreen() {
+  const { t } = useTranslation();
   const [partenaires, setPartenaires] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -38,8 +40,8 @@ export default function PartenairesScreen() {
 
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>🤝 Partenaires locaux</Text>
-        <Text style={styles.headerSubtitle}>Rabais exclusifs PrixMalin</Text>
+        <Text style={styles.headerTitle}>{t('partenaires.title')}</Text>
+        <Text style={styles.headerSubtitle}>{t('partenaires.subtitle')}</Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -75,12 +77,12 @@ export default function PartenairesScreen() {
 
                 {/* Bouton circulaire */}
                 <View style={[styles.bouton, { backgroundColor: p.couleur }]}>
-                  <Text style={styles.boutonTexte}>Voir la circulaire →</Text>
+                  <Text style={styles.boutonTexte}>{t('partenaires.voir_circulaire')}</Text>
                 </View>
 
                 {/* Badge coupon */}
                 <View style={styles.badge}>
-                  <Text style={styles.badgeTexte}>🏷️ Rabais sur produits désignés</Text>
+                  <Text style={styles.badgeTexte}>{t('partenaires.badge_rabais')}</Text>
                 </View>
               </TouchableOpacity>
             ))}
@@ -88,7 +90,7 @@ export default function PartenairesScreen() {
             {/* Placeholder futur partenaire */}
             <View style={styles.carteProchaine}>
               <Text style={styles.prochaineEmoji}>🚧</Text>
-              <Text style={styles.prochaineTexte}>Prochain partenaire à venir</Text>
+              <Text style={styles.prochaineTexte}>{t('partenaires.prochain')}</Text>
             </View>
           </>
         )}

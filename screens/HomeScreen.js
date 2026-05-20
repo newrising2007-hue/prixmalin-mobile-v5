@@ -12,16 +12,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
 
-const LANGUAGES = ['fr', 'en', 'es', 'ar', 'zh'];
-
 export default function HomeScreen({ navigation }) {
-  const { t, i18n: i18nInstance } = useTranslation();
-  const [, forceUpdate] = React.useState(0);
-  React.useEffect(() => {
-    const handler = () => forceUpdate(n => n + 1);
-    i18nInstance.on('languageChanged', handler);
-    return () => i18nInstance.off('languageChanged', handler);
-  }, [i18nInstance]);
+  const { t } = useTranslation();
 
   const MENU_ITEMS = [
     {
@@ -102,25 +94,6 @@ export default function HomeScreen({ navigation }) {
           />
           <Text style={styles.title}>PrixMalin</Text>
           <Text style={styles.subtitle}>{t('tagline')}</Text>
-
-          {/* TOGGLE LANGUE TEST */}
-          <View style={styles.langToggle}>
-            {LANGUAGES.map(lang => (
-              <TouchableOpacity
-                key={lang}
-                onPress={() => i18nInstance.changeLanguage(lang)}
-                style={[
-                  styles.langBtn,
-                  i18nInstance.language === lang && styles.langBtnActive,
-                ]}
-              >
-                <Text style={[
-                  styles.langBtnText,
-                  i18nInstance.language === lang && styles.langBtnTextActive,
-                ]}>{lang.toUpperCase()}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
         </View>
 
         {/* MENU */}
@@ -132,8 +105,8 @@ export default function HomeScreen({ navigation }) {
 
         {/* BLOC RECRUTEMENT PARTENAIRE */}
         <View style={styles.recrutement}>
-          <Text style={styles.recrutementTitre}>Devenez partenaire local 🤝</Text>
-          <Text style={styles.recrutementSub}>Rejoignez PrixMalin et attirez plus de clients</Text>
+          <Text style={styles.recrutementTitre}>{t('recrutement_titre')}</Text>
+          <Text style={styles.recrutementSub}>{t('recrutement_sub')}</Text>
           <Text
             style={styles.recrutementEmail}
             onPress={() => Linking.openURL('mailto:partenaires@prixmalin.ca')}
@@ -185,32 +158,6 @@ const styles = StyleSheet.create({
     color: '#6b7280',
     textAlign: 'center',
     marginBottom: 8,
-  },
-  // ── TOGGLE LANGUE ──
-  langToggle: {
-    flexDirection: 'row',
-    gap: 6,
-    marginTop: 4,
-  },
-  langBtn: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    backgroundColor: '#f9fafb',
-  },
-  langBtnActive: {
-    backgroundColor: '#16a34a',
-    borderColor: '#16a34a',
-  },
-  langBtnText: {
-    fontSize: 11,
-    color: '#6b7280',
-    fontWeight: '600',
-  },
-  langBtnTextActive: {
-    color: '#fff',
   },
   // ── MENU ──
   menuContainer: {

@@ -28,42 +28,43 @@ const JOURS_LABEL = {
 };
 
 // ── TYPES CUISINE ────────────────────────────────────────────────────
+// labels résolus via t('restaurants.cuisine.*') au render
 const TYPES_CUISINE = [
-  { value: 'all', label: 'Tous', emoji: '🍽️' },
-  { value: 'québécois', label: 'Québécois', emoji: '🍁' },
-  { value: 'fast-food', label: 'Fast Food', emoji: '🍔' },
-  { value: 'pizza', label: 'Pizzeria', emoji: '🍕' },
-  { value: 'buffet', label: 'Buffet', emoji: '🍱' },
-  { value: 'grillades', label: 'Grillades', emoji: '🥩' },
-  { value: 'fruits-de-mer', label: 'Fruits de mer', emoji: '🦞' },
-  { value: 'mexicain', label: 'Mexicain', emoji: '🌮' },
-  { value: 'chinois', label: 'Chinois', emoji: '🥢' },
-  { value: 'japonais', label: 'Japonais', emoji: '🍣' },
-  { value: 'italien', label: 'Italien', emoji: '🍝' },
-  { value: 'indien', label: 'Indien', emoji: '🍛' },
-  { value: 'café', label: 'Café', emoji: '☕' },
-  { value: 'bar', label: 'Bar / Pub', emoji: '🍺' },
-  { value: 'végétarien', label: 'Végétarien', emoji: '🥗' },
-  { value: 'déjeuner', label: 'Déjeuner', emoji: '🥞' },
-  { value: 'rôtisserie', label: 'Rôtisserie', emoji: '🍗' },
-  { value: 'sushi', label: 'Sushi', emoji: '🍱' },
-  { value: 'libanais', label: 'Libanais', emoji: '🥙' },
-  { value: 'méditerranéen', label: 'Méditerranéen', emoji: '🫒' },
-  { value: 'thaïlandais', label: 'Thaïlandais', emoji: '🍜' },
-  { value: 'vietnamien', label: 'Vietnamien', emoji: '🍲' },
-  { value: 'coréen', label: 'Coréen', emoji: '🥘' },
-  { value: 'grec', label: 'Grec', emoji: '🫕' },
-  { value: 'halal', label: 'Halal', emoji: '🌙' },
-  { value: 'brunch', label: 'Brunch', emoji: '🥂' },
-  { value: 'food-truck', label: 'Food Truck', emoji: '🚚' },
-  { value: 'sandwich', label: 'Sandwich & Pita', emoji: '🥪' },
+  { value: 'all', labelKey: 'restaurants.cuisine_all', emoji: '🍽️' },
+  { value: 'québécois', labelKey: 'restaurants.cuisine_quebecois', emoji: '🍁' },
+  { value: 'fast-food', labelKey: 'restaurants.cuisine_fastfood', emoji: '🍔' },
+  { value: 'pizza', labelKey: 'restaurants.cuisine_pizza', emoji: '🍕' },
+  { value: 'buffet', labelKey: 'restaurants.cuisine_buffet', emoji: '🍱' },
+  { value: 'grillades', labelKey: 'restaurants.cuisine_grillades', emoji: '🥩' },
+  { value: 'fruits-de-mer', labelKey: 'restaurants.cuisine_fruitsmer', emoji: '🦞' },
+  { value: 'mexicain', labelKey: 'restaurants.cuisine_mexicain', emoji: '🌮' },
+  { value: 'chinois', labelKey: 'restaurants.cuisine_chinois', emoji: '🥢' },
+  { value: 'japonais', labelKey: 'restaurants.cuisine_japonais', emoji: '🍣' },
+  { value: 'italien', labelKey: 'restaurants.cuisine_italien', emoji: '🍝' },
+  { value: 'indien', labelKey: 'restaurants.cuisine_indien', emoji: '🍛' },
+  { value: 'café', labelKey: 'restaurants.cuisine_cafe', emoji: '☕' },
+  { value: 'bar', labelKey: 'restaurants.cuisine_bar', emoji: '🍺' },
+  { value: 'végétarien', labelKey: 'restaurants.cuisine_vegetarien', emoji: '🥗' },
+  { value: 'déjeuner', labelKey: 'restaurants.cuisine_dejeuner', emoji: '🥞' },
+  { value: 'rôtisserie', labelKey: 'restaurants.cuisine_rotisserie', emoji: '🍗' },
+  { value: 'sushi', labelKey: 'restaurants.cuisine_sushi', emoji: '🍱' },
+  { value: 'libanais', labelKey: 'restaurants.cuisine_libanais', emoji: '🥙' },
+  { value: 'méditerranéen', labelKey: 'restaurants.cuisine_mediterraneen', emoji: '🫒' },
+  { value: 'thaïlandais', labelKey: 'restaurants.cuisine_thai', emoji: '🍜' },
+  { value: 'vietnamien', labelKey: 'restaurants.cuisine_vietnamien', emoji: '🍲' },
+  { value: 'coréen', labelKey: 'restaurants.cuisine_coreen', emoji: '🥘' },
+  { value: 'grec', labelKey: 'restaurants.cuisine_grec', emoji: '🫕' },
+  { value: 'halal', labelKey: 'restaurants.cuisine_halal', emoji: '🌙' },
+  { value: 'brunch', labelKey: 'restaurants.cuisine_brunch', emoji: '🥂' },
+  { value: 'food-truck', labelKey: 'restaurants.cuisine_foodtruck', emoji: '🚚' },
+  { value: 'sandwich', labelKey: 'restaurants.cuisine_sandwich', emoji: '🥪' },
 ];
 
 const SERVICES = [
-  { value: 'surplace', label: 'Sur place', emoji: '🪑' },
-  { value: 'takeout', label: 'Take out', emoji: '🥡' },
-  { value: 'livraison', label: 'Livraison', emoji: '🚗' },
-  { value: 'drive', label: 'Drive', emoji: '🚘' },
+  { value: 'surplace', labelKey: 'restaurants.service_surplace', emoji: '🪑' },
+  { value: 'takeout', labelKey: 'restaurants.service_takeout', emoji: '🥡' },
+  { value: 'livraison', labelKey: 'restaurants.service_livraison', emoji: '🚗' },
+  { value: 'drive', labelKey: 'restaurants.service_drive', emoji: '🚘' },
 ];
 
 // ── PROVINCES + VILLES ───────────────────────────────────────────────
@@ -141,6 +142,7 @@ function openDirections(address, name) {
 
 // ── COMPOSANT HORAIRES ACCORDION ─────────────────────────────────────
 function HorairesAccordion({ horaires, phone }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const today = getTodayJour();
 
@@ -151,7 +153,7 @@ function HorairesAccordion({ horaires, phone }) {
         onPress={() => setOpen(o => !o)}
         activeOpacity={0.7}
       >
-        <Text style={styles.accordionLabel}>⏰ Voir les horaires</Text>
+        <Text style={styles.accordionLabel}>{t('restaurants.voir_horaires')}</Text>
         <Text style={styles.accordionChevron}>{open ? '▲' : '▼'}</Text>
       </TouchableOpacity>
 
@@ -159,7 +161,7 @@ function HorairesAccordion({ horaires, phone }) {
         <View style={styles.accordionContent}>
           {!horaires ? (
             <View>
-              <Text style={styles.horaireInconnu}>Horaires non disponibles — contactez le restaurant</Text>
+              <Text style={styles.horaireInconnu}>{t('restaurants.horaires_inconnus')}</Text>
               {phone && (
                 <TouchableOpacity onPress={() => Linking.openURL(`tel:${phone}`)}>
                   <Text style={styles.horairePhone}>📞 {phone}</Text>
@@ -183,7 +185,7 @@ function HorairesAccordion({ horaires, phone }) {
                       {h.note && <Text style={styles.horaireNote}> · {h.note}</Text>}
                     </View>
                   ) : (
-                    <Text style={styles.horaireFerme}>Fermé</Text>
+                    <Text style={styles.horaireFerme}>{t('restaurants.ferme')}</Text>
                   )}
                 </View>
               );
@@ -197,6 +199,7 @@ function HorairesAccordion({ horaires, phone }) {
 
 // ── COMPOSANT CARTE RESTAURANT ────────────────────────────────────────
 function CarteRestaurant({ restaurant }) {
+  const { t } = useTranslation();
   const ouvert = isOpenNow(restaurant.horaires);
   const isGoogle = restaurant.source === 'google';
   const isPrixMalin = restaurant.source === 'prixmalin';
@@ -219,7 +222,7 @@ function CarteRestaurant({ restaurant }) {
           <View style={styles.badgeRow}>
             {isPrixMalin && (
               <View style={styles.badgeVerifie}>
-                <Text style={styles.badgeVerifieText}>✓ Vérifié</Text>
+                <Text style={styles.badgeVerifieText}>{t('restaurants.verifie')}</Text>
               </View>
             )}
             {isGoogle && (
@@ -235,12 +238,12 @@ function CarteRestaurant({ restaurant }) {
             )}
             {ouvert === true && (
               <View style={styles.badgeOuvert}>
-                <Text style={styles.badgeOuvertText}>● Ouvert</Text>
+                <Text style={styles.badgeOuvertText}>{t('restaurants.ouvert')}</Text>
               </View>
             )}
             {ouvert === false && restaurant.horaires && (
               <View style={styles.badgeFerme}>
-                <Text style={styles.badgeFermeText}>● Fermé</Text>
+                <Text style={styles.badgeFermeText}>{t('restaurants.ferme_badge')}</Text>
               </View>
             )}
           </View>
@@ -263,7 +266,7 @@ function CarteRestaurant({ restaurant }) {
               return (
                 <View key={c} style={styles.tagCuisine}>
                   <Text style={styles.tagCuisineText}>
-                    {tc ? `${tc.emoji} ${tc.label}` : c}
+                    {tc ? `${tc.emoji} ${t(tc.labelKey)}` : c}
                   </Text>
                 </View>
               );
@@ -280,7 +283,7 @@ function CarteRestaurant({ restaurant }) {
             return (
               <View key={s} style={styles.tagService}>
                 <Text style={styles.tagServiceText}>
-                  {sv ? `${sv.emoji} ${sv.label}` : s}
+                  {sv ? `${sv.emoji} ${t(sv.labelKey)}` : s}
                 </Text>
               </View>
             );
@@ -292,7 +295,7 @@ function CarteRestaurant({ restaurant }) {
       {restaurant.reservation && (
         <View style={styles.reservationBadge}>
           <Text style={styles.reservationText}>
-            📋 {restaurant.reservationSurplace ? 'Réservation recommandée' : 'Réservation acceptée'}
+            📋 {restaurant.reservationSurplace ? t('restaurants.reservation_recommandee') : t('restaurants.reservation_acceptee')}
             {restaurant.reservationInfo ? ` — ${restaurant.reservationInfo}` : ''}
           </Text>
         </View>
@@ -318,7 +321,7 @@ function CarteRestaurant({ restaurant }) {
             onPress={() => Linking.openURL(`tel:${restaurant.phone}`)}
             activeOpacity={0.75}
           >
-            <Text style={styles.btnAppelerText}>📞 Appeler</Text>
+            <Text style={styles.btnAppelerText}>{t('restaurants.appeler')}</Text>
           </TouchableOpacity>
         )}
         {restaurant.address && (
@@ -327,7 +330,7 @@ function CarteRestaurant({ restaurant }) {
             onPress={() => openDirections(restaurant.address, restaurant.name)}
             activeOpacity={0.75}
           >
-            <Text style={styles.btnDirectionsText}>🗺️ Directions</Text>
+            <Text style={styles.btnDirectionsText}>{t('restaurants.directions')}</Text>
           </TouchableOpacity>
         )}
         {restaurant.website && (
@@ -336,7 +339,7 @@ function CarteRestaurant({ restaurant }) {
             onPress={() => Linking.openURL(restaurant.website)}
             activeOpacity={0.75}
           >
-            <Text style={styles.btnSiteText}>🌐 Site web</Text>
+            <Text style={styles.btnSiteText}>{t('restaurants.site_web')}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -351,7 +354,7 @@ function CarteRestaurant({ restaurant }) {
         activeOpacity={0.6}
       >
         <Text style={styles.correctionText}>
-          {isGoogle ? '✏️ Corriger sur Google Maps...' : '✏️ Signaler une correction...'}
+          {isGoogle ? t('restaurants.corriger_google') : t('restaurants.signaler_correction')}
         </Text>
       </TouchableOpacity>
     </View>
@@ -360,7 +363,7 @@ function CarteRestaurant({ restaurant }) {
 
 // ── ÉCRAN PRINCIPAL ───────────────────────────────────────────────────
 export default function RestaurantScreen() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -436,7 +439,7 @@ export default function RestaurantScreen() {
       const data = await res.json();
       setRestaurants(data.restaurants || []);
     } catch {
-      setError('Impossible de charger les restaurants. Vérifiez votre connexion.');
+      setError(t('restaurants.erreur_chargement'));
     }
     setLoading(false);
     setRefreshing(false);
@@ -563,15 +566,15 @@ export default function RestaurantScreen() {
       <View style={styles.stickyHeader}>
         <View style={styles.headerTop}>
           <View>
-            <Text style={styles.headerTitle}>🍽️ Restaurants</Text>
+            <Text style={styles.headerTitle}>{t('restaurants.title')}</Text>
             {gpsStatus === 'denied' && (
-              <Text style={styles.gpsWarning}>⚠️ Position non détectée — Abitibi par défaut</Text>
+              <Text style={styles.gpsWarning}>{t('restaurants.gps_defaut')}</Text>
             )}
             {gpsStatus === 'granted' && userCity ? (
               <Text style={styles.gpsOk}>📍 {userCity}</Text>
             ) : null}
             {gpsStatus === 'asking' && (
-              <Text style={styles.gpsAsking}>📡 Localisation...</Text>
+              <Text style={styles.gpsAsking}>{t('search.localisation')}</Text>
             )}
             {villeActive && (
               <Text style={styles.gpsOk}>🗺️ {villeActive}</Text>
@@ -590,13 +593,13 @@ export default function RestaurantScreen() {
             style={[styles.modeBtn, !modeVille && styles.modeBtnActive]}
             onPress={switchToLocal}
           >
-            <Text style={[styles.modeBtnText, !modeVille && styles.modeBtnTextActive]}>📍 Local</Text>
+            <Text style={[styles.modeBtnText, !modeVille && styles.modeBtnTextActive]}>{t('restaurants.local')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.modeBtn, modeVille && styles.modeBtnActive]}
             onPress={() => { setModeVille(true); setCuisine('all'); setServicesActifs([]); setSearch(''); }}
           >
-            <Text style={[styles.modeBtnText, modeVille && styles.modeBtnTextActive]}>🗺️ Autre ville</Text>
+            <Text style={[styles.modeBtnText, modeVille && styles.modeBtnTextActive]}>{t('restaurants.autre_ville')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -653,7 +656,7 @@ export default function RestaurantScreen() {
               >
                 {villeLoading
                   ? <ActivityIndicator size="small" color="#fff" />
-                  : <Text style={styles.villeChercherText}>Chercher</Text>
+                  : <Text style={styles.villeChercherText}>{t('restaurants.chercher')}</Text>
                 }
               </TouchableOpacity>
             </View>
@@ -678,7 +681,7 @@ export default function RestaurantScreen() {
         {/* ── RECHERCHE TEXTE ── */}
         <TextInput
           style={styles.searchInput}
-          placeholder="🔍 Rechercher un resto, une cuisine..."
+          placeholder={t('restaurants.recherche_placeholder')}
           placeholderTextColor="#9ca3af"
           value={search}
           onChangeText={setSearch}
@@ -695,7 +698,7 @@ export default function RestaurantScreen() {
                 onPress={() => setCuisine(tc.value)}
               >
                 <Text style={[styles.cuisineChipText, cuisine === tc.value && styles.cuisineChipTextActive]}>
-                  {tc.emoji} {tc.label}
+                  {tc.emoji} {t(tc.labelKey)}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -712,7 +715,7 @@ export default function RestaurantScreen() {
                 onPress={() => toggleService(s.value)}
               >
                 <Text style={[styles.serviceChipText, servicesActifs.includes(s.value) && styles.serviceChipTextActive]}>
-                  {s.emoji} {s.label}
+                  {s.emoji} {t(s.labelKey)}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -741,7 +744,7 @@ export default function RestaurantScreen() {
         {loading && (
           <View style={styles.loadingState}>
             <ActivityIndicator size="large" color="#f97316" />
-            <Text style={styles.loadingText}>Recherche de restaurants...</Text>
+            <Text style={styles.loadingText}>{t('restaurants.chargement')}</Text>
           </View>
         )}
 
@@ -757,7 +760,7 @@ export default function RestaurantScreen() {
                 fetchRestaurants(pos.lat, pos.lng, !!villeCoords);
               }}
             >
-              <Text style={styles.retryText}>Réessayer</Text>
+              <Text style={styles.retryText}>{t('restaurants.reessayer')}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -766,8 +769,8 @@ export default function RestaurantScreen() {
         {!loading && !error && filtered.length === 0 && restaurants.length > 0 && (
           <View style={styles.emptyState}>
             <Text style={styles.emptyIcon}>🍽️</Text>
-            <Text style={styles.emptyTitle}>Aucun restaurant trouvé</Text>
-            <Text style={styles.emptySubtitle}>Essayez de changer vos filtres</Text>
+            <Text style={styles.emptyTitle}>{t('restaurants.aucun_restaurant')}</Text>
+            <Text style={styles.emptySubtitle}>{t('restaurants.changer_filtres')}</Text>
           </View>
         )}
 

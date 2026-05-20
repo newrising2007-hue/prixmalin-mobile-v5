@@ -8,40 +8,43 @@ import {
   StatusBar,
   Linking,
 } from 'react-native';
-
-const GAMING_LINKS = [
-  {
-    emoji: '🛒',
-    title: 'Produits Gaming',
-    subtitle: 'Claviers, souris, casques et plus',
-    url: 'https://prixmalin.ca/produits',
-    color: '#8b5cf6',
-  },
-  {
-    emoji: '🎁',
-    title: 'Codes Bonus',
-    subtitle: 'Codes exclusifs pour gamers canadiens',
-    url: 'https://prixmalin.ca/codes-bonus',
-    color: '#16a34a',
-  },
-  {
-    emoji: '💳',
-    title: 'Cartes Cadeaux & Abonnements',
-    subtitle: 'Xbox, PlayStation, Steam et plus',
-    url: 'https://prixmalin.ca/deals',
-    color: '#f97316',
-  },
-];
+import { useTranslation } from 'react-i18next';
 
 export default function GamingHubScreen() {
+  const { t } = useTranslation();
+
+  const GAMING_LINKS = [
+    {
+      emoji: '🛒',
+      titleKey: 'gaming.products_title',
+      subtitleKey: 'gaming.products_sub',
+      url: 'https://prixmalin.ca/produits',
+      color: '#8b5cf6',
+    },
+    {
+      emoji: '🎁',
+      titleKey: 'gaming.codes_bonus_title',
+      subtitleKey: 'gaming.codes_bonus_sub',
+      url: 'https://prixmalin.ca/codes-bonus',
+      color: '#16a34a',
+    },
+    {
+      emoji: '💳',
+      titleKey: 'gaming.cards_title',
+      subtitleKey: 'gaming.cards_sub',
+      url: 'https://prixmalin.ca/deals',
+      color: '#f97316',
+    },
+  ];
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#f8faf8" />
 
       <View style={styles.header}>
         <Text style={styles.headerEmoji}>🎮</Text>
-        <Text style={styles.headerTitle}>Gaming Hub</Text>
-        <Text style={styles.headerSubtitle}>Tout le gaming PrixMalin</Text>
+        <Text style={styles.headerTitle}>{t('gaming.hub_title')}</Text>
+        <Text style={styles.headerSubtitle}>{t('gaming.hub_subtitle')}</Text>
       </View>
 
       <View style={styles.linksContainer}>
@@ -54,20 +57,18 @@ export default function GamingHubScreen() {
           >
             <Text style={styles.linkEmoji}>{item.emoji}</Text>
             <View style={styles.linkText}>
-              <Text style={styles.linkTitle}>{item.title}</Text>
-              <Text style={styles.linkSubtitle}>{item.subtitle}</Text>
+              <Text style={styles.linkTitle}>{t(item.titleKey)}</Text>
+              <Text style={styles.linkSubtitle}>{t(item.subtitleKey)}</Text>
             </View>
             <View style={[styles.linkButton, { backgroundColor: item.color }]}>
-              <Text style={styles.linkButtonText}>Voir →</Text>
+              <Text style={styles.linkButtonText}>{t('gaming.see_btn')}</Text>
             </View>
           </TouchableOpacity>
         ))}
       </View>
 
       <View style={styles.note}>
-        <Text style={styles.noteText}>
-          🌐 Le contenu gaming est géré sur prixmalin.ca — toujours à jour
-        </Text>
+        <Text style={styles.noteText}>🌐 {t('gaming.web_note')}</Text>
       </View>
     </SafeAreaView>
   );

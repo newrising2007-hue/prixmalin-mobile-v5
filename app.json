@@ -2,7 +2,7 @@
   "expo": {
     "name": "PrixMalin",
     "slug": "prixmalin",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -22,10 +22,11 @@
         "backgroundColor": "#4CAF50"
       },
       "package": "com.neosmarthing.prixmalin",
+      "versionCode": 14,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION"
-      ],
+      ]
     },
     "web": {
       "favicon": "./assets/icon.png"

@@ -177,27 +177,28 @@ function detectCategory(query) {
 }
 
 // ── BADGE CATÉGORIE DÉTECTÉE ─────────────────────────────────────────
-const CATEGORY_LABELS = {
-  vehicules:    '🚗 Véhicules',
-  pieces:       '🔧 Pièces & mécanique',
-  epicerie:     '🛒 Épicerie & alimentation',
-  electro:      '💻 Électronique',
-  quincaillerie:'🔨 Quincaillerie',
-  maison:       '🏠 Maison & meubles',
-  mode:         '👕 Mode & vêtements',
-  sport:        '⚽ Sport',
-  plein_air:    '🌲 Plein air & chasse',
-  machinerie:   '🚜 Machinerie',
-  sante:        '💊 Santé & beauté',
-  animalerie:   '🐾 Animalerie',
-  loisirs:      '🎲 Loisirs',
-  bijoux:       '💍 Bijoux & accessoires',
-  bureautique:  '🖨️ Bureautique',
+// Labels traduits via i18n — voir clés categories.* dans les fichiers de traduction
+const CATEGORY_EMOJI = {
+  vehicules:    '🚗',
+  pieces:       '🔧',
+  epicerie:     '🛒',
+  electro:      '💻',
+  quincaillerie:'🔨',
+  maison:       '🏠',
+  mode:         '👕',
+  sport:        '⚽',
+  plein_air:    '🌲',
+  machinerie:   '🚜',
+  sante:        '💊',
+  animalerie:   '🐾',
+  loisirs:      '🎲',
+  bijoux:       '💍',
+  bureautique:  '🖨️',
   divers:       null,
 };
 
 export default function SearchScreen() {
-  const { t } = useTranslation();
+  const { t, i18n: i18nInstance } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [onlineResults, setOnlineResults] = useState([]);
   const [localResults, setLocalResults] = useState([]);
@@ -361,10 +362,10 @@ export default function SearchScreen() {
         <Text style={styles.onlineLogo}>{logo}</Text>
         <View style={styles.onlineInfo}>
           <Text style={styles.onlineStore}>{item.store}</Text>
-          <Text style={styles.onlineSubtitle}>En ligne · Livraison disponible</Text>
+          <Text style={styles.onlineSubtitle}>{t('search.online_livraison')}</Text>
         </View>
         <View style={[styles.onlineButton, { backgroundColor: color }]}>
-          <Text style={styles.onlineButtonText}>Voir les prix →</Text>
+          <Text style={styles.onlineButtonText}>{t('search.voir_prix')}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -402,7 +403,7 @@ export default function SearchScreen() {
                 onPress={() => Linking.openURL(`https://prixmalin.ca/fr/partenaires/${item.partner}`).catch(() => {})}
                 activeOpacity={0.75}
               >
-                <Text style={styles.partnerBadge}>🤝 Fier Partenaire</Text>
+                <Text style={styles.partnerBadge}>🤝 {t('search.fier_partenaire')}</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -422,7 +423,7 @@ export default function SearchScreen() {
               style={[styles.actionBtn, styles.actionBtnDirections]}
               onPress={() => Linking.openURL(mapsUrl).catch(() => {})}
             >
-              <Text style={styles.actionBtnText}>📍 Directions</Text>
+              <Text style={styles.actionBtnText}>{t('search.directions')}</Text>
             </TouchableOpacity>
 
             {hasWebsite && (
@@ -430,7 +431,7 @@ export default function SearchScreen() {
                 style={[styles.actionBtn, styles.actionBtnWebsite]}
                 onPress={() => Linking.openURL(item.website || item.affiliate_url).catch(() => {})}
               >
-                <Text style={styles.actionBtnText}>🌐 Site web</Text>
+                <Text style={styles.actionBtnText}>{t('search.site_web')}</Text>
               </TouchableOpacity>
             )}
 
@@ -439,7 +440,7 @@ export default function SearchScreen() {
                 style={[styles.actionBtn, styles.actionBtnPhone]}
                 onPress={() => Linking.openURL(`tel:${item.phone}`).catch(() => {})}
               >
-                <Text style={styles.actionBtnText}>📞 Appeler</Text>
+                <Text style={styles.actionBtnText}>{t('search.appeler')}</Text>
               </TouchableOpacity>
             ) : null}
           </View>
@@ -454,8 +455,8 @@ export default function SearchScreen() {
       return (
         <View style={styles.emptyState}>
           <Text style={styles.emptyIcon}>🔍</Text>
-          <Text style={styles.emptyTitle}>Aucun résultat</Text>
-          <Text style={styles.emptySubtitle}>Essayez avec d'autres mots-clés</Text>
+          <Text style={styles.emptyTitle}>{t('no_results')}</Text>
+          <Text style={styles.emptySubtitle}>{t('search.aucun_resultat_sub')}</Text>
         </View>
       );
     }
@@ -463,10 +464,10 @@ export default function SearchScreen() {
       return (
         <View style={styles.initialState}>
           <Text style={styles.initialIcon}>🛍️</Text>
-          <Text style={styles.initialText}>Recherchez un produit pour trouver les meilleurs prix près de chez vous</Text>
+          <Text style={styles.initialText}>{t('search.initial_text')}</Text>
           {recentSearches.length > 0 && (
             <View style={styles.recentSection}>
-              <Text style={styles.recentTitle}>🕐 Recherches récentes</Text>
+              <Text style={styles.recentTitle}>🕐 {t('recherches_recentes')}</Text>
               {recentSearches.map((q, i) => (
                 <TouchableOpacity
                   key={i}
@@ -518,10 +519,10 @@ export default function SearchScreen() {
         </View>
 
         {/* Badge catégorie détectée */}
-        {detectedCategory && hasSearched && (
+        {detectedCategory && hasSearched && CATEGORY_EMOJI[detectedCategory] && (
           <View style={styles.categoryBadge}>
             <Text style={styles.categoryBadgeText}>
-              {CATEGORY_LABELS[detectedCategory]}
+              {CATEGORY_EMOJI[detectedCategory]} {t(`categories.${detectedCategory === 'plein_air' ? 'loisirs' : detectedCategory === 'maison' ? 'divers' : detectedCategory === 'mode' ? 'vetements' : detectedCategory === 'animalerie' ? 'animaux' : detectedCategory}`) || detectedCategory}
             </Text>
           </View>
         )}
@@ -530,13 +531,13 @@ export default function SearchScreen() {
         {hasSearched && (
           <View style={styles.gpsRow}>
             {gpsStatus === 'denied' && (
-              <Text style={styles.gpsWarning}>⚠️ Position non détectée — résultats pour l'Abitibi</Text>
+              <Text style={styles.gpsWarning}>{t('search.gps_defaut')}</Text>
             )}
             {gpsStatus === 'granted' && userCity ? (
               <Text style={styles.gpsOk}>📍 {userCity}</Text>
             ) : null}
             {gpsStatus === 'asking' && (
-              <Text style={styles.gpsAsking}>📡 Localisation...</Text>
+              <Text style={styles.gpsAsking}>{t('search.localisation')}</Text>
             )}
           </View>
         )}
@@ -550,18 +551,18 @@ export default function SearchScreen() {
         {/* ── SECTION EN LIGNE ── */}
         {hasSearched && (
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>🌐 EN LIGNE</Text>
+            <Text style={styles.sectionLabel}>{t('search.en_ligne_label')}</Text>
             {loadingOnline ? (
               <View style={styles.sectionLoading}>
                 <ActivityIndicator size="small" color="#16a34a" />
-                <Text style={styles.sectionLoadingText}>Chargement...</Text>
+                <Text style={styles.sectionLoadingText}>{t('chargement')}</Text>
               </View>
             ) : onlineResults.length > 0 ? (
               onlineResults.map((item, i) => (
                 <View key={i}>{renderOnlineItem({ item })}</View>
               ))
             ) : !loadingOnline && (
-              <Text style={styles.sectionEmpty}>Aucun résultat en ligne</Text>
+              <Text style={styles.sectionEmpty}>{t('search.aucun_en_ligne')}</Text>
             )}
           </View>
         )}
@@ -570,21 +571,21 @@ export default function SearchScreen() {
         {hasSearched && (
           <View style={styles.section}>
             <View style={styles.sectionHeaderRow}>
-              <Text style={styles.sectionLabel}>📍 MAGASINS PRÈS DE VOUS</Text>
+              <Text style={styles.sectionLabel}>{t('search.magasins_label')}</Text>
               {loadingLocal && (
                 <ActivityIndicator size="small" color="#16a34a" style={{ marginLeft: 8 }} />
               )}
             </View>
             {loadingLocal && localResults.length === 0 ? (
               <View style={styles.sectionLoading}>
-                <Text style={styles.sectionLoadingText}>Recherche de magasins...</Text>
+                <Text style={styles.sectionLoadingText}>{t('search.recherche_magasins')}</Text>
               </View>
             ) : localResults.length > 0 ? (
               localResults.map((item, i) => (
                 <View key={i}>{renderLocalItem({ item })}</View>
               ))
             ) : !loadingLocal && (
-              <Text style={styles.sectionEmpty}>Aucun magasin trouvé dans votre région</Text>
+              <Text style={styles.sectionEmpty}>{t('aucun_magasin')}</Text>
             )}
           </View>
         )}
