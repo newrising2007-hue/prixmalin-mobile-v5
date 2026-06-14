@@ -1,4 +1,4 @@
-path = '/mnt/sauvegardes/Important/Projets/PrixMalin/prixmalin-mobile-v5-clean/screens/SearchScreen.js'
+path = '/mnt/projets/PrixMalin/prixmalin-mobile-v5-clean/screens/SearchScreen.js'
 with open(path, 'r', encoding='utf-8') as f:
     content = f.read()
 
