@@ -1,3 +1,4 @@
+import { BACKEND_URL } from '../config';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect, useRef } from 'react';
@@ -18,7 +19,6 @@ import {
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
-const BACKEND_URL = 'https://prixmalin-backend.onrender.com';
 const ONLINE_API_URL = 'https://prixmalin.ca/api/search';
 const RECENT_SEARCHES_KEY = 'prixmalin_recent_searches';
 const GPS_FALLBACK = { latitude: 47.3283, longitude: -79.4338 };

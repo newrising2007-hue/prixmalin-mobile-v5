@@ -1,3 +1,4 @@
+import { BACKEND_URL } from '../config';
 import * as Location from 'expo-location';
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +18,6 @@ import {
   Platform,
 } from 'react-native';
 
-const BACKEND_URL = 'https://prixmalin-backend.onrender.com';
 const GPS_FALLBACK = { lat: 47.3340, lng: -79.4335 };
 
 // ── JOURS ────────────────────────────────────────────────────────────

@@ -1,3 +1,4 @@
+import { BACKEND_URL } from '../config';
 import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
@@ -13,7 +14,6 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-const BACKEND_URL = 'https://prixmalin-backend.onrender.com';
 
 export default function PartenairesScreen() {
   const { t } = useTranslation();
