@@ -37,7 +37,6 @@
     "home": "الرئيسية",
     "search": "بحث",
     "gaming_deals": "عروض الألعاب",
-    "bonus_codes": "رموز مكافأة",
     "coupons": "كوبونات",
     "alerts": "تنبيهات"
   },
@@ -48,15 +47,11 @@
   },
   "gaming": {
     "deals_title": "💎 عروض الألعاب",
-    "codes_title": "🎁 رموز مكافأة مجانية",
-    "codes_subtitle": "رموز حصرية للاعبين الكنديين",
     "no_expiry": "بدون انتهاء",
     "hub_title": "Gaming Hub",
     "hub_subtitle": "كل ألعاب PrixMalin",
     "products_title": "منتجات الألعاب",
     "products_sub": "لوحات مفاتيح، فئران، سماعات والمزيد",
-    "codes_bonus_title": "رموز المكافأة",
-    "codes_bonus_sub": "رموز حصرية للاعبين الكنديين",
     "cards_title": "بطاقات الهدايا والاشتراكات",
     "cards_sub": "Xbox، PlayStation، Steam والمزيد",
     "see_btn": "عرض →",
@@ -87,7 +82,7 @@
     "epicerie_title": "عروض البقالة",
     "epicerie_sub": "أفضل الأسعار حسب المنطقة هذا الأسبوع",
     "gaming_title": "ألعاب",
-    "gaming_sub": "منتجات وأكواد وعروض الألعاب"
+    "gaming_sub": "منتجات وعروض الألعاب"
   },
   "partenaires": {
     "title": "🤝 شركاء محليون",

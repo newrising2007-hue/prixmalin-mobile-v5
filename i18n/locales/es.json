@@ -37,7 +37,6 @@
     "home": "Inicio",
     "search": "Buscar",
     "gaming_deals": "Ofertas Gaming",
-    "bonus_codes": "Códigos Bonus",
     "coupons": "Cupones",
     "alerts": "Alertas"
   },
@@ -48,15 +47,11 @@
   },
   "gaming": {
     "deals_title": "💎 Ofertas Gaming",
-    "codes_title": "🎁 Códigos Bonus Gratis",
-    "codes_subtitle": "Códigos exclusivos para gamers canadienses",
     "no_expiry": "Sin vencimiento",
     "hub_title": "Gaming Hub",
     "hub_subtitle": "Todo el gaming de PrixMalin",
     "products_title": "Productos Gaming",
     "products_sub": "Teclados, ratones, auriculares y más",
-    "codes_bonus_title": "Códigos Bonus",
-    "codes_bonus_sub": "Códigos exclusivos para gamers canadienses",
     "cards_title": "Tarjetas de regalo y suscripciones",
     "cards_sub": "Xbox, PlayStation, Steam y más",
     "see_btn": "Ver →",
@@ -87,7 +82,7 @@
     "epicerie_title": "Ofertas de supermercado",
     "epicerie_sub": "Mejores precios por región esta semana",
     "gaming_title": "Gaming",
-    "gaming_sub": "Productos, códigos y ofertas gaming"
+    "gaming_sub": "Productos y ofertas gaming"
   },
   "partenaires": {
     "title": "🤝 Socios locales",

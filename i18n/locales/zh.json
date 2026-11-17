@@ -37,7 +37,6 @@
     "home": "首页",
     "search": "搜索",
     "gaming_deals": "游戏优惠",
-    "bonus_codes": "奖励代码",
     "coupons": "优惠券",
     "alerts": "提醒"
   },
@@ -48,15 +47,11 @@
   },
   "gaming": {
     "deals_title": "💎 游戏优惠",
-    "codes_title": "🎁 免费奖励代码",
-    "codes_subtitle": "加拿大玩家专属代码",
     "no_expiry": "无到期日",
     "hub_title": "Gaming Hub",
     "hub_subtitle": "PrixMalin全部游戏内容",
     "products_title": "游戏产品",
     "products_sub": "键盘、鼠标、耳机等",
-    "codes_bonus_title": "奖励代码",
-    "codes_bonus_sub": "加拿大玩家专属代码",
     "cards_title": "礼品卡和订阅",
     "cards_sub": "Xbox、PlayStation、Steam等",
     "see_btn": "查看 →",
@@ -87,7 +82,7 @@
     "epicerie_title": "杂货优惠",
     "epicerie_sub": "本周各地区最优惠价格",
     "gaming_title": "游戏",
-    "gaming_sub": "产品、代码和游戏优惠"
+    "gaming_sub": "产品和游戏优惠"
   },
   "partenaires": {
     "title": "🤝 本地合作伙伴",

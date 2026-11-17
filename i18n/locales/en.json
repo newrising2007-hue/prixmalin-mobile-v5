@@ -37,7 +37,6 @@
     "home": "Home",
     "search": "Search",
     "gaming_deals": "Gaming Deals",
-    "bonus_codes": "Bonus Codes",
     "coupons": "Coupons",
     "alerts": "Alerts"
   },
@@ -48,15 +47,11 @@
   },
   "gaming": {
     "deals_title": "💎 Gaming Deals",
-    "codes_title": "🎁 Free Bonus Codes",
-    "codes_subtitle": "Exclusive codes for Canadian gamers",
     "no_expiry": "No expiry",
     "hub_title": "Gaming Hub",
     "hub_subtitle": "All PrixMalin Gaming",
     "products_title": "Gaming Products",
     "products_sub": "Keyboards, mice, headsets and more",
-    "codes_bonus_title": "Bonus Codes",
-    "codes_bonus_sub": "Exclusive codes for Canadian gamers",
     "cards_title": "Gift Cards & Subscriptions",
     "cards_sub": "Xbox, PlayStation, Steam and more",
     "see_btn": "View →",
@@ -87,7 +82,7 @@
     "epicerie_title": "Grocery Deals",
     "epicerie_sub": "Best prices by region this week",
     "gaming_title": "Gaming",
-    "gaming_sub": "Products, codes and gaming deals"
+    "gaming_sub": "Products and gaming deals"
   },
   "partenaires": {
     "title": "🤝 Local Partners",

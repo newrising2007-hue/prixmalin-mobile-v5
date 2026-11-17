@@ -37,7 +37,6 @@
     "home": "Accueil",
     "search": "Recherche",
     "gaming_deals": "Deals Gaming",
-    "bonus_codes": "Codes Bonus",
     "coupons": "Coupons",
     "alerts": "Alertes"
   },
@@ -48,15 +47,11 @@
   },
   "gaming": {
     "deals_title": "💎 Deals Gaming",
-    "codes_title": "🎁 Codes Bonus Gratuits",
-    "codes_subtitle": "Codes exclusifs pour gamers canadiens",
     "no_expiry": "Sans expiration",
     "hub_title": "Gaming Hub",
     "hub_subtitle": "Tout le gaming PrixMalin",
     "products_title": "Produits Gaming",
     "products_sub": "Claviers, souris, casques et plus",
-    "codes_bonus_title": "Codes Bonus",
-    "codes_bonus_sub": "Codes exclusifs pour gamers canadiens",
     "cards_title": "Cartes Cadeaux & Abonnements",
     "cards_sub": "Xbox, PlayStation, Steam et plus",
     "see_btn": "Voir →",
@@ -87,7 +82,7 @@
     "epicerie_title": "Aubaines Épicerie",
     "epicerie_sub": "Meilleurs prix par région cette semaine",
     "gaming_title": "Gaming",
-    "gaming_sub": "Produits, codes et deals gaming"
+    "gaming_sub": "Produits et deals gaming"
   },
   "partenaires": {
     "title": "🤝 Partenaires locaux",

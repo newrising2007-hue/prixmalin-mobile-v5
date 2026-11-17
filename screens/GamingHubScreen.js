@@ -22,13 +22,6 @@ export default function GamingHubScreen() {
       color: '#8b5cf6',
     },
     {
-      emoji: '🎁',
-      titleKey: 'gaming.codes_bonus_title',
-      subtitleKey: 'gaming.codes_bonus_sub',
-      url: 'https://prixmalin.ca/codes-bonus',
-      color: '#16a34a',
-    },
-    {
       emoji: '💳',
       titleKey: 'gaming.cards_title',
       subtitleKey: 'gaming.cards_sub',
