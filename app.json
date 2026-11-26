@@ -22,7 +22,6 @@
         "backgroundColor": "#4CAF50"
       },
       "package": "com.neosmarthing.prixmalin",
-      "versionCode": 14,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION"
